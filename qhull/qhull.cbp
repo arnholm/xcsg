@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="qhull" />
+		<Option pch_mode="2" />
+		<Option compiler="msvc" />
+		<Build>
+			<Target title="MSVC_Debug">
+				<Option output=".cmp/msvc/qhulld" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output=".cmp/msvc/obj/Debug/" />
+				<Option type="2" />
+				<Option compiler="msvc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="/MDd" />
+					<Add option="/Od" />
+					<Add option="/RTCsu" />
+					<Add option="/Fd$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).pdb" />
+					<Add option="/GF" />
+					<Add option="/EHsc" />
+					<Add option="/W3" />
+					<Add option="`$(CPDE_USR)\bin\wx-config.exe --prefix=$(#wx) --wxcfg=$(#wx.debug) --iso --cxxflags`" />
+					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
+					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
+					<Add option="/D_CRT_SECURE_DEPRECATE" />
+				</Compiler>
+				<ExtraCommands>
+					<Add after="$(CPDE_USR)/bin/cpde_usr -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="MSVC_Release">
+				<Option output=".cmp/msvc/qhull" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output=".cmp/msvc/obj/Release/" />
+				<Option type="2" />
+				<Option compiler="msvc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="/MD" />
+					<Add option="/Ox" />
+					<Add option="/GF" />
+					<Add option="/EHsc" />
+					<Add option="/W3" />
+					<Add option="`$(CPDE_USR)\bin\wx-config.exe --prefix=$(#wx) --wxcfg=$(#wx.release) --iso --cxxflags`" />
+					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
+					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
+					<Add option="/D_CRT_SECURE_DEPRECATE" />
+				</Compiler>
+				<ExtraCommands>
+					<Add after="$(CPDE_USR)/bin/cpde_usr -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="GCC_Debug">
+				<Option output=".cmp/gcc/qhulld" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output=".cmp/gcc/obj/Debug/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-std=c++0x" />
+					<Add option="-W" />
+					<Add option="-fPIC" />
+					<Add option="-DNOPCH" />
+					<Add option="-fexceptions" />
+					<Add option="-D_DEBUG" />
+					<Add option="-g" />
+				</Compiler>
+				<ExtraCommands>
+					<Add after="$(CPDE_USR)/bin/cpde_usr -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="GCC_Release">
+				<Option output=".cmp/gcc/qhull" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output=".cmp/gcc/obj/Release/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Os" />
+					<Add option="-std=c++0x" />
+					<Add option="-W" />
+					<Add option="-fPIC" />
+					<Add option="-fexceptions" />
+					<Add option="-Wno-clobbered" />
+					<Add option="-DNOPCH" />
+				</Compiler>
+				<ExtraCommands>
+					<Add after="$(CPDE_USR)/bin/cpde_usr -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-DQHULL_IMPLEMENTATION" />
+			<Add directory="$(CPDE_USR)/include" />
+			<Add directory="$(#boost.include)" />
+			<Add directory="." />
+		</Compiler>
+		<Unit filename="libqhull_r/geom2_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhull_r/geom_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhull_r/geom_r.h" />
+		<Unit filename="libqhull_r/global_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhull_r/io_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhull_r/io_r.h" />
+		<Unit filename="libqhull_r/libqhull_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhull_r/libqhull_r.h" />
+		<Unit filename="libqhull_r/mem_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhull_r/mem_r.h" />
+		<Unit filename="libqhull_r/merge_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhull_r/merge_r.h" />
+		<Unit filename="libqhull_r/poly2_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhull_r/poly_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhull_r/poly_r.h" />
+		<Unit filename="libqhull_r/qhull_ra.h" />
+		<Unit filename="libqhull_r/qset_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhull_r/qset_r.h" />
+		<Unit filename="libqhull_r/random_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhull_r/random_r.h" />
+		<Unit filename="libqhull_r/rboxlib_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhull_r/stat_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhull_r/stat_r.h" />
+		<Unit filename="libqhull_r/user_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhull_r/user_r.h" />
+		<Unit filename="libqhull_r/usermem_r.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="libqhullcpp/Coordinates.cpp" />
+		<Unit filename="libqhullcpp/Coordinates.h" />
+		<Unit filename="libqhullcpp/PointCoordinates.cpp" />
+		<Unit filename="libqhullcpp/PointCoordinates.h" />
+		<Unit filename="libqhullcpp/Qhull.cpp" />
+		<Unit filename="libqhullcpp/Qhull.h" />
+		<Unit filename="libqhullcpp/QhullError.h" />
+		<Unit filename="libqhullcpp/QhullFacet.cpp" />
+		<Unit filename="libqhullcpp/QhullFacet.h" />
+		<Unit filename="libqhullcpp/QhullFacetList.cpp" />
+		<Unit filename="libqhullcpp/QhullFacetList.h" />
+		<Unit filename="libqhullcpp/QhullFacetSet.cpp" />
+		<Unit filename="libqhullcpp/QhullFacetSet.h" />
+		<Unit filename="libqhullcpp/QhullHyperplane.cpp" />
+		<Unit filename="libqhullcpp/QhullHyperplane.h" />
+		<Unit filename="libqhullcpp/QhullIterator.h" />
+		<Unit filename="libqhullcpp/QhullLinkedList.h" />
+		<Unit filename="libqhullcpp/QhullPoint.cpp" />
+		<Unit filename="libqhullcpp/QhullPoint.h" />
+		<Unit filename="libqhullcpp/QhullPointSet.cpp" />
+		<Unit filename="libqhullcpp/QhullPointSet.h" />
+		<Unit filename="libqhullcpp/QhullPoints.cpp" />
+		<Unit filename="libqhullcpp/QhullPoints.h" />
+		<Unit filename="libqhullcpp/QhullQh.cpp" />
+		<Unit filename="libqhullcpp/QhullQh.h" />
+		<Unit filename="libqhullcpp/QhullRidge.cpp" />
+		<Unit filename="libqhullcpp/QhullRidge.h" />
+		<Unit filename="libqhullcpp/QhullSet.cpp" />
+		<Unit filename="libqhullcpp/QhullSet.h" />
+		<Unit filename="libqhullcpp/QhullSets.h" />
+		<Unit filename="libqhullcpp/QhullStat.cpp" />
+		<Unit filename="libqhullcpp/QhullStat.h" />
+		<Unit filename="libqhullcpp/QhullVertex.cpp" />
+		<Unit filename="libqhullcpp/QhullVertex.h" />
+		<Unit filename="libqhullcpp/QhullVertexSet.cpp" />
+		<Unit filename="libqhullcpp/QhullVertexSet.h" />
+		<Unit filename="libqhullcpp/RboxPoints.cpp" />
+		<Unit filename="libqhullcpp/RboxPoints.h" />
+		<Unit filename="libqhullcpp/RoadError.cpp" />
+		<Unit filename="libqhullcpp/RoadError.h" />
+		<Unit filename="libqhullcpp/RoadLogEvent.cpp" />
+		<Unit filename="libqhullcpp/RoadLogEvent.h" />
+		<Unit filename="libqhullcpp/functionObjects.h" />
+		<Unit filename="qhull2d.cpp" />
+		<Unit filename="qhull2d.h" />
+		<Unit filename="qhull3d.cpp" />
+		<Unit filename="qhull3d.h" />
+		<Unit filename="qhull_config.h" />
+		<Unit filename="qvec3d.cpp" />
+		<Unit filename="qvec3d.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

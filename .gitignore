@@ -1,0 +1,5 @@
+*.layout
+*.depend
+*.pdb
+*.exe
+.cmp

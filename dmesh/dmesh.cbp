@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="dmesh" />
+		<Option pch_mode="2" />
+		<Option compiler="msvc" />
+		<Option virtualFolders="topology\;geometry\;xprofile\;" />
+		<Build>
+			<Target title="MSVC_Debug">
+				<Option output=".cmp/msvc/dmeshd" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output=".cmp/msvc/obj/Debug/" />
+				<Option type="2" />
+				<Option compiler="msvc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="/MDd" />
+					<Add option="/Od" />
+					<Add option="/RTCsu" />
+					<Add option="/Fd$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).pdb" />
+					<Add option="/GF" />
+					<Add option="/EHsc" />
+					<Add option="/W3" />
+					<Add option="`$(CPDE_USR)\bin\wx-config.exe --prefix=$(#wx) --wxcfg=$(#wx.debug) --iso --cxxflags`" />
+					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
+					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
+					<Add option="/D_CRT_SECURE_DEPRECATE" />
+				</Compiler>
+				<ExtraCommands>
+					<Add after="$(CPDE_USR)/bin/cpde_usr -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="MSVC_Release">
+				<Option output=".cmp/msvc/dmesh" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output=".cmp/msvc/obj/Release/" />
+				<Option type="2" />
+				<Option compiler="msvc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="/MD" />
+					<Add option="/Ox" />
+					<Add option="/GF" />
+					<Add option="/EHsc" />
+					<Add option="/W3" />
+					<Add option="`$(CPDE_USR)\bin\wx-config.exe --prefix=$(#wx) --wxcfg=$(#wx.release) --iso --cxxflags`" />
+					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
+					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
+					<Add option="/D_CRT_SECURE_DEPRECATE" />
+				</Compiler>
+				<ExtraCommands>
+					<Add after="$(CPDE_USR)/bin/cpde_usr -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="GCC_Debug">
+				<Option output=".cmp/gcc/dmeshd" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output=".cmp/gcc/obj/Debug/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-std=c++0x" />
+					<Add option="-W" />
+					<Add option="-fPIC" />
+					<Add option="-DNOPCH" />
+					<Add option="-fexceptions" />
+					<Add option="-D_DEBUG" />
+					<Add option="-g" />
+				</Compiler>
+				<ExtraCommands>
+					<Add after="$(CPDE_USR)/bin/cpde_usr -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="GCC_Release">
+				<Option output=".cmp/gcc/dmesh" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output=".cmp/gcc/obj/Release/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-std=c++0x" />
+					<Add option="-W" />
+					<Add option="-fPIC" />
+					<Add option="-DNOPCH" />
+					<Add option="-fexceptions" />
+					<Add option="-Os" />
+				</Compiler>
+				<ExtraCommands>
+					<Add after="$(CPDE_USR)/bin/cpde_usr -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-DDMESH_IMPLEMENTATION" />
+			<Add directory="$(CPDE_USR)/include" />
+			<Add directory="$(#boost.include)" />
+		</Compiler>
+		<Unit filename="dbox2d.cpp">
+			<Option virtualFolder="geometry/" />
+		</Unit>
+		<Unit filename="dbox2d.h">
+			<Option virtualFolder="geometry/" />
+		</Unit>
+		<Unit filename="dcircle.cpp">
+			<Option virtualFolder="geometry/" />
+		</Unit>
+		<Unit filename="dcircle.h">
+			<Option virtualFolder="geometry/" />
+		</Unit>
+		<Unit filename="dcoedge.cpp">
+			<Option virtualFolder="topology/" />
+		</Unit>
+		<Unit filename="dcoedge.h">
+			<Option virtualFolder="topology/" />
+		</Unit>
+		<Unit filename="dedge.cpp">
+			<Option virtualFolder="topology/" />
+		</Unit>
+		<Unit filename="dedge.h">
+			<Option virtualFolder="topology/" />
+		</Unit>
+		<Unit filename="dentity.cpp">
+			<Option virtualFolder="topology/" />
+		</Unit>
+		<Unit filename="dentity.h">
+			<Option virtualFolder="topology/" />
+		</Unit>
+		<Unit filename="dline2d.cpp">
+			<Option virtualFolder="geometry/" />
+		</Unit>
+		<Unit filename="dline2d.h">
+			<Option virtualFolder="geometry/" />
+		</Unit>
+		<Unit filename="dloop.cpp">
+			<Option virtualFolder="xprofile/" />
+		</Unit>
+		<Unit filename="dloop.h">
+			<Option virtualFolder="xprofile/" />
+		</Unit>
+		<Unit filename="dloop_optimizer.cpp" />
+		<Unit filename="dloop_optimizer.h" />
+		<Unit filename="dmesh.cpp" />
+		<Unit filename="dmesh.h" />
+		<Unit filename="dpos2d.cpp">
+			<Option virtualFolder="geometry/" />
+		</Unit>
+		<Unit filename="dpos2d.h">
+			<Option virtualFolder="geometry/" />
+		</Unit>
+		<Unit filename="dprofile.cpp">
+			<Option virtualFolder="xprofile/" />
+		</Unit>
+		<Unit filename="dprofile.h">
+			<Option virtualFolder="xprofile/" />
+		</Unit>
+		<Unit filename="dtriangle.cpp">
+			<Option virtualFolder="topology/" />
+		</Unit>
+		<Unit filename="dtriangle.h">
+			<Option virtualFolder="topology/" />
+		</Unit>
+		<Unit filename="dvec2d.cpp">
+			<Option virtualFolder="geometry/" />
+		</Unit>
+		<Unit filename="dvec2d.h">
+			<Option virtualFolder="geometry/" />
+		</Unit>
+		<Unit filename="dvertex.cpp">
+			<Option virtualFolder="topology/" />
+		</Unit>
+		<Unit filename="dvertex.h">
+			<Option virtualFolder="topology/" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

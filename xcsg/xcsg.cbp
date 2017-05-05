@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="xcsg" />
+		<Option pch_mode="2" />
+		<Option compiler="msvc" />
+		<Option virtualFolders="mesh\;shapes\3d\;shapes\;shapes\2d\;boolean\;XML\;Transforms\;boolean\3d\;boolean\2d\;mesh\sweep\;file_export\;" />
+		<Build>
+			<Target title="MSVC_Debug">
+				<Option output=".cmp/msvc/bin/Debug/xcsgd" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".cmp/msvc/obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="msvc" />
+				<Option parameters="E:\cpde3\acanve\csg\as_csg\samples\polyhedron_sample.xcsg" />
+				<Compiler>
+					<Add option="/MDd" />
+					<Add option="/GF" />
+					<Add option="/Od" />
+					<Add option="/W3" />
+					<Add option="/RTCsu" />
+					<Add option="/Fd$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).pdb" />
+					<Add option="/EHsc" />
+					<Add option="`$(CPDE_USR)\bin\wx-config.exe --prefix=$(#wx) --wxcfg=$(#wx.debug) --cxxflags`" />
+					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
+					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
+					<Add option="/D_CRT_SECURE_DEPRECATE" />
+				</Compiler>
+				<Linker>
+					<Add option="`$(CPDE_USR)\bin\wx-config.exe  --prefix=$(#wx) --wxcfg=$(#wx.debug) --libs`" />
+					<Add option="/NODEFAULTLIB:libcmt.lib" />
+					<Add option="/NODEFAULTLIB:msvcrt.lib" />
+					<Add option="/INCREMENTAL:NO" />
+					<Add library="msvcrtd.lib" />
+					<Add library="carve" />
+					<Add library="qhulld" />
+					<Add library="dmeshd" />
+					<Add directory="$(#carve.lib_debug)" />
+				</Linker>
+			</Target>
+			<Target title="MSVC_Release">
+				<Option output=".cmp/msvc/bin/Release/xcsg" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".cmp/msvc/obj/Release/" />
+				<Option type="1" />
+				<Option compiler="msvc" />
+				<Option parameters="E:/cpde3/acanve/csg/as_samples/extrude/linear_extrude.xcsg " />
+				<Compiler>
+					<Add option="/MD" />
+					<Add option="/GF" />
+					<Add option="/Ox" />
+					<Add option="/W3" />
+					<Add option="/EHsc" />
+					<Add option="`$(CPDE_USR)\bin\wx-config.exe --prefix=$(#wx) --wxcfg=$(#wx.release) --cxxflags`" />
+					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
+					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
+					<Add option="/D_CRT_SECURE_DEPRECATE" />
+				</Compiler>
+				<Linker>
+					<Add option="`$(CPDE_USR)\bin\wx-config.exe  --prefix=$(#wx) --wxcfg=$(#wx.release) --libs`" />
+					<Add option="/NODEFAULTLIB:libcmtd.lib" />
+					<Add option="/NODEFAULTLIB:msvcrtd.lib" />
+					<Add option="/INCREMENTAL:NO" />
+					<Add library="msvcrt.lib" />
+					<Add library="carve" />
+					<Add library="qhull" />
+					<Add library="dmesh" />
+					<Add directory="$(#carve.lib_release)" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="$(CPDE_USR)\bin\cpde_usr  -bin -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="GCC_Debug">
+				<Option output=".cmp/gcc/bin/Debug/xcsgd" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".cmp/gcc/obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++0x" />
+					<Add option="-g" />
+					<Add option="-W" />
+					<Add option="-fPIC" />
+					<Add option="-fexceptions" />
+					<Add option="`$(#wx.config) --cxxflags --debug`" />
+					<Add option="-DNOPCH" />
+					<Add option="-D_DEBUG" />
+					<Add directory="$(#carve.build_include)" />
+					<Add directory="$(#carve)/common" />
+				</Compiler>
+				<Linker>
+					<Add option="`$(#wx.config) --libs std,aui --static --debug`" />
+					<Add library="qhulld" />
+					<Add library="dmeshd" />
+					<Add library="carve" />
+					<Add library="boost_program_options" />
+					<Add library="boost_filesystem" />
+					<Add library="boost_thread" />
+					<Add library="boost_system" />
+					<Add directory="$(#carve.lib)" />
+				</Linker>
+			</Target>
+			<Target title="GCC_Release">
+				<Option output=".cmp/gcc/bin/Release/xcsg" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".cmp/gcc/obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-Os" />
+					<Add option="-std=c++0x" />
+					<Add option="-W" />
+					<Add option="-fPIC" />
+					<Add option="-fexceptions" />
+					<Add option="`$(#wx.config) --cxxflags`" />
+					<Add option="-DNOPCH" />
+					<Add directory="$(#carve.build_include)" />
+					<Add directory="$(#carve)/common" />
+				</Compiler>
+				<Linker>
+					<Add option="`$(#wx.config) --libs std,aui --static`" />
+					<Add library="qhull" />
+					<Add library="dmesh" />
+					<Add library="carve" />
+					<Add library="boost_program_options" />
+					<Add library="boost_system" />
+					<Add library="boost_filesystem" />
+					<Add library="boost_thread" />
+					<Add directory="$(#carve.lib)" />
+				</Linker>
+				<ExtraCommands>
+					<Add before="rm -f $(TARGET_OUTPUT_FILE)" />
+					<Add after="upx $(TARGET_OUTPUT_FILE)" />
+					<Add after="$(CPDE_USR)/bin/cpde_usr -bin -xi -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add directory="$(CPDE_USR)/include" />
+			<Add directory="$(#boost.include)" />
+			<Add directory="$(#carve.include)" />
+		</Compiler>
+		<Linker>
+			<Add directory="$(CPDE_USR)/lib" />
+			<Add directory="$(#boost.lib)" />
+		</Linker>
+		<Unit filename="amf_file.cpp">
+			<Option virtualFolder="file_export/" />
+		</Unit>
+		<Unit filename="amf_file.h">
+			<Option virtualFolder="file_export/" />
+		</Unit>
+		<Unit filename="boolean_timer.cpp">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="boolean_timer.h">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="boost_command_line.cpp" />
+		<Unit filename="boost_command_line.h" />
+		<Unit filename="carve_boolean.cpp">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="carve_boolean.h">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="carve_triangulate.cpp">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="carve_triangulate.h">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="cf_xmlNode.cpp">
+			<Option virtualFolder="XML/" />
+		</Unit>
+		<Unit filename="cf_xmlNode.h">
+			<Option virtualFolder="XML/" />
+		</Unit>
+		<Unit filename="cf_xmlTree.cpp">
+			<Option virtualFolder="XML/" />
+		</Unit>
+		<Unit filename="cf_xmlTree.h">
+			<Option virtualFolder="XML/" />
+		</Unit>
+		<Unit filename="clipper_boolean.cpp">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="clipper_boolean.h">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="clipper_csg/clipper.cpp" />
+		<Unit filename="clipper_csg/clipper.hpp" />
+		<Unit filename="clipper_csg/clipper_csg_config.h" />
+		<Unit filename="clipper_csg/clipper_offset.cpp" />
+		<Unit filename="clipper_csg/clipper_offset.h" />
+		<Unit filename="clipper_csg/clipper_profile.cpp" />
+		<Unit filename="clipper_csg/clipper_profile.h" />
+		<Unit filename="clipper_csg/contour2d.cpp" />
+		<Unit filename="clipper_csg/contour2d.h" />
+		<Unit filename="clipper_csg/dmesh_adapter.cpp" />
+		<Unit filename="clipper_csg/dmesh_adapter.h" />
+		<Unit filename="clipper_csg/polygon2d.cpp" />
+		<Unit filename="clipper_csg/polygon2d.h" />
+		<Unit filename="clipper_csg/polymesh2d.cpp" />
+		<Unit filename="clipper_csg/polymesh2d.h" />
+		<Unit filename="clipper_csg/polyset2d.cpp" />
+		<Unit filename="clipper_csg/polyset2d.h" />
+		<Unit filename="clipper_csg/vmap2d.cpp" />
+		<Unit filename="clipper_csg/vmap2d.h" />
+		<Unit filename="extrude_mesh.cpp">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="extrude_mesh.h">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="geodesic_sphere.cpp">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="geodesic_sphere.h">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="main.cpp" />
+		<Unit filename="mesh_utils.cpp">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="mesh_utils.h">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="openscad_csg.cpp">
+			<Option virtualFolder="file_export/" />
+		</Unit>
+		<Unit filename="openscad_csg.h">
+			<Option virtualFolder="file_export/" />
+		</Unit>
+		<Unit filename="out_triangles.cpp">
+			<Option virtualFolder="file_export/" />
+		</Unit>
+		<Unit filename="out_triangles.h">
+			<Option virtualFolder="file_export/" />
+		</Unit>
+		<Unit filename="polymesh3d.cpp">
+			<Option virtualFolder="mesh/sweep/" />
+		</Unit>
+		<Unit filename="polymesh3d.h">
+			<Option virtualFolder="mesh/sweep/" />
+		</Unit>
+		<Unit filename="primitives2d.cpp">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="primitives2d.h">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="primitives3d.cpp">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="primitives3d.h">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="sweep_mesh.cpp">
+			<Option virtualFolder="mesh/sweep/" />
+		</Unit>
+		<Unit filename="sweep_mesh.h">
+			<Option virtualFolder="mesh/sweep/" />
+		</Unit>
+		<Unit filename="sweep_path.cpp">
+			<Option virtualFolder="mesh/sweep/" />
+		</Unit>
+		<Unit filename="sweep_path.h">
+			<Option virtualFolder="mesh/sweep/" />
+		</Unit>
+		<Unit filename="sweep_path_linear.cpp">
+			<Option virtualFolder="mesh/sweep/" />
+		</Unit>
+		<Unit filename="sweep_path_linear.h">
+			<Option virtualFolder="mesh/sweep/" />
+		</Unit>
+		<Unit filename="sweep_path_rotate.cpp">
+			<Option virtualFolder="mesh/sweep/" />
+		</Unit>
+		<Unit filename="sweep_path_rotate.h">
+			<Option virtualFolder="mesh/sweep/" />
+		</Unit>
+		<Unit filename="sweep_path_transform.cpp">
+			<Option virtualFolder="mesh/sweep/" />
+		</Unit>
+		<Unit filename="sweep_path_transform.h">
+			<Option virtualFolder="mesh/sweep/" />
+		</Unit>
+		<Unit filename="tin_mesh.cpp">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="tin_mesh.h">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="version.h" />
+		<Unit filename="xcircle.cpp">
+			<Option virtualFolder="shapes/2d/" />
+		</Unit>
+		<Unit filename="xcircle.h">
+			<Option virtualFolder="shapes/2d/" />
+		</Unit>
+		<Unit filename="xcone.cpp">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xcone.h">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xcsg_factory.cpp">
+			<Option virtualFolder="XML/" />
+		</Unit>
+		<Unit filename="xcsg_factory.h">
+			<Option virtualFolder="XML/" />
+		</Unit>
+		<Unit filename="xcsg_main.cpp" />
+		<Unit filename="xcsg_main.h" />
+		<Unit filename="xcube.cpp">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xcube.h">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xcuboid.cpp">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xcuboid.h">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xcylinder.cpp">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xcylinder.h">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xdifference2d.cpp">
+			<Option virtualFolder="boolean/2d/" />
+		</Unit>
+		<Unit filename="xdifference2d.h">
+			<Option virtualFolder="boolean/2d/" />
+		</Unit>
+		<Unit filename="xdifference3d.cpp">
+			<Option virtualFolder="boolean/3d/" />
+		</Unit>
+		<Unit filename="xdifference3d.h">
+			<Option virtualFolder="boolean/3d/" />
+		</Unit>
+		<Unit filename="xface.cpp">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xface.h">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xhull2d.cpp">
+			<Option virtualFolder="boolean/2d/" />
+		</Unit>
+		<Unit filename="xhull2d.h">
+			<Option virtualFolder="boolean/2d/" />
+		</Unit>
+		<Unit filename="xhull3d.cpp">
+			<Option virtualFolder="boolean/3d/" />
+		</Unit>
+		<Unit filename="xhull3d.h">
+			<Option virtualFolder="boolean/3d/" />
+		</Unit>
+		<Unit filename="xintersection2d.cpp">
+			<Option virtualFolder="boolean/2d/" />
+		</Unit>
+		<Unit filename="xintersection2d.h">
+			<Option virtualFolder="boolean/2d/" />
+		</Unit>
+		<Unit filename="xintersection3d.cpp">
+			<Option virtualFolder="boolean/3d/" />
+		</Unit>
+		<Unit filename="xintersection3d.h">
+			<Option virtualFolder="boolean/3d/" />
+		</Unit>
+		<Unit filename="xlinear_extrude.cpp">
+			<Option virtualFolder="boolean/3d/" />
+		</Unit>
+		<Unit filename="xlinear_extrude.h">
+			<Option virtualFolder="boolean/3d/" />
+		</Unit>
+		<Unit filename="xoffset2d.cpp">
+			<Option virtualFolder="boolean/2d/" />
+		</Unit>
+		<Unit filename="xoffset2d.h">
+			<Option virtualFolder="boolean/2d/" />
+		</Unit>
+		<Unit filename="xpolygon.cpp">
+			<Option virtualFolder="shapes/2d/" />
+		</Unit>
+		<Unit filename="xpolygon.h">
+			<Option virtualFolder="shapes/2d/" />
+		</Unit>
+		<Unit filename="xpolyhedron.cpp">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xpolyhedron.h">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xrectangle.cpp">
+			<Option virtualFolder="shapes/2d/" />
+		</Unit>
+		<Unit filename="xrectangle.h">
+			<Option virtualFolder="shapes/2d/" />
+		</Unit>
+		<Unit filename="xrotate_extrude.cpp">
+			<Option virtualFolder="boolean/3d/" />
+		</Unit>
+		<Unit filename="xrotate_extrude.h">
+			<Option virtualFolder="boolean/3d/" />
+		</Unit>
+		<Unit filename="xshape.cpp">
+			<Option virtualFolder="shapes/" />
+		</Unit>
+		<Unit filename="xshape.h">
+			<Option virtualFolder="shapes/" />
+		</Unit>
+		<Unit filename="xshape2d.cpp">
+			<Option virtualFolder="shapes/2d/" />
+		</Unit>
+		<Unit filename="xshape2d.h">
+			<Option virtualFolder="shapes/2d/" />
+		</Unit>
+		<Unit filename="xshape2d_collector.cpp">
+			<Option virtualFolder="XML/" />
+		</Unit>
+		<Unit filename="xshape2d_collector.h">
+			<Option virtualFolder="XML/" />
+		</Unit>
+		<Unit filename="xsolid.cpp">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xsolid.h">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xsolid_collector.cpp">
+			<Option virtualFolder="XML/" />
+		</Unit>
+		<Unit filename="xsolid_collector.h">
+			<Option virtualFolder="XML/" />
+		</Unit>
+		<Unit filename="xsphere.cpp">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xsphere.h">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xsquare.cpp">
+			<Option virtualFolder="shapes/2d/" />
+		</Unit>
+		<Unit filename="xsquare.h">
+			<Option virtualFolder="shapes/2d/" />
+		</Unit>
+		<Unit filename="xtin_model.cpp">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xtin_model.h">
+			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xtmatrix.cpp">
+			<Option virtualFolder="Transforms/" />
+		</Unit>
+		<Unit filename="xtmatrix.h">
+			<Option virtualFolder="Transforms/" />
+		</Unit>
+		<Unit filename="xtransform_extrude.cpp">
+			<Option virtualFolder="boolean/3d/" />
+		</Unit>
+		<Unit filename="xtransform_extrude.h">
+			<Option virtualFolder="boolean/3d/" />
+		</Unit>
+		<Unit filename="xunion2d.cpp">
+			<Option virtualFolder="boolean/2d/" />
+		</Unit>
+		<Unit filename="xunion2d.h">
+			<Option virtualFolder="boolean/2d/" />
+		</Unit>
+		<Unit filename="xunion3d.cpp">
+			<Option virtualFolder="boolean/3d/" />
+		</Unit>
+		<Unit filename="xunion3d.h">
+			<Option virtualFolder="boolean/3d/" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

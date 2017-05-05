@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="XCSG">
+		<Project filename="qhull/qhull.cbp" />
+		<Project filename="dmesh/dmesh.cbp" />
+		<Project filename="xcsg/xcsg.cbp">
+			<Depends filename="qhull/qhull.cbp" />
+			<Depends filename="dmesh/dmesh.cbp" />
+		</Project>
+	</Workspace>
+</CodeBlocks_workspace_file>
