@@ -36,5 +36,6 @@ The file difference3d.xcsg:
 </xcsg>
 ```
 The resulting STL becomes:
+
 ![](https://raw.githubusercontent.com/wiki/arnholm/xcsg/images/difference3d.png)
 
