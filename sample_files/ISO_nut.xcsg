@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xcsg version="1.0" secant_tolerance="0.010000000000000002">
+	<metadata>
+		<software name="angelcad" version="v1.0-00"/>
+		<model name="ISO_nut" created="2017-05-05T20:11:04"/>
+	</metadata>
+	<difference3d>
+		<intersection3d>
+			<tmatrix>
+				<trow c0="0.010000000000000002" c1="0" c2="0" c3="0"/>
+				<trow c0="0" c1="0.010000000000000002" c2="0" c3="0"/>
+				<trow c0="0" c1="0" c2="0.010000000000000002" c3="0"/>
+				<trow c0="0" c1="0" c2="0" c3="1"/>
+			</tmatrix>
+			<linear_extrude dz="1480">
+				<polygon>
+					<tmatrix>
+						<trow c0="100" c1="0" c2="0" c3="-1158.308956772089"/>
+						<trow c0="0" c1="100" c2="0" c3="-1337.5"/>
+						<trow c0="0" c1="0" c2="100" c3="0"/>
+						<trow c0="0" c1="0" c2="0" c3="1"/>
+					</tmatrix>
+					<vertices>
+						<vertex x="23.16617913544178" y="6.6874997599424058"/>
+						<vertex x="23.16617913544178" y="20.062500240057595"/>
+						<vertex x="11.58308956772089" y="26.75"/>
+						<vertex x="0" y="20.062500240057595"/>
+						<vertex x="0" y="6.6874997599424058"/>
+						<vertex x="11.58308956772089" y="0"/>
+					</vertices>
+				</polygon>
+			</linear_extrude>
+			<cone h="25.752000000000006" r1="26.75" r2="0" center="false">
+				<tmatrix>
+					<trow c0="100" c1="0" c2="0" c3="0"/>
+					<trow c0="0" c1="100" c2="0" c3="0"/>
+					<trow c0="0" c1="0" c2="100" c3="0"/>
+					<trow c0="0" c1="0" c2="0" c3="1"/>
+				</tmatrix>
+			</cone>
+		</intersection3d>
+		<union3d>
+			<tmatrix>
+				<trow c0="1.0625" c1="0" c2="0" c3="0"/>
+				<trow c0="0" c1="1.0625" c2="0" c3="0"/>
+				<trow c0="0" c1="0" c2="1" c3="-7.5"/>
+				<trow c0="0" c1="0" c2="0" c3="1"/>
+			</tmatrix>
+			<cylinder h="30" r="6.8308657258749008" center="false"/>
+			<rotate_extrude angle="94.247779607693801" pitch="-2">
+				<tmatrix>
+					<trow c0="1" c1="0" c2="0" c3="0"/>
+					<trow c0="0" c1="6.123233995736766e-017" c2="-1" c3="0"/>
+					<trow c0="0" c1="1" c2="6.123233995736766e-017" c3="30"/>
+					<trow c0="0" c1="0" c2="0" c3="1"/>
+				</tmatrix>
+				<polygon>
+					<tmatrix>
+						<trow c0="6.123233995736766e-017" c1="1" c2="0" c3="6.4844555705785751"/>
+						<trow c0="-1" c1="6.123233995736766e-017" c2="0" c3="1"/>
+						<trow c0="0" c1="0" c2="1" c3="0"/>
+						<trow c0="0" c1="0" c2="0" c3="1"/>
+					</tmatrix>
+					<vertices>
+						<vertex x="0.020000000000000004" y="0"/>
+						<vertex x="1.98" y="0"/>
+						<vertex x="1.98" y="0.3080126941204071"/>
+						<vertex x="1.75" y="0.4330126941204071"/>
+						<vertex x="1.125" y="1.5155444294214249"/>
+						<vertex x="0.875" y="1.5155444294214249"/>
+						<vertex x="0.25" y="0.4330126941204071"/>
+						<vertex x="0.020000000000000004" y="0.3080126941204071"/>
+					</vertices>
+				</polygon>
+			</rotate_extrude>
+		</union3d>
+	</difference3d>
+</xcsg>
