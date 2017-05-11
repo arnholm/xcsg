@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "xpolyhedron.h"
 #include <carve/polyhedron_decl.hpp>
 #include <carve/input.hpp>
@@ -215,10 +215,12 @@ const xface& xpolyhedron::f_get(size_t f_ind) const
    return m_faces.at(f_ind);
 }
 
-bool  xpolyhedron::check_polyhedron(ostream& out)
+bool  xpolyhedron::check_polyhedron(ostream& out, size_t& num_non_tri)
 {
    map<size_t,size_t> edge_count;
    size_t face_error=0;
+
+   num_non_tri = 0;
 
    for(auto i=m_faces.begin(); i!=m_faces.end(); i++) {
       const xface& face = *i;
@@ -229,6 +231,8 @@ bool  xpolyhedron::check_polyhedron(ostream& out)
          p.push_back(m_vertices[face[i]]);
       }
       if(!(face_area(p)>0.0))face_error++;
+
+      num_non_tri += (face.size()!=3)? 1 : 0;
 
       // number of edges == number of vertices
       size_t nedge = face.size();
@@ -262,6 +266,8 @@ bool  xpolyhedron::check_polyhedron(ostream& out)
    else {
       out << ">>> Warning: Polyhedron has " << face_error << " zero area faces." << endl;
    }
+
+   out << "...Polyhedron has "<< num_non_tri << " non-triangular faces" << endl;
    return ((face_error+nerr)==0);
 }
 

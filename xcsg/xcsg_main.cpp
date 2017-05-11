@@ -111,9 +111,12 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
 
       carve_boolean csg;
       try {
+         boost::timer timer;
          boolean_timer::singleton().init(nbool);
          csg.compute(obj->create_carve_mesh(),carve::csg::CSG::OP::UNION);
-         cout << "...completed boolean operations in " <<  setprecision(5) << boolean_timer::singleton().elapsed() << " [sec], or " <<  setprecision(3) << boolean_timer::singleton().elapsed()/60.0 << " [min]" << endl;
+
+         double elapsed_sec = timer.elapsed();
+         cout << "...completed boolean operations in " <<  setprecision(5) << elapsed_sec<< " [sec] "<< endl;
       }
       catch(carve::exception& ex ) {
 
@@ -134,13 +137,21 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
          // create & check lump
          std::shared_ptr<xpolyhedron> poly = csg.create_manifold(imani);
          cout << "...lump " << imani+1 << ": " <<poly->v_size() << " vertices, " << poly->f_size() << " polygon faces." << endl;
-         poly->check_polyhedron(cout);
 
-         bool improve = true;
-         bool canonicalize = true;
-         bool degen_check = true;
-         cout << "...Triangulating lump ... " << std::endl;
-         cout << "...Triangulation completed with " << triangulate.compute(poly->create_carve_polyhedron(),improve,canonicalize,degen_check)<< " triangle faces" << endl;
+         size_t num_non_tri = 0;
+         poly->check_polyhedron(cout,num_non_tri);
+
+         if(num_non_tri > 0) {
+            bool improve = true;
+            bool canonicalize = true;
+            bool degen_check = true;
+            cout << "...Triangulating lump ... " << std::endl;
+            cout << "...Triangulation completed with " << triangulate.compute(poly->create_carve_polyhedron(),improve,canonicalize,degen_check)<< " triangle faces" << endl;
+         }
+         else {
+            // triangulation not required
+            triangulate.add(poly->create_carve_polyhedron());
+         }
       }
 
       cout <<    "...Exporting results " << endl;

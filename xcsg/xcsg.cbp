@@ -5,7 +5,7 @@
 		<Option title="xcsg" />
 		<Option pch_mode="2" />
 		<Option compiler="msvc" />
-		<Option virtualFolders="mesh\;shapes\3d\;shapes\;shapes\2d\;boolean\;XML\;Transforms\;boolean\3d\;boolean\2d\;mesh\sweep\;file_export\;" />
+		<Option virtualFolders="mesh/;shapes/3d/;shapes/;shapes/2d/;boolean/;XML/;Transforms/;boolean/3d/;boolean/2d/;mesh/sweep/;file_export/;" />
 		<Build>
 			<Target title="MSVC_Debug">
 				<Option output=".cmp/msvc/bin/Debug/xcsgd" prefix_auto="1" extension_auto="1" />
@@ -165,6 +165,12 @@
 		<Unit filename="carve_boolean.h">
 			<Option virtualFolder="mesh/" />
 		</Unit>
+		<Unit filename="carve_boolean_thread.cpp">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="carve_boolean_thread.h">
+			<Option virtualFolder="mesh/" />
+		</Unit>
 		<Unit filename="carve_triangulate.cpp">
 			<Option virtualFolder="mesh/" />
 		</Unit>
@@ -257,6 +263,7 @@
 		<Unit filename="primitives3d.h">
 			<Option virtualFolder="mesh/" />
 		</Unit>
+		<Unit filename="safe_queue.h" />
 		<Unit filename="sweep_mesh.cpp">
 			<Option virtualFolder="mesh/sweep/" />
 		</Unit>

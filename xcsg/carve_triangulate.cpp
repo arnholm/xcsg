@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "carve_triangulate.h"
 #include <carve/tree.hpp>
 #include <carve/csg_triangulator.hpp>
@@ -126,3 +126,7 @@ size_t carve_triangulate::compute(std::shared_ptr<carve::poly::Polyhedron> poly,
    return poly_triangle->faces.size();
 }
 
+void carve_triangulate::add(std::shared_ptr<carve::poly::Polyhedron> poly)
+{
+   m_polyset->push_back(poly);
+}

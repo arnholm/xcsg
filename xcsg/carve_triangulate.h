@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef CARVE_TRIANGULATE_H
 #define CARVE_TRIANGULATE_H
 
@@ -30,6 +30,9 @@ public:
 
    // compute triangulated polyhedron and add to polyset
    size_t compute(std::shared_ptr<carve::poly::Polyhedron> poly, bool improve, bool canonicalize, bool degen_check);
+
+   // add polyhedron to polyset without triangulation
+   void add(std::shared_ptr<carve::poly::Polyhedron> poly);
 
    std::shared_ptr<poly_vector> carve_polyset() { return m_polyset; }
 

@@ -7,15 +7,16 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef BOOLEAN_TIMER_H
 #define BOOLEAN_TIMER_H
 
+#include <atomic>
 
 class boolean_timer {
 public:
@@ -35,10 +36,15 @@ protected:
    virtual ~boolean_timer();
 
 private:
-   double m_elapsed_sec;    // total elapsed time added
-   double m_elapsed_report; // last reported elapsed time
-   int    m_nbool_tot;      // total number of booleans
-   int    m_nbool;          // number of booleans processed so far
+   int    m_nbool_tot;                    // total number of booleans
+
+private:
+
+   // variables that are updated by threads
+   std::atomic_uint  m_elapsed_millisec;    // total elapsed time added, actually sum of elapsed times in threads, not clock time
+   std::atomic_uint  m_nbool;               // number of booleans processed so far
+   std::atomic_uint  m_progress;            // A value from [0..1000] measuring progress, i.e. per thousand
+   std::atomic_uint  m_progress_report;     // progress value for previous report
 };
 
 #endif // BOOLEAN_TIMER_H

@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef XPOLYHEDRON_H
 #define XPOLYHEDRON_H
 
@@ -39,7 +39,7 @@ public:
    size_t         f_size() const;
    const xface&   f_get(size_t f_ind) const;
 
-   bool check_polyhedron(ostream& out);
+   bool check_polyhedron(ostream& out, size_t& num_non_tri);
 
    // create meshset from this polyhedron
    std::shared_ptr<carve::mesh::MeshSet<3>> create_carve_mesh(const carve::math::Matrix& t = carve::math::Matrix()) const;
