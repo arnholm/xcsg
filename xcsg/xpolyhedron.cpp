@@ -276,6 +276,7 @@ std::shared_ptr<carve::poly::Polyhedron> xpolyhedron::create_carve_polyhedron()
 {
    carve::input::PolyhedronData data;
    data.points = m_vertices;
+   data.reserveFaces(static_cast<int>(m_faces.size()),4);
    for(auto i=m_faces.begin(); i!=m_faces.end(); i++) {
       const xface& face = *i;
       data.addFace(face.begin(),face.end());
