@@ -36,11 +36,11 @@ void boolean_timer::add_elapsed(double esec)
    int millisec        = static_cast<int>(1000*esec);
    m_elapsed_millisec += millisec;
    m_nbool++;
-   m_progress = (1000.0*m_nbool)/m_nbool_tot;
+   m_progress = static_cast<unsigned int>((1000.0*m_nbool)/m_nbool_tot);
 
    // report progress at every 5% progress
    if( (m_progress - m_progress_report) >= 50) {
-      size_t p = m_progress;
+      unsigned int p = m_progress;
       m_progress_report = p;
 
       double percent = m_progress*0.1;
