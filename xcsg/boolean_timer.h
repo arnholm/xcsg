@@ -28,8 +28,8 @@ public:
    // measure time in each boolean and add elapsed seconds by calling add_elapsed
    void add_elapsed(double esec);
 
-   // return total elapsed so far
-   double elapsed();
+   // return total elapsed in threads so far
+   double thread_elapsed();
 
 protected:
    boolean_timer();

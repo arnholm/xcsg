@@ -7,16 +7,16 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "clipper_boolean.h"
 
-#include <boost/timer.hpp>
 #include "boolean_timer.h"
+#include <boost/date_time.hpp>
 
 clipper_boolean::clipper_boolean()
 {}
@@ -32,7 +32,8 @@ bool clipper_boolean::compute(std::shared_ptr<clipper_profile> b, ClipperLib::Cl
       m_profile = b;
    }
    else {
-      boost::timer timer;
+      boost::posix_time::ptime p1 = boost::posix_time::microsec_clock::universal_time();
+
       success = false;
       ClipperLib::Clipper clipper;
       clipper.AddPaths(m_profile->paths(),ClipperLib::ptSubject,true);
@@ -43,7 +44,10 @@ bool clipper_boolean::compute(std::shared_ptr<clipper_profile> b, ClipperLib::Cl
          ClipperLib::CleanPolygons(result->paths());
          m_profile = result;
       }
-      boolean_timer::singleton().add_elapsed(timer.elapsed());
+      boost::posix_time::time_duration  ptime_diff = boost::posix_time::microsec_clock::universal_time() - p1;
+      double elapsed_sec = 0.001*ptime_diff.total_milliseconds();
+
+      boolean_timer::singleton().add_elapsed(elapsed_sec);
    }
    return success;
 }

@@ -13,6 +13,8 @@
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
 
+#include <boost/date_time.hpp>
+
 #include "carve_boolean.h"
 #include "xpolyhedron.h"
 //#include <carve/mesh_simplify.hpp>
@@ -20,7 +22,6 @@
 #include <iostream>
 #include <carve/input.hpp>
 
-#include <boost/timer.hpp>
 #include "boolean_timer.h"
 #include "mesh_utils.h"
 
@@ -45,15 +46,15 @@ size_t carve_boolean::compute( std::shared_ptr<carve::mesh::MeshSet<3>> b,  carv
       }
       else {
          // the time runs only when an actual boolean is taking place
-         boost::timer timer;
+         boost::posix_time::ptime p1 = boost::posix_time::microsec_clock::universal_time();
 
          carve::csg::CSG  csg;
          m_meshset = std::shared_ptr<carve::mesh::MeshSet<3>>(csg.compute(m_meshset.get(),b.get(),op));
 
-     //    carve::mesh::MeshSimplifier simplifier;
-     //    simplifier.eliminateShortEdges(m_meshset.get(), mesh_utils::min_edge_length());
+         boost::posix_time::time_duration  ptime_diff = boost::posix_time::microsec_clock::universal_time() - p1;
+         double elapsed_sec = 0.001*ptime_diff.total_milliseconds();
 
-         boolean_timer::singleton().add_elapsed(timer.elapsed());
+         boolean_timer::singleton().add_elapsed(elapsed_sec);
       }
    }
    catch (std::exception& ex)

@@ -49,7 +49,7 @@ void boolean_timer::add_elapsed(double esec)
 }
 
 
-double boolean_timer::elapsed()
+double boolean_timer::thread_elapsed()
 {
    return m_elapsed_millisec*0.001;
 }

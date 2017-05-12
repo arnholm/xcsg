@@ -15,6 +15,8 @@
 
 #include "xcsg_main.h"
 
+#include <boost/date_time.hpp>
+
 #include <sstream>
 #include <stdexcept>
 using namespace std;
@@ -28,7 +30,6 @@ using namespace std;
 #include "mesh_utils.h"
 #include "xpolyhedron.h"
 #include "xcsg_factory.h"
-#include <boost/timer.hpp>
 #include "boolean_timer.h"
 
 #include "openscad_csg.h"
@@ -111,12 +112,15 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
 
       carve_boolean csg;
       try {
-         boost::timer timer;
+
+         boost::posix_time::ptime p1 = boost::posix_time::microsec_clock::universal_time();
          boolean_timer::singleton().init(nbool);
          csg.compute(obj->create_carve_mesh(),carve::csg::CSG::OP::UNION);
+         boost::posix_time::time_duration  ptime_diff = boost::posix_time::microsec_clock::universal_time() - p1;
+         double elapsed_sec = 0.001*ptime_diff.total_milliseconds();
 
-         double elapsed_sec = timer.elapsed();
-         cout << "...completed boolean operations in " <<  setprecision(5) << elapsed_sec<< " [sec] "<< endl;
+         cout << "...completed boolean operations in " << setprecision(5) << elapsed_sec << " [sec] ("
+                                                       << setprecision(3) << boolean_timer::singleton().thread_elapsed()/(elapsed_sec+0.001) << " x CPU) "<< endl;
       }
       catch(carve::exception& ex ) {
 
