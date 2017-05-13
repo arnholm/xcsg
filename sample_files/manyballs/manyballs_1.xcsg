@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xcsg version="1.0" secant_tolerance="0.18000000000000002">
+	<metadata>
+		<software name="angelcad" version="v1.0-00"/>
+		<model name="manyballs_1" created="2017-05-12T19:13:26"/>
+	</metadata>
+	<union3d>
+		<union3d>
+			<union3d>
+				<sphere r="25"/>
+			</union3d>
+		</union3d>
+	</union3d>
+</xcsg>
