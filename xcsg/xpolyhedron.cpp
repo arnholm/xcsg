@@ -16,6 +16,8 @@
 #include "xpolyhedron.h"
 #include <carve/polyhedron_decl.hpp>
 #include <carve/input.hpp>
+#include "qhull/qhull3d.h"
+#include "carve_boolean.h"
 #include "cf_xmlNode.h"
 #include "mesh_utils.h"
 #include <map>
@@ -154,19 +156,38 @@ std::shared_ptr<carve::mesh::MeshSet<3>> xpolyhedron::create_carve_mesh(const ca
    bool reverse_face = mesh_utils::is_left_hand(t);
 
    carve::input::PolyhedronData data;
-   data.reserveVertices(static_cast<int>(m_vertices.size()));
-   for(size_t i=0; i<m_vertices.size(); i++) {
-      data.addVertex(t*get_transform()*m_vertices[i]);
-   }
-
-   data.reserveFaces(static_cast<int>(m_faces.size()),4);
-   for(size_t i=0; i<m_faces.size(); i++) {
-      const xface& face = m_faces[i];
-      if(reverse_face) data.addFace(face.rbegin(),face.rend());
-      else             data.addFace(face.begin(),face.end());
-   }
-
    carve::input::Options options;
+
+   if(m_faces.size() > 0) {
+
+      // conventional polyhedron
+      data.reserveVertices(static_cast<int>(m_vertices.size()));
+      for(size_t i=0; i<m_vertices.size(); i++) {
+         data.addVertex(t*get_transform()*m_vertices[i]);
+      }
+
+      data.reserveFaces(static_cast<int>(m_faces.size()),4);
+      for(size_t i=0; i<m_faces.size(); i++) {
+         const xface& face = m_faces[i];
+         if(reverse_face) data.addFace(face.rbegin(),face.rend());
+         else             data.addFace(face.begin(),face.end());
+      }
+   }
+   else if(m_vertices.size() > 2) {
+
+      // No faces specified, but several vertices
+      // Create instead a convex hull polyhedron, using only the vertices
+      qhull3d qhull;
+      for(size_t i=0; i<m_vertices.size(); i++) {
+         xvertex vertex = t*get_transform()*t*get_transform()*m_vertices[i];
+         qhull.push_back(vertex.v[0],vertex.v[1],vertex.v[2]);
+      }
+
+      carve_boolean csg;
+      csg.compute(qhull);
+      return csg.mesh_set();
+   }
+
    return std::shared_ptr<carve::mesh::MeshSet<3>>(data.createMesh(options));
 }
 
