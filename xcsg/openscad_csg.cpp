@@ -7,15 +7,14 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "openscad_csg.h"
 #include <iomanip>
-#include <iostream>
 #include <stdexcept>
 #include "clipper_csg/polygon2d.h"
 #include "clipper_csg/contour2d.h"
@@ -26,12 +25,6 @@
 
 openscad_csg::openscad_csg(const std::string& xcsg_path)
 {
-/*
-   cout << "folder   : " << fullpath.parent_path().string() << endl;
-   cout << "filename : " << fullpath.stem().string() << endl;
-   cout << "extension: " << fullpath.extension().string() << endl;
-*/
-
    boost::filesystem::path fullpath(xcsg_path);
    boost::filesystem::path csg_path = fullpath.parent_path() / fullpath.stem();
    m_path = csg_path.string() + ".csg";

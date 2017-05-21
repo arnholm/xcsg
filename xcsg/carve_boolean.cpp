@@ -19,7 +19,6 @@
 #include "xpolyhedron.h"
 //#include <carve/mesh_simplify.hpp>
 #include "carve/mesh_simplify.hpp"
-#include <iostream>
 #include <carve/input.hpp>
 
 #include "boolean_timer.h"

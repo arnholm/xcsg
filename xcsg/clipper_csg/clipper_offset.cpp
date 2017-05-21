@@ -14,7 +14,6 @@
 // EndLicense:
 
 #include "clipper_offset.h"
-#include <iostream>
 using namespace std;
 
 clipper_offset::clipper_offset()
@@ -26,8 +25,6 @@ clipper_offset::~clipper_offset()
 
 bool clipper_offset::compute(std::shared_ptr<clipper_profile> profile, double delta, bool round, bool chamfer)
 {
-//   cout <<  "clipper_offset delta="<<delta<<",  round="<<round <<",  chamfer=" << chamfer << endl;
-
    if(round) {
       return compute(profile,delta,ClipperLib::jtRound);
    }
