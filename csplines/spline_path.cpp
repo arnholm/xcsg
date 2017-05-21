@@ -1,5 +1,6 @@
 #include "spline_path.h"
 #include "ap/spline3.h"
+#include <algorithm>
 
 // #include <iostream>
 
