@@ -5,7 +5,7 @@
 		<Option title="xcsg" />
 		<Option pch_mode="2" />
 		<Option compiler="msvc" />
-		<Option virtualFolders="mesh/;shapes/3d/;shapes/;shapes/2d/;boolean/;XML/;Transforms/;boolean/3d/;boolean/2d/;mesh/sweep/;file_export/;" />
+		<Option virtualFolders="mesh/;shapes/3d/;shapes/;shapes/2d/;boolean/;XML/;Transforms/;boolean/3d/;boolean/2d/;mesh/sweep/;file_export/;boolean/sweep/;" />
 		<Build>
 			<Target title="MSVC_Debug">
 				<Option output=".cmp/msvc/bin/Debug/xcsgd" prefix_auto="1" extension_auto="1" />
@@ -76,11 +76,12 @@
 				<Option object_output=".cmp/gcc/obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="/work/DATA/Angel_misc/sweep/sweep_spline.xcsg --stl " />
 				<Compiler>
 					<Add option="-std=c++0x" />
+					<Add option="-fPIC" />
 					<Add option="-g" />
 					<Add option="-W" />
-					<Add option="-fPIC" />
 					<Add option="-fexceptions" />
 					<Add option="`$(#wx.config) --cxxflags --debug`" />
 					<Add option="-DNOPCH" />
@@ -90,6 +91,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="`$(#wx.config) --libs std,aui --static --debug`" />
+					<Add library="csplinesd" />
 					<Add library="qhulld" />
 					<Add library="dmeshd" />
 					<Add library="carve" />
@@ -109,8 +111,8 @@
 				<Compiler>
 					<Add option="-Os" />
 					<Add option="-std=c++0x" />
-					<Add option="-W" />
 					<Add option="-fPIC" />
+					<Add option="-W" />
 					<Add option="-fexceptions" />
 					<Add option="`$(#wx.config) --cxxflags`" />
 					<Add option="-DNOPCH" />
@@ -119,6 +121,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="`$(#wx.config) --libs std,aui --static`" />
+					<Add library="csplines" />
 					<Add library="qhull" />
 					<Add library="dmesh" />
 					<Add library="carve" />
@@ -288,6 +291,12 @@
 		<Unit filename="sweep_path_rotate.h">
 			<Option virtualFolder="mesh/sweep/" />
 		</Unit>
+		<Unit filename="sweep_path_spline.cpp">
+			<Option virtualFolder="mesh/sweep/" />
+		</Unit>
+		<Unit filename="sweep_path_spline.h">
+			<Option virtualFolder="mesh/sweep/" />
+		</Unit>
 		<Unit filename="sweep_path_transform.cpp">
 			<Option virtualFolder="mesh/sweep/" />
 		</Unit>
@@ -453,11 +462,23 @@
 		<Unit filename="xsphere.h">
 			<Option virtualFolder="shapes/3d/" />
 		</Unit>
+		<Unit filename="xspline_path.cpp">
+			<Option virtualFolder="boolean/sweep/" />
+		</Unit>
+		<Unit filename="xspline_path.h">
+			<Option virtualFolder="boolean/sweep/" />
+		</Unit>
 		<Unit filename="xsquare.cpp">
 			<Option virtualFolder="shapes/2d/" />
 		</Unit>
 		<Unit filename="xsquare.h">
 			<Option virtualFolder="shapes/2d/" />
+		</Unit>
+		<Unit filename="xsweep.cpp">
+			<Option virtualFolder="boolean/sweep/" />
+		</Unit>
+		<Unit filename="xsweep.h">
+			<Option virtualFolder="boolean/sweep/" />
 		</Unit>
 		<Unit filename="xtin_model.cpp">
 			<Option virtualFolder="shapes/3d/" />

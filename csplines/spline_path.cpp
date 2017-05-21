@@ -1,0 +1,134 @@
+#include "spline_path.h"
+#include "ap/spline3.h"
+
+// #include <iostream>
+
+namespace csplines {
+
+   spline_path::spline_path()
+   : m_length(0.0)
+   {}
+
+   spline_path::spline_path(const std::vector<cpoint>& points)
+   : m_length(0.0)
+   {
+      compute_spline(points);
+   }
+
+   spline_path::~spline_path()
+   {}
+
+   bool spline_path::compute_spline(const std::vector<cpoint>& points)
+   {
+      // estimate parameter values for each of the points as the distance travelled along the curve
+      int n = (int) points.size();
+
+      // allocate the arrays
+      ap::real_1d_array t,px,py,pz,vx,vy,vz;
+      t.setbounds(0,n-1);
+      px.setbounds(0,n-1);
+      py.setbounds(0,n-1);
+      pz.setbounds(0,n-1);
+      vx.setbounds(0,n-1);
+      vy.setbounds(0,n-1);
+      vz.setbounds(0,n-1);
+
+      // assign all array values
+      double tsum = 0.0;
+      t(0) = tsum;
+      px(0) = points[0].px;
+      py(0) = points[0].py;
+      pz(0) = points[0].pz;
+      vx(0) = points[0].vx;
+      vy(0) = points[0].vy;
+      vz(0) = points[0].vz;
+      for(int i=1; i<n; i++) {
+         tsum += points[i].dist(points[i-1]);
+         t(i) = tsum;
+         px(i) = points[i].px;
+         py(i) = points[i].py;
+         pz(i) = points[i].pz;
+         vx(i) = points[i].vx;
+         vy(i) = points[i].vy;
+         vz(i) = points[i].vz;
+      }
+
+      // normalise the parameters [0,1]
+      double scale = 1.0/tsum;
+      for(int i=1; i<n; i++) t(i) *= scale;
+      m_length = tsum;
+
+      buildcubicspline(t,px,n,0,0.0,0,0.0,m_cpx);
+      buildcubicspline(t,py,n,0,0.0,0,0.0,m_cpy);
+      buildcubicspline(t,pz,n,0,0.0,0,0.0,m_cpz);
+
+      buildcubicspline(t,vx,n,0,0.0,0,0.0,m_cvx);
+      buildcubicspline(t,vy,n,0,0.0,0,0.0,m_cvy);
+      buildcubicspline(t,vz,n,0,0.0,0,0.0,m_cvz);
+      return true;
+   }
+
+   cpoint spline_path::pos(double t) const
+   {
+      double px = splineinterpolation(m_cpx,t);
+      double py = splineinterpolation(m_cpy,t);
+      double pz = splineinterpolation(m_cpz,t);
+
+      double vx = splineinterpolation(m_cvx,t);
+      double vy = splineinterpolation(m_cvy,t);
+      double vz = splineinterpolation(m_cvz,t);
+
+      return cpoint(px,py,pz, vx,vy,vz);
+   }
+
+   cpoint spline_path::dir(double t) const
+   {
+      double px,dpx,d2px;
+      double py,dpy,d2py;
+      double pz,dpz,d2pz;
+      splinedifferentiation(m_cpx,t,px,dpx,d2px);
+      splinedifferentiation(m_cpy,t,py,dpy,d2py);
+      splinedifferentiation(m_cpz,t,pz,dpz,d2pz);
+
+      double vx = splineinterpolation(m_cvx,t);
+      double vy = splineinterpolation(m_cvy,t);
+      double vz = splineinterpolation(m_cvz,t);
+
+      return cpoint(dpx,dpy,dpz, vx,vy,vz);
+   }
+
+
+   double spline_path::max_curvature(int nseg) const
+   {
+      // curvature corresponds to 2nd derivative
+
+      double dt = 1.0/nseg;
+      double c  = 0.0;
+      int    np = nseg+1;
+      for(int ip=0; ip<np; ip++) {
+         double t = ip*dt;
+
+         double px,dpx,d2px;
+         double py,dpy,d2py;
+         double pz,dpz,d2pz;
+         splinedifferentiation(m_cpx,t,px,dpx,d2px);
+         splinedifferentiation(m_cpy,t,py,dpy,d2py);
+         splinedifferentiation(m_cpz,t,pz,dpz,d2pz);
+
+         c = std::max(c,fabs(d2px));
+         c = std::max(c,fabs(d2py));
+         c = std::max(c,fabs(d2pz));
+
+     //    std::cout << "c=" << d2px << ' ' <<  d2py << ' ' << d2pz << ": length="<< m_length << std::endl;
+      }
+      return c/(m_length*m_length);
+   }
+
+
+   double spline_path::length() const
+   {
+      return m_length;
+   }
+
+
+}

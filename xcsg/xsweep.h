@@ -13,23 +13,26 @@
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
 
-#include "sweep_path_linear.h"
+#ifndef XSWEEP_H
+#define XSWEEP_H
 
-sweep_path_linear::sweep_path_linear(std::shared_ptr<const polymesh2d> pm2d, double h)
-: m_pm2d(pm2d)
-, m_h(h)
-{}
+#include "xsolid.h"
+class xshape2d;
+class xspline_path;
 
-sweep_path_linear::~sweep_path_linear()
-{}
+class xsweep : public xsolid {
+public:
+   xsweep();
+   xsweep(const cf_xmlNode& node);
+   virtual ~xsweep();
 
-std::shared_ptr<const polymesh3d> sweep_path_linear::profile(double p) const
-{
-   carve::math::Matrix t = carve::math::Matrix::TRANS(0.0,0.0,p*m_h);
-   return std::shared_ptr<const polymesh3d>(new polymesh3d(m_pm2d,t));
-}
+   std::shared_ptr<carve::mesh::MeshSet<3>> create_carve_mesh(const carve::math::Matrix& t = carve::math::Matrix()) const;
 
-size_t sweep_path_linear::nseg() const
-{
-   return 1;
-}
+protected:
+
+private:
+   std::shared_ptr<xshape2d>    m_profile;
+   std::shared_ptr<xspline_path> m_path;
+};
+
+#endif // XSWEEP_H

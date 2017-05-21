@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef EXTRUDE_MESH_H
 #define EXTRUDE_MESH_H
 
@@ -20,6 +20,7 @@
 #include <carve/mesh.hpp>
 #include "clipper_csg/clipper_profile.h"
 #include <carve/matrix.hpp>
+#include "csplines/spline_path.h"
 
 // extrude 2d to 3d
 
@@ -37,6 +38,10 @@ public:
                                                                      const carve::math::Matrix& t_top,         // top profile transform
                                                                      std::shared_ptr<clipper_profile> top,     // top profile
                                                                      const carve::math::Matrix& t);            // final solid transform
+
+   static std::shared_ptr<carve::mesh::MeshSet<3>> sweep_extrude(std::shared_ptr<clipper_profile> profile,
+                                                                 std::shared_ptr<const csplines::spline_path> path,
+                                                                 const carve::math::Matrix& t);
 
    static double evaluate_max_x(std::shared_ptr<carve::mesh::MeshSet<3>> meshset);
 

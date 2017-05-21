@@ -107,8 +107,8 @@
 		<Unit filename="ap/spline3.cpp" />
 		<Unit filename="ap/spline3.h" />
 		<Unit filename="csplines_config.h" />
-		<Unit filename="spline3d.cpp" />
-		<Unit filename="spline3d.h" />
+		<Unit filename="spline_path.cpp" />
+		<Unit filename="spline_path.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

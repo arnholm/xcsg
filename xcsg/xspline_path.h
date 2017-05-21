@@ -13,23 +13,26 @@
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
 
-#include "sweep_path_linear.h"
 
-sweep_path_linear::sweep_path_linear(std::shared_ptr<const polymesh2d> pm2d, double h)
-: m_pm2d(pm2d)
-, m_h(h)
-{}
+#ifndef XSPLINE_PATH_H
+#define XSPLINE_PATH_H
 
-sweep_path_linear::~sweep_path_linear()
-{}
+#include <memory>
+class cf_xmlNode;
+#include "csplines/spline_path.h"
 
-std::shared_ptr<const polymesh3d> sweep_path_linear::profile(double p) const
-{
-   carve::math::Matrix t = carve::math::Matrix::TRANS(0.0,0.0,p*m_h);
-   return std::shared_ptr<const polymesh3d>(new polymesh3d(m_pm2d,t));
-}
+class xspline_path {
+public:
+   xspline_path();
+   xspline_path(const cf_xmlNode& node);
+   virtual ~xspline_path();
 
-size_t sweep_path_linear::nseg() const
-{
-   return 1;
-}
+   const std::vector<csplines::cpoint>& cp() const;
+
+protected:
+
+private:
+   std::vector<csplines::cpoint> m_cp;  // spline control points
+};
+
+#endif // XSPLINE_PATH_H

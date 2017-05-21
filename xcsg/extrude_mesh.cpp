@@ -7,18 +7,19 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "extrude_mesh.h"
 #include "mesh_utils.h"
 #include "sweep_mesh.h"
 #include "sweep_path_linear.h"
 #include "sweep_path_rotate.h"
 #include "sweep_path_transform.h"
+#include "sweep_path_spline.h"
 #include "clipper_csg/dmesh_adapter.h"
 #include "carve/mesh_simplify.hpp"
 
@@ -124,7 +125,25 @@ std::shared_ptr<carve::mesh::MeshSet<3>> extrude_mesh::transform_extrude(const c
    return meshset;
 }
 
+std::shared_ptr<carve::mesh::MeshSet<3>> extrude_mesh::sweep_extrude(std::shared_ptr<clipper_profile> profile,
+                                                                     std::shared_ptr<const csplines::spline_path> spath,
+                                                                     const carve::math::Matrix& t)
+{
+   // tesselate the profile
+   dmesh_adapter tess;
+   tess.tesselate(profile->polyset());
 
+   // use the 2d mesh as basis for sweep
+   std::shared_ptr<sweep_path_spline>  path(new sweep_path_spline(tess.mesh(),spath,-1));
+   std::shared_ptr<xpolyhedron> poly = sweep_mesh(path,false).polyhedron();
+   std::shared_ptr<carve::mesh::MeshSet<3>> meshset = poly->create_carve_mesh(t);
+
+   carve::mesh::MeshSimplifier simplifier;
+   double min_normal_angle=(pi/180.)*1E-4;  // 1E-4 degrees
+   simplifier.mergeCoplanarFaces(meshset.get(),min_normal_angle);
+
+   return meshset;
+}
 
 std::shared_ptr<carve::mesh::MeshSet<3>> extrude_mesh::clone_extrude(std::shared_ptr<carve::mesh::MeshSet<3>> meshset, const carve::math::Matrix& t)
 {

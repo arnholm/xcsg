@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef XCSG_FACTORY_H
 #define XCSG_FACTORY_H
 
@@ -64,6 +64,7 @@ protected:
    static std::shared_ptr<xsolid> make_linear_extrude(const cf_xmlNode& node);
    static std::shared_ptr<xsolid> make_rotate_extrude(const cf_xmlNode& node);
    static std::shared_ptr<xsolid> make_transform_extrude(const cf_xmlNode& node);
+   static std::shared_ptr<xsolid> make_sweep(const cf_xmlNode& node);
 
 
    // concrete 2d types
