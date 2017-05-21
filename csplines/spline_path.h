@@ -32,6 +32,7 @@ namespace csplines {
    struct CSPLINES_PUBLIC cpoint {
       cpoint(double px_, double py_, double pz_, double vx_, double vy_, double vz_) : px(px_), py(py_), pz(pz_),vx(vx_),vy(vy_),vz(vz_) {}
       inline double dist(const cpoint& other) const {  double dx(px-other.px),dy(py-other.py),dz(pz-other.pz); return sqrt(dx*dx+dy*dy+dz*dz); }
+      inline double length() const { return sqrt(vx*vx+vy*vy+vz*vz); }
       double px,py,pz;
       double vx,vy,vz;
    };
@@ -54,17 +55,24 @@ namespace csplines {
       // return max curvature observed by sampling nseg segments
       double max_curvature(int nseg) const;
 
+      // return vector scaling range, largest minus smallest
+      double scaling_range() const;
+
       // return sum of segment lengths
       double length() const;
 
+      // return number of input control points
+      size_t size() const;
+
    private:
-      double            m_length;  // sum of segment lengths
-      ap::real_1d_array m_cpx;
-      ap::real_1d_array m_cpy;
-      ap::real_1d_array m_cpz;
-      ap::real_1d_array m_cvx;
-      ap::real_1d_array m_cvy;
-      ap::real_1d_array m_cvz;
+      std::vector<cpoint> m_points;
+      double              m_length;  // sum of segment lengths
+      ap::real_1d_array   m_cpx;
+      ap::real_1d_array   m_cpy;
+      ap::real_1d_array   m_cpz;
+      ap::real_1d_array   m_cvx;
+      ap::real_1d_array   m_cvy;
+      ap::real_1d_array   m_cvz;
    };
 
 }

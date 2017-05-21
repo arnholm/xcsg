@@ -2,8 +2,6 @@
 #include "ap/spline3.h"
 #include <algorithm>
 
-// #include <iostream>
-
 namespace csplines {
 
    spline_path::spline_path()
@@ -19,8 +17,15 @@ namespace csplines {
    spline_path::~spline_path()
    {}
 
+   size_t  spline_path::size() const
+   {
+      return m_points.size();
+   }
+
    bool spline_path::compute_spline(const std::vector<cpoint>& points)
    {
+      m_points = points;
+
       // estimate parameter values for each of the points as the distance travelled along the curve
       int n = (int) points.size();
 
@@ -102,7 +107,6 @@ namespace csplines {
    double spline_path::max_curvature(int nseg) const
    {
       // curvature corresponds to 2nd derivative
-
       double dt = 1.0/nseg;
       double c  = 0.0;
       int    np = nseg+1;
@@ -119,8 +123,6 @@ namespace csplines {
          c = std::max(c,fabs(d2px));
          c = std::max(c,fabs(d2py));
          c = std::max(c,fabs(d2pz));
-
-     //    std::cout << "c=" << d2px << ' ' <<  d2py << ' ' << d2pz << ": length="<< m_length << std::endl;
       }
       return c/(m_length*m_length);
    }
@@ -131,5 +133,18 @@ namespace csplines {
       return m_length;
    }
 
+   double spline_path::scaling_range() const
+   {
+      double smin = 0.0;
+      double smax = 0.0;
+      for(size_t i=0; i<m_points.size(); i++) {
+         const cpoint& p = m_points[i];
+         double l = p.length();
+         smin = (i==0)? l : std::min(l,smin);
+         smax = (i==0)? l : std::max(l,smin);
+      }
+
+      return (smax-smin);
+   }
 
 }

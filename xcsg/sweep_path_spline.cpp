@@ -16,8 +16,6 @@
 #include "sweep_path_spline.h"
 #include "mesh_utils.h"
 
-// #include <iostream>
-
 static const double pi = 4.0*atan(1.0);
 
 sweep_path_spline::sweep_path_spline(std::shared_ptr<const polymesh2d> pm2d, std::shared_ptr<const csplines::spline_path> path, int nseg)
@@ -28,22 +26,21 @@ sweep_path_spline::sweep_path_spline(std::shared_ptr<const polymesh2d> pm2d, std
    if(m_nseg < 1) {
 
       // start with a minimum of 2 segments and increase until the tolerance is satisfied
-      nseg = 2;
+      nseg = std::max(2,std::abs(m_nseg));
 
       // estimate the max radius of the path
       int nseg_sample = 20;
       double c_max = path->max_curvature(nseg_sample);
-  //    std::cout << "cmax=" << c_max << std::endl;
-
-      if(c_max > 0.0) {
+      double srange = path->scaling_range();
+      if(c_max > 1.0E-5) {
 
          double radius = 1.0/c_max;
-
          double angle  = 0.5*pi;   // Assuming 90 degree segment at given radius
 
          double alpha = angle/nseg;
          while( radius*(1.0-cos(0.5*alpha)) > mesh_utils::secant_tolerance() ) {
             nseg += 1;
+            if(nseg > 512)break;
             alpha = angle/nseg;
          }
 
@@ -52,11 +49,16 @@ sweep_path_spline::sweep_path_spline(std::shared_ptr<const polymesh2d> pm2d, std
 
          double arclen = 0.5*pi*radius;
          double slen   = path->length();
+         double factor = slen/arclen;
 
-         nseg *= slen/arclen;
+         if(factor > 0.0) {
+            int nseg1 = nseg * slen/arclen;
+            nseg  = std::max(nseg,nseg1);
+         }
+      }
 
-        //  std::cout << "radius=" << radius << ", nseg=" << nseg <<  std::endl;
-
+      if(srange > 0.0  && nseg == std::abs(m_nseg)) {
+         nseg = std::max(nseg,nseg*static_cast<int>(srange+0.5));
       }
 
       m_nseg = nseg;
@@ -79,7 +81,7 @@ std::shared_ptr<const polymesh3d> sweep_path_spline::profile(double p) const
    // get the curve point
    csplines::cpoint cp = m_path->pos(p);
 
-   size_t icol = 3;
+   // set curve position in transformation
    t.m[3][0] = cp.px;
    t.m[3][1] = cp.py;
    t.m[3][2] = cp.pz;
@@ -98,6 +100,10 @@ std::shared_ptr<const polymesh3d> sweep_path_spline::profile(double p) const
       }
    }
 
+   // scaling of profile at this parameter value
+   double scale = ydir.length();
+
+   // compute rotational terms
    vec3d xdir = carve::geom::cross(ydir,zdir).normalize();
    ydir       = carve::geom::cross(zdir,xdir).normalize();
 
@@ -113,7 +119,10 @@ std::shared_ptr<const polymesh3d> sweep_path_spline::profile(double p) const
    t.m[2][1] = zdir[1];
    t.m[2][2] = zdir[2];
 
-   return std::shared_ptr<const polymesh3d>(new polymesh3d(m_pm2d,t));
+   // profile scaling
+   carve::math::Matrix tscale = carve::math::Matrix::SCALE(scale,scale,1.0);
+
+   return std::shared_ptr<const polymesh3d>(new polymesh3d(m_pm2d,t*tscale));
 }
 
 

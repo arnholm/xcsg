@@ -26,6 +26,8 @@ xsweep::xsweep()
 
 xsweep::xsweep(const cf_xmlNode& const_node)
 {
+   set_transform(const_node);
+
    cf_xmlNode node = const_node;
    for(auto i=node.begin(); i!=node.end(); i++) {
 

@@ -134,7 +134,8 @@ std::shared_ptr<carve::mesh::MeshSet<3>> extrude_mesh::sweep_extrude(std::shared
    tess.tesselate(profile->polyset());
 
    // use the 2d mesh as basis for sweep
-   std::shared_ptr<sweep_path_spline>  path(new sweep_path_spline(tess.mesh(),spath,-1));
+   int nseg = -4*static_cast<int>(spath->size());
+   std::shared_ptr<sweep_path_spline>  path(new sweep_path_spline(tess.mesh(),spath,nseg));
    std::shared_ptr<xpolyhedron> poly = sweep_mesh(path,false).polyhedron();
    std::shared_ptr<carve::mesh::MeshSet<3>> meshset = poly->create_carve_mesh(t);
 
