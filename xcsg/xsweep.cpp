@@ -59,3 +59,9 @@ std::shared_ptr<carve::mesh::MeshSet<3>> xsweep::create_carve_mesh(const carve::
 
    return  extrude_mesh::sweep_extrude(csg.profile(),spline,t*get_transform());
 }
+
+
+size_t xsweep::nbool()
+{
+   return m_profile->nbool();
+}

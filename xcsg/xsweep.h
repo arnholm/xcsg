@@ -26,12 +26,14 @@ public:
    xsweep(const cf_xmlNode& node);
    virtual ~xsweep();
 
+   virtual size_t nbool();
+
    std::shared_ptr<carve::mesh::MeshSet<3>> create_carve_mesh(const carve::math::Matrix& t = carve::math::Matrix()) const;
 
 protected:
 
 private:
-   std::shared_ptr<xshape2d>    m_profile;
+   std::shared_ptr<xshape2d>     m_profile;
    std::shared_ptr<xspline_path> m_path;
 };
 
