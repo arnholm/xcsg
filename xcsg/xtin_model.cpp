@@ -7,17 +7,19 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "xtin_model.h"
 #include "primitives3d.h"
 #include <carve/input.hpp>
 #include <map>
 #include "tin_mesh.h"
+
+
 
 xtin_model::xtin_model(const cf_xmlNode& const_node)
 {
@@ -79,9 +81,10 @@ std::shared_ptr<carve::mesh::MeshSet<3>> xtin_model::create_carve_mesh(const car
 
    // convert to carve mesh
    carve::input::PolyhedronData data;
-   data.reserveVertices(static_cast<int>(m_vertices.size()));
-   for(size_t i=0; i<m_vertices.size(); i++) {
-      data.addVertex(t*get_transform()*m_vertices[i]);
+   data.reserveVertices(static_cast<int>(poly->m_vert.size()));
+   for(size_t i=0; i<poly->m_vert.size(); i++) {
+      const tin_mesh::txyz& v = poly->m_vert[i];
+      data.addVertex(t*get_transform()*carve::geom::VECTOR(v.x,v.y,v.z));
    }
 
    data.reserveFaces(static_cast<int>(poly->m_face.size()),3);
@@ -91,5 +94,8 @@ std::shared_ptr<carve::mesh::MeshSet<3>> xtin_model::create_carve_mesh(const car
    }
 
    carve::input::Options options;
-   return std::shared_ptr<carve::mesh::MeshSet<3>>(data.createMesh(options));
+   std::shared_ptr<carve::mesh::MeshSet<3>>  meshset(data.createMesh(options));
+
+
+   return meshset;
 }

@@ -7,15 +7,17 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "tin_mesh.h"
 #include "dmesh/dmesh.h"
 #include "dmesh/dtriangle.h"
+#include <algorithm>
+#include <iostream>
 
 std::shared_ptr<tin_mesh::tpoly> tin_mesh::make_tin(std::shared_ptr<tpoly> poly)
 {
@@ -41,5 +43,38 @@ std::shared_ptr<tin_mesh::tpoly> tin_mesh::make_tin(std::shared_ptr<tpoly> poly)
       poly->m_face.push_back({v1,v2,v3});
    }
 
-   return poly;
+   return close_tin(poly,mesh);
+}
+
+std::shared_ptr<tin_mesh::tpoly> tin_mesh::close_tin(std::shared_ptr<tpoly> poly, dmesh& mesh)
+{
+   size_t nvert = poly->m_vert.size();
+   size_t nface = poly->m_face.size();
+
+   // compute min and max z
+   double zmin = poly->m_vert[0].z;
+   double zmax = zmin;
+   for( auto& v : poly->m_vert) {
+      zmin = std::min(zmin,v.z);
+      zmax = std::max(zmax,v.z);
+   }
+   double diff = zmax-zmin;
+
+
+
+   std::shared_ptr<tpoly> cpoly = std::shared_ptr<tpoly>(new tpoly( std::vector<txyz>()));
+   cpoly->m_vert.reserve(nvert*2);
+   cpoly->m_face.reserve(nface*2);
+
+   // z coordinate of bottom vertices
+   double zlow = zmin-diff*0.1;
+   for( auto& v : poly->m_vert) cpoly->m_vert.push_back(txyz(v.x,v.y,zlow));  // bottom vertices
+   for( auto& v : poly->m_vert) cpoly->m_vert.push_back(v);                   // top vertices
+
+
+   for( auto& f : poly->m_face)  cpoly->m_face.push_back({f[2],f[1],f[0]});    // bottom faces (reversed)
+   for( auto& f : poly->m_face) cpoly->m_face.push_back({f[0]+nvert,f[1]+nvert,f[2]+nvert}); // top faces
+
+
+   return cpoly;
 }

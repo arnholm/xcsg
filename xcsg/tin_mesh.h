@@ -7,17 +7,18 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef TIN_MESH_H
 #define TIN_MESH_H
 
 #include <memory>
 #include <vector>
+class dmesh;
 
 class tin_mesh {
 public:
@@ -34,7 +35,12 @@ public:
       std::vector<pface>  m_face;
    };
 
+   // perform inital meshing of original points, returns non-closed mesh
    static std::shared_ptr<tpoly> make_tin(std::shared_ptr<tpoly> poly);
+
+private:
+   // convert non-closed mesh to closed polyhedron
+   static std::shared_ptr<tpoly> close_tin(std::shared_ptr<tpoly> poly, dmesh& mesh);
 
 };
 
