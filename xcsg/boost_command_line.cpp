@@ -37,7 +37,7 @@ namespace po = boost::program_options;
 // http://www.boost.org/doc/libs/1_60_0/doc/html/program_options/tutorial.html
 
 boost_command_line::boost_command_line(int argc , char **argv)
-: generic("\nxcsg command line options & arguments")
+: generic("\nxcsg command line options & arguments ("+std::string(XCSG_version)+")")
 , hidden("Hidden options")
 , m_parse_ok(false)
 , m_help_shown(false)
@@ -45,7 +45,7 @@ boost_command_line::boost_command_line(int argc , char **argv)
 {
    generic.add_options()
         ("help,h",  "Show this help message.")
-        ("version,v",  "Show program version.")
+        ("version,v",  "Show program version (numeric part).")
         ("amf",   "AMF output file format (Additive Manufacturing Format)")
         ("csg",   "CSG output file format (OpenSCAD)")
         ("stl",   "STL output file format (STereoLitography)")
@@ -150,7 +150,7 @@ boost_command_line::boost_command_line(int argc , char **argv)
 void boost_command_line::show_version()
 {
    if(!m_version_shown) {
-      cout << "xcsg version " << XCSG_version << endl;
+      cout <<  string(XCSG_version).substr(1) << endl;
       m_version_shown = true;
    }
 }
@@ -158,7 +158,6 @@ void boost_command_line::show_version()
 void boost_command_line::show_help()
 {
    if(!m_help_shown) {
-      show_version();
       cout << generic << "  <xcsg-file>\t\tpath to input .xcsg file (required)" << endl << endl;
       m_help_shown = true;
    }

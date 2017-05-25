@@ -25,7 +25,7 @@
 #include "xintersection3d.h"
 #include "xpolyhedron.h"
 #include "xsphere.h"
-#include "xtin_model.h"
+// #include "xtin_model.h"
 #include "xunion3d.h"
 #include "xhull3d.h"
 #include "xlinear_extrude.h"
@@ -106,7 +106,7 @@ std::shared_ptr<xsolid> xcsg_factory::make_difference3d(const cf_xmlNode& node) 
 std::shared_ptr<xsolid> xcsg_factory::make_intersection3d(const cf_xmlNode& node)     { return std::shared_ptr<xsolid>(new xintersection3d(node)); }
 std::shared_ptr<xsolid> xcsg_factory::make_polyhedron(const cf_xmlNode& node)         { return std::shared_ptr<xsolid>(new xpolyhedron(node));     }
 std::shared_ptr<xsolid> xcsg_factory::make_sphere(const cf_xmlNode& node)             { return std::shared_ptr<xsolid>(new xsphere(node));         }
-std::shared_ptr<xsolid> xcsg_factory::make_tin_model(const cf_xmlNode& node)          { return std::shared_ptr<xsolid>(new xtin_model(node));      }
+// std::shared_ptr<xsolid> xcsg_factory::make_tin_model(const cf_xmlNode& node)          { return std::shared_ptr<xsolid>(new xtin_model(node));      }
 std::shared_ptr<xsolid> xcsg_factory::make_union3d(const cf_xmlNode& node)            { return std::shared_ptr<xsolid>(new xunion3d(node));        }
 std::shared_ptr<xsolid> xcsg_factory::make_hull3d(const cf_xmlNode& node)             { return std::shared_ptr<xsolid>(new xhull3d(node));         }
 std::shared_ptr<xsolid> xcsg_factory::make_linear_extrude(const cf_xmlNode& node)     { return std::shared_ptr<xsolid>(new xlinear_extrude(node)); }

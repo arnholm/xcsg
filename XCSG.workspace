@@ -9,8 +9,5 @@
 			<Depends filename="dmesh/dmesh.cbp" />
 			<Depends filename="csplines/csplines.cbp" />
 		</Project>
-		<Project filename="xcsg_version/xcsg_version.cbp">
-			<Depends filename="xcsg/xcsg.cbp" />
-		</Project>
 	</Workspace>
 </CodeBlocks_workspace_file>

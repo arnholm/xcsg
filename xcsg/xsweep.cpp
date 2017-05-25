@@ -32,11 +32,13 @@ xsweep::xsweep(const cf_xmlNode& const_node)
    for(auto i=node.begin(); i!=node.end(); i++) {
 
       cf_xmlNode sub(i);
-      if(!m_profile.get() && xcsg_factory::singleton().is_shape2d(sub)) {
-         m_profile = xcsg_factory::singleton().make_shape2d(sub);
+      if(xcsg_factory::singleton().is_shape2d(sub)) {
+         if(!m_profile.get()) m_profile = xcsg_factory::singleton().make_shape2d(sub);
+         else throw logic_error("xsweep: More than one sweep profile specified.");
       }
-      else if(!m_path.get() && sub.tag()=="spline_path") {
-         m_path = std::shared_ptr<xspline_path>(new xspline_path(sub));
+      else if(sub.tag()=="spline_path") {
+         if(!m_path.get()) m_path = std::shared_ptr<xspline_path>(new xspline_path(sub));
+         else throw logic_error("xsweep: More than one spline_path specified.");
       }
    }
 
