@@ -20,6 +20,7 @@
 #include "xsolid_collector.h"
 
 #include "carve_boolean_thread.h"
+#include "carve_mesh_thread.h"
 
 xintersection3d::xintersection3d()
 {}
@@ -41,9 +42,7 @@ std::shared_ptr<carve::mesh::MeshSet<3>> xintersection3d::create_carve_mesh(cons
 
    safe_queue<std::string> exception_queue;
    safe_queue<carve_boolean_thread::MeshSet_ptr> mesh_queue;
-   for(auto i=m_incl.begin(); i!=m_incl.end(); i++) {
-      mesh_queue.enqueue((*i)->create_carve_mesh(t*get_transform()));
-   }
+   carve_mesh_thread::create_mesh_queue(t*get_transform(),m_incl,mesh_queue);
 
    const size_t nthreads = carve_boolean_thread::default_nthreads();
    list<boost::thread>  csg_threads;

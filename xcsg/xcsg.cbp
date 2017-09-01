@@ -176,6 +176,12 @@
 		<Unit filename="carve_boolean_thread.h">
 			<Option virtualFolder="mesh/" />
 		</Unit>
+		<Unit filename="carve_mesh_thread.cpp">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="carve_mesh_thread.h">
+			<Option virtualFolder="mesh/" />
+		</Unit>
 		<Unit filename="carve_triangulate.cpp">
 			<Option virtualFolder="mesh/" />
 		</Unit>

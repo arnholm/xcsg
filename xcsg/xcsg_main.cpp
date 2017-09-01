@@ -110,17 +110,16 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
 
       cout << "...starting boolean operations" << endl;
 
+      boost::posix_time::ptime time_0 = boost::posix_time::microsec_clock::universal_time();
       carve_boolean csg;
       try {
 
-         boost::posix_time::ptime p1 = boost::posix_time::microsec_clock::universal_time();
          boolean_timer::singleton().init(nbool);
          csg.compute(obj->create_carve_mesh(),carve::csg::CSG::OP::UNION);
-         boost::posix_time::time_duration  ptime_diff = boost::posix_time::microsec_clock::universal_time() - p1;
+         boost::posix_time::time_duration  ptime_diff = boost::posix_time::microsec_clock::universal_time() - time_0;
          double elapsed_sec = 0.001*ptime_diff.total_milliseconds();
 
-         cout << "...completed boolean operations in " << setprecision(5) << elapsed_sec << " [sec] ("
-                                                       << setprecision(3) << boolean_timer::singleton().thread_elapsed()/(elapsed_sec+0.001) << " x CPU) "<< endl;
+         cout << "...completed boolean operations in " << setprecision(5) << elapsed_sec << " [sec] " << endl;
       }
       catch(carve::exception& ex ) {
 
@@ -135,6 +134,7 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
       cout << "...result model contains " << nmani << ((nmani==1)? " lump.": " lumps.") << endl;
 
       // we export only triangles
+       boost::posix_time::ptime time_1 = boost::posix_time::microsec_clock::universal_time();
       carve_triangulate triangulate;
       for(size_t imani=0; imani<nmani; imani++) {
 
@@ -150,14 +150,18 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
             bool canonicalize = true;
             bool degen_check = true;
             cout << "...Triangulating lump ... " << std::endl;
-            cout << "...Triangulation completed with " << triangulate.compute(poly->create_carve_polyhedron(),improve,canonicalize,degen_check)<< " triangle faces" << endl;
+            cout << "...Triangulation completed with " << triangulate.compute(poly->create_carve_polyhedron(),improve,canonicalize,degen_check)<< " triangle faces ";
+
+            boost::posix_time::ptime time_2 = boost::posix_time::microsec_clock::universal_time();
+            double elapsed_2 = 0.001*(time_2 - time_1).total_milliseconds();
+            cout << "in " << elapsed_2 << " [sec]" << endl;
+
          }
          else {
             // triangulation not required
             triangulate.add(poly->create_carve_polyhedron());
          }
       }
-
       cout <<    "...Exporting results " << endl;
 
       // create object for file export
