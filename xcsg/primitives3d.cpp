@@ -225,20 +225,23 @@ std::shared_ptr<xpolyhedron>  primitives3d::make_geodesic_sphere(double r, int n
    carve::math::Matrix tloc = t * carve::math::Matrix::SCALE(r,r,r);
 
    if(nseg < 0) {
-      nseg = 4;
+      nseg = 6;
       double alpha = 2.0*pi/nseg;
-      while(r*(1.0-cos(0.5*alpha)) >  mesh_utils::secant_tolerance()) {
-         nseg += 2;
+      while(1.1*r*(1.0-cos(0.5*alpha)) >  mesh_utils::secant_tolerance()) {
+         nseg *= 2;
          alpha = 2*pi/nseg;
       }
    }
 
    // approximate number of recursion levels from nseg
-   size_t idepth = 0;
+   size_t idepth = 2;
+
    if(nseg >  12)idepth = 1;
    if(nseg >  24)idepth = 2;
    if(nseg >  48)idepth = 3;
-   if(nseg > 192)idepth = 4;
+   if(nseg >  96)idepth = 4;
+   if(nseg > 192)idepth = 5;
+
 
    geodesic_sphere gsphere(idepth);
 

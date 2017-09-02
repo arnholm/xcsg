@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "geodesic_sphere.h"
 
 geodesic_sphere::geodesic_sphere(size_t idepth)
@@ -110,7 +110,7 @@ void geodesic_sphere::subdivide(size_t iv1, size_t iv2, size_t iv3, size_t idept
 {
    if(idepth == 0) {
       // create one new face and stop recursion
-      m_faces.push_back(xface(iv1,iv2,iv3));
+      m_faces.push_back(xface(iv3,iv2,iv1));
       return;
    }
 

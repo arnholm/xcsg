@@ -36,7 +36,7 @@ xsphere::~xsphere()
 std::shared_ptr<carve::mesh::MeshSet<3>> xsphere::create_carve_mesh(const carve::math::Matrix& t) const
 {
    int nseg = -1;
-   std::shared_ptr<xpolyhedron> poly = primitives3d::make_sphere(m_r,nseg,t*get_transform());
-  // std::shared_ptr<xpolyhedron> poly = primitives3d::make_geodesic_sphere(m_r,nseg,t*get_transform());
+ //  std::shared_ptr<xpolyhedron> poly = primitives3d::make_sphere(m_r,nseg,t*get_transform());
+   std::shared_ptr<xpolyhedron> poly = primitives3d::make_geodesic_sphere(m_r,nseg,t*get_transform());
    return poly->create_carve_mesh();
 }

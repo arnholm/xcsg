@@ -89,7 +89,7 @@ size_t carve_triangulate::compute(std::shared_ptr<carve::poly::Polyhedron> poly,
       f.getVertexLoop(vloop);
 
       carve::triangulate::triangulate(carve::poly::p2_adapt_project<3>(f.project), vloop, result);
-      if(improve) {
+      if(improve && vloop.size()>3) {
          carve::triangulate::improve(carve::poly::p2_adapt_project<3>(f.project), vloop, result);
       }
 
