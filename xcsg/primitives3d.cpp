@@ -234,7 +234,7 @@ std::shared_ptr<xpolyhedron>  primitives3d::make_geodesic_sphere(double r, int n
    }
 
    // approximate number of recursion levels from nseg
-   size_t idepth = 2;
+   size_t idepth = 0;
 
    if(nseg >  12)idepth = 1;
    if(nseg >  24)idepth = 2;
