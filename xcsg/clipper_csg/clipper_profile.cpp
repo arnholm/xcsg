@@ -34,6 +34,11 @@ void clipper_profile::AddPaths(std::shared_ptr<ClipperLib::Paths> paths)
    }
 }
 
+void clipper_profile::AddPath(const ClipperLib::Path& path)
+{
+   m_paths.push_back(path);
+}
+
 std::shared_ptr<polyset2d> clipper_profile::polyset()
 {
    std::shared_ptr<polyset2d> pset(new polyset2d());
@@ -53,17 +58,14 @@ std::shared_ptr<polyset2d> clipper_profile::polyset()
    return pset;
 }
 
-
-void clipper_profile::fill_holes()
+void clipper_profile::positive_profiles(std::list<std::shared_ptr<clipper_profile>>& profiles )
 {
-   // to fill the holes, we simply discard the negative paths
-   ClipperLib::Paths filled_paths;
-   filled_paths.reserve(m_paths.size());
    for(size_t i=0; i<m_paths.size(); i++) {
       bool positive = Orientation(m_paths[i]);
       if(positive) {
-         filled_paths.push_back(m_paths[i]);
+         std::shared_ptr<clipper_profile> prof = std::make_shared<clipper_profile>();
+         prof->AddPath(m_paths[i]);
+         profiles.push_back(prof);
       }
    }
-   m_paths = filled_paths;
 }

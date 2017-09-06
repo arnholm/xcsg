@@ -19,6 +19,7 @@
 #include "clipper_csg_config.h"
 #include "clipper.hpp"
 #include "polyset2d.h"
+#include <list>
 
 // A clipper_profile represents the result of successive 2d booleans
 // It can represent any complex 2d profile, possibly multiple polygons with holes.
@@ -37,8 +38,12 @@ public:
    // return a set of polygons for this profile
    std::shared_ptr<polyset2d> polyset();
 
-   // fill holes in this profile
-   void fill_holes();
+   // split this profile into a number of single contour profiles containing only positive winding order paths
+   // negative winding order paths are discareded
+   void positive_profiles(std::list<std::shared_ptr<clipper_profile>>& profiles );
+
+protected:
+   void AddPath(  const ClipperLib::Path& path);
 
 private:
    ClipperLib::Paths m_paths;

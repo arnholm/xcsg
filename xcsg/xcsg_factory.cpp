@@ -70,7 +70,7 @@ xcsg_factory::xcsg_factory()
    m_shape2d_map.insert(std::make_pair("intersection2d",xcsg_factory::make_intersection2d));
    m_shape2d_map.insert(std::make_pair("union2d",xcsg_factory::make_union2d));
    m_shape2d_map.insert(std::make_pair("hull2d",xcsg_factory::make_hull2d));
-   m_shape2d_map.insert(std::make_pair("fill2d",xcsg_factory::make_hull2d));
+   m_shape2d_map.insert(std::make_pair("fill2d",xcsg_factory::make_fill2d));
    m_shape2d_map.insert(std::make_pair("offset2d",xcsg_factory::make_offset2d));
 }
 

@@ -48,8 +48,16 @@ std::shared_ptr<clipper_profile> xfill2d ::create_clipper_profile(const carve::m
    clipper_boolean csg;
    for(auto i=m_incl.begin(); i!=m_incl.end(); i++) {
       std::shared_ptr<clipper_profile> profile = (*i)->create_clipper_profile(t*get_transform());
-      profile->fill_holes();
-      csg.compute(profile,ClipperLib::ctUnion);
+
+      // split the profile into single path profiles with only positive winding order
+      std::list<std::shared_ptr<clipper_profile>> profiles;
+      profile->positive_profiles(profiles);
+
+      // union the profiles to obtain a single profile again
+      // the effect is that all holes dissapear, but outer contours remain
+      for(auto& p : profiles) {
+         csg.compute(p,ClipperLib::ctUnion);
+      }
    }
    return csg.profile();
 }
