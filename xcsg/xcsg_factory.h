@@ -76,6 +76,7 @@ protected:
    static std::shared_ptr<xshape2d> make_intersection2d(const cf_xmlNode& node);
    static std::shared_ptr<xshape2d> make_union2d(const cf_xmlNode& node);
    static std::shared_ptr<xshape2d> make_hull2d(const cf_xmlNode& node);
+   static std::shared_ptr<xshape2d> make_fill2d(const cf_xmlNode& node);
    static std::shared_ptr<xshape2d> make_offset2d(const cf_xmlNode& node);
  //  static std::shared_ptr<xshape2d> make_soffset2d(const cf_xmlNode& node);
 

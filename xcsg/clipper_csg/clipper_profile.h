@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef CLIPPER_PROFILE_H
 #define CLIPPER_PROFILE_H
 
@@ -36,6 +36,9 @@ public:
 
    // return a set of polygons for this profile
    std::shared_ptr<polyset2d> polyset();
+
+   // fill holes in this profile
+   void fill_holes();
 
 private:
    ClipperLib::Paths m_paths;

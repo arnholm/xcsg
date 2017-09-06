@@ -53,3 +53,17 @@ std::shared_ptr<polyset2d> clipper_profile::polyset()
    return pset;
 }
 
+
+void clipper_profile::fill_holes()
+{
+   // to fill the holes, we simply discard the negative paths
+   ClipperLib::Paths filled_paths;
+   filled_paths.reserve(m_paths.size());
+   for(size_t i=0; i<m_paths.size(); i++) {
+      bool positive = Orientation(m_paths[i]);
+      if(positive) {
+         filled_paths.push_back(m_paths[i]);
+      }
+   }
+   m_paths = filled_paths;
+}
