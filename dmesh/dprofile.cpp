@@ -7,18 +7,20 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "dprofile.h"
 #include <unordered_set>
 #include <unordered_map>
 #include <string>
 #include <list>
+#include <map>
 #include <sstream>
+#include <cmath>
 using namespace std;
 
 #include "dmesh.h"
@@ -112,7 +114,7 @@ void dprofile::compute(dmesh* mesh)
 
       // create and initialise loop
       dloop* loop = new dloop(mesh);
-      m_loops.insert(loop);
+      m_loops.push_back(loop);
 
       // handle first edge
       edge_set.erase(edge);
@@ -173,7 +175,7 @@ void dprofile::add_loop(const vector<dpos2d>& points)
 
    // create and initialise new loop in this mesh
    dloop* loop = new dloop(get_mesh());
-   m_loops.insert(loop);
+   m_loops.push_back(loop);
 
    // create vertices for the loop + maintain a local vertex index vector for the loop
    vector<size_t> vind;
@@ -195,6 +197,23 @@ void dprofile::add_loop(const vector<dpos2d>& points)
    size_t iv2 = vind[0];
    dedge* edge = get_mesh()->get_create_edge(iv1,iv2);
    loop->push_back(new dcoedge(loop,edge,false));
+}
+
+void dprofile::sort_loops()
+{
+   // make sure the loop with the largest absolute area comes first in the list of loops
+
+   std::multimap<double,dloop*> sorted_loops;
+   for(auto& loop : m_loops) {
+      double area = fabs(loop->signed_area());
+      if(area > 0) {
+         sorted_loops.insert(std::make_pair(area,loop));
+      }
+   }
+   m_loops.clear();
+   for(auto& p : sorted_loops) {
+      m_loops.push_back(p.second);
+   }
 }
 
 
