@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef DMESH_H
 #define DMESH_H
 
@@ -120,6 +120,8 @@ public:
    // return pointer to profile, requires prior call to compute_profile()
    const dprofile* get_profile() const { return &m_profile; }
 
+   void debug_mesh_report(std::ostream& out) const;
+
 protected:
    size_t         add_vertex(const dpos2d& pos);
    dedge*         get_create_edge(size_t iv1, size_t iv2);
@@ -153,6 +155,9 @@ protected:
 
    // remove unbounded triangles, i.e. triangles with at least one free edge (use_count==1)
    void           remove_unbounded_triangles();
+
+   // remove triangles overlapping loops
+   void           remove_overlapping_triangles();
 
    // enforce free loop edges by splitting them, return number of splits. Zero return means all recovered
    size_t         recover_loop_edges_split();

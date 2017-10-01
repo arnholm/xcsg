@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "dmesh.h"
 #include "dvertex.h"
 #include "dedge.h"
@@ -24,6 +24,10 @@
 #include <map>
 #include <string>
 #include <cmath>
+
+
+#include <fstream>
+#include <iomanip>
 
 dmesh::dmesh()
 : m_profile(this)
@@ -85,7 +89,10 @@ void  dmesh::remove_unused_edges()
 
 bool dmesh::triangulate_profile(bool rmv_nonmat, bool split_loops, bool rmv_unbound)
 {
-   // then run triangulation based on the new vertices
+   // Sort profile loops
+   m_profile.sort_loops();
+
+   // run triangulation based on loop vertices
    bool repeat = true;
    while(repeat) {
 
@@ -95,6 +102,7 @@ bool dmesh::triangulate_profile(bool rmv_nonmat, bool split_loops, bool rmv_unbo
 
       repeat = false;
       triangulate_vertices();
+      remove_overlapping_triangles();
 
       // remove extra triangles
       if(rmv_nonmat) {
@@ -109,6 +117,7 @@ bool dmesh::triangulate_profile(bool rmv_nonmat, bool split_loops, bool rmv_unbo
          remove_unbounded_triangles();
       }
    }
+
    return true;
 }
 
@@ -508,6 +517,23 @@ void dmesh::remove_unbounded_triangles()
 
 }
 
+void dmesh::remove_overlapping_triangles()
+{
+   std::unordered_set<dtriangle*> overlapping;
+   for(auto& loop : m_profile ) {
+
+      for(auto& e : m_edge) {
+         dedge* edge = e.second;
+         loop->collect_overlapping_triangles(edge,overlapping);
+      }
+   }
+
+  // now delete the triangles and any edges that fall out of use
+  for(auto triangle : overlapping) {
+     remove_triangle(triangle,true);
+  }
+}
+
 
 void dmesh::export_p2d(std::ostream& out) const
 {
@@ -646,4 +672,57 @@ size_t dmesh::split_edge(dedge* edge)
       }
    }
    return 0;
+}
+
+
+void dmesh::debug_mesh_report(std::ostream& out) const
+{
+   using namespace std;
+
+   size_t ivert = 0;
+   for(auto& v : m_vert) {
+      const dpos2d& p = v->pos();
+      out << "Vertex: "
+          << setw(5)  << 'v'+std::to_string(ivert++)
+          << setw(12) << p.x()
+          << setw(12) << p.y()
+          << endl;
+   }
+
+   out << endl;
+   map<const dedge*,string> edge_names;
+   size_t iedge=0;
+   for(auto& e : m_edge) {
+      const dedge* edge = e.second;
+      string edge_name = 'e'+std::to_string(iedge++);
+      edge_names[edge] = edge_name;
+      out << "Edge: "
+          << setw(5)  << edge_name
+          << setw(5)  << 'v'+std::to_string(edge->vertex1())
+          << setw(5)  << 'v'+std::to_string(edge->vertex2())
+          << ", uc="<< setw(4)  << edge->use_count()
+          << endl;
+   }
+
+   out << endl;
+   size_t itri=0;
+   for(auto& t : m_tri) {
+      out << "Triangle: "
+          << setw(5)  << 't'+std::to_string(itri++)
+          << "   :  "
+          << setw(5)  << 'v'+std::to_string(t->vertex1())
+          << setw(5)  << 'v'+std::to_string(t->vertex2())
+          << setw(5)  << 'v'+std::to_string(t->vertex3())
+          << "   :  "
+          << setw(4)  << edge_names[t->coedge(0)->edge()]
+          << setw(4)  << edge_names[t->coedge(1)->edge()]
+          << setw(4)  << edge_names[t->coedge(2)->edge()]
+          << "   :  "
+          << setw(4)  << t->coedge(0)->edge()->use_count()
+          << setw(4)  << t->coedge(1)->edge()->use_count()
+          << setw(4)  << t->coedge(2)->edge()->use_count()
+          << endl;
+   }
+
+
 }
