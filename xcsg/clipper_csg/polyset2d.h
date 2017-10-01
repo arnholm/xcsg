@@ -7,34 +7,34 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef POLYSET2D_H
 #define POLYSET2D_H
 
 #include "polygon2d.h"
-#include <set>
+#include <list>
 
 class polyset2d {
 public:
-   typedef std::set<std::shared_ptr<polygon2d>>  polygon2d_set;
-   typedef polygon2d_set::iterator iterator;
+   typedef std::list<std::shared_ptr<polygon2d>>  polygon2d_list;
+   typedef polygon2d_list::iterator iterator;
 
    polyset2d();
    virtual ~polyset2d();
 
-   void insert(std::shared_ptr<polygon2d> poly) { m_poly.insert(poly); }
+   void push_back(std::shared_ptr<polygon2d> poly) { m_poly.push_back(poly); }
 
    size_t size() const { return m_poly.size(); }
    iterator begin()    { return m_poly.begin(); }
    iterator end()      { return m_poly.end(); }
 
 private:
-   polygon2d_set m_poly;
+   polygon2d_list m_poly;
 };
 
 #endif // POLYSET2D_H

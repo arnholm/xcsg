@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "contour2d.h"
 #include "vmap2d.h"
 #include <utility>
@@ -128,4 +128,59 @@ bool contour2d::make_compatible(contour2d& a, contour2d& b, double epspnt)
    b = vmb.contour();
 
    return true;
+}
+
+double contour2d::signed_area() const
+{
+
+   /*
+     Method:
+
+     ref http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
+     Some of the suggested methods will fail in the case of a non-convex polygon,
+     such as a crescent. Here's a simple one that will work with non-convex polygons
+     (it'll even work with a self-intersecting polygon like a figure-eight, telling you whether it's mostly clockwise).
+
+     Sum over the edges, (x2-x1)(y2+y1). If the result is positive the curve is clockwise,
+     if it's negative the curve is counter-clockwise. (The result is twice the enclosed area, with a +/- convention.)
+
+     point[0] = (5,0)   edge[0]: (6-5)(4+0) =   4
+     point[1] = (6,4)   edge[1]: (4-6)(5+4) = -18
+     point[2] = (4,5)   edge[2]: (1-4)(5+5) = -30
+     point[3] = (1,5)   edge[3]: (1-1)(0+5) =   0
+     point[4] = (1,0)   edge[4]: (5-1)(0+0) =   0
+                                              ---
+                                              -44  counter-clockwise
+   */
+
+   size_t np  = m_vert.size();
+   double sum = 0.0;
+
+   for (size_t ip = 1; ip < np; ip++)    {
+      const dpos2d& prev = m_vert[ip-1];
+      const dpos2d& pcur = m_vert[ip];
+
+      double x1 = prev.x();
+      double y1 = prev.y();
+
+      double x2 = pcur.x();
+      double y2 = pcur.y();
+
+      sum += (x2 - x1)*(y2 + y1);
+   }
+
+   // close the polygon: account for the final edge from last to first point
+   const dpos2d& prev = m_vert[np-1];
+   const dpos2d& pcur = m_vert[0];
+
+   double x1 = prev.x();
+   double y1 = prev.y();
+
+   double x2 = pcur.x();
+   double y2 = pcur.y();
+
+   sum += (x2 - x1)*(y2 + y1);
+
+   double s_area = 0.5*sum;
+   return s_area;
 }

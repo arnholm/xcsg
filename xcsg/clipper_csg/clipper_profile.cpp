@@ -48,7 +48,7 @@ std::shared_ptr<polyset2d> clipper_profile::polyset()
       bool positive = Orientation(m_paths[i]);
       if(positive) {
          polygon = std::shared_ptr<polygon2d>(new polygon2d());
-         pset->insert(polygon);
+         pset->push_back(polygon);
       }
       if(!polygon.get()) {
          throw std::logic_error("polyset2d error: 1st polygon2d contour was negative??");

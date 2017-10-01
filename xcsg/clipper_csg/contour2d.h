@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef CONTOUR2D_H
 #define CONTOUR2D_H
 
@@ -42,6 +42,10 @@ public:
 
    // make_compatible recomputes a and b to be compatible for use in "transform_extrude"
    static bool make_compatible(contour2d& a, contour2d& b, double epspnt);
+
+   // compute the signed area of the contour
+   // CCW contours have positive areas
+   double signed_area() const;
 
    ClipperLib::Path path() const;
 private:
