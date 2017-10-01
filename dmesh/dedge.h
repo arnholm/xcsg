@@ -7,17 +7,18 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef DEDGE_H
 #define DEDGE_H
 
 #include "dentity.h"
 #include "dvec2d.h"
+#include "dline2d.h"
 #include "dcoedge.h"
 class dtriangle;
 #include <unordered_set>
@@ -53,6 +54,9 @@ public:
 
    // return the length of the edge
    double length() const;
+
+   // return the edge as a dline2d
+   dline2d line() const;
 
    // return the triangles connected to this edge
    std::unordered_set<dtriangle*> triangles() const;

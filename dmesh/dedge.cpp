@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "dedge.h"
 #include "dvertex.h"
 #include "dcoedge.h"
@@ -41,6 +41,14 @@ dvec2d dedge::dir() const
    const dpos2d& p1 = mesh->get_vertex(m_iv1)->pos();
    const dpos2d& p2 = mesh->get_vertex(m_iv2)->pos();
    return dvec2d(p1,p2);
+}
+
+dline2d dedge::line() const
+{
+   const dmesh* mesh = get_mesh();
+   const dpos2d& p1 = mesh->get_vertex(m_iv1)->pos();
+   const dpos2d& p2 = mesh->get_vertex(m_iv2)->pos();
+   return std::move(dline2d(p1,p2));
 }
 
 std::unordered_set<dtriangle*> dedge::triangles() const
