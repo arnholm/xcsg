@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "dloop.h"
 #include "dvertex.h"
 #include "dcoedge.h"
@@ -166,4 +166,48 @@ size_t dloop::split_coedge(dcoedge* coedge)
    }
 
    throw std::logic_error("dloop::split_coedge: coedge was not found");
+}
+
+void dloop::collect_overlapping_triangles(dedge* edge, std::unordered_set<dtriangle*>& overlapping)
+{
+   if(edge->is_referenced_from<dloop>())return;
+
+   size_t iv1 = edge->vertex1();
+   size_t iv2 = edge->vertex2();
+
+   // get the line representation of the input edge
+   dline2d edge_line = edge->line();
+
+   for(auto icoedge=m_coedges.begin(); icoedge!=m_coedges.end(); icoedge++) {
+
+      // get the line representation of the loop coedge
+      dcoedge* coedge     = *icoedge;
+      dedge* coedge_edge  = coedge->edge();
+
+      size_t icv1 = coedge_edge->vertex1();
+      size_t icv2 = coedge_edge->vertex2();
+
+      bool common_vertex = (iv1==icv1 || iv1==icv2) || (iv2==icv1 || iv2==icv2);
+      if( (coedge_edge != edge) && !common_vertex ) {
+
+         dline2d coedge_line = coedge_edge->line();
+
+         dpos2d pos;
+         double edge_par   = -1.0;
+         double coedge_par = -1.0;
+         if(edge_line.intersect(coedge_line,pos,edge_par,coedge_par)) {
+            bool on_line        = (edge_par  >0.0) && (edge_par  <1.0);
+            bool on_coedge_line = (coedge_par>0.0) && (coedge_par<1.0);
+            if(on_line && on_coedge_line) {
+               // we have intersection
+               std::unordered_set<dtriangle*> triangles = edge->triangles();
+               for(auto& tri : triangles) {
+                  overlapping.insert(tri);
+               }
+            }
+         }
+      }
+
+   // next doedge in loop
+   }
 }
