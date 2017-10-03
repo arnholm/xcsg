@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "dtriangle.h"
 #include "dcoedge.h"
 #include "dedge.h"
@@ -21,6 +21,7 @@
 #include <algorithm>
 #include "dloop.h"
 #include "dvec2d.h"
+#include "dline2d.h"
 
 #include <unordered_set>
 
@@ -246,4 +247,25 @@ size_t dtriangle::oppsite_vertex(const dedge* edge) const
    }
 
    throw std::logic_error("dtriangle::oppsite_vertex: given edge not referenced by triangle");
+}
+
+
+bool dtriangle::intersects(const dline2d& line) const
+{
+   std::vector<dedge*> edges = get_edges();
+   for(auto& edge : edges) {
+      dline2d edge_line = edge->line();
+
+      dpos2d pos;
+      double edge_par = -1.0;
+      double line_par = -1.0;
+      if(edge_line.intersect(line,pos,edge_par,line_par)) {
+         bool on_edge = (edge_par>0.0) && (edge_par<1.0);
+         bool on_line = (line_par>0.0) && (line_par<1.0);
+         if(on_edge && on_line) {
+            return true;
+         }
+      }
+   }
+   return false;
 }

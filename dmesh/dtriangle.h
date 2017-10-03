@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef DTRIANGLE_H
 #define DTRIANGLE_H
 
@@ -22,6 +22,7 @@
 #include "dentity.h"
 #include "dcircle.h"
 #include "dcoedge.h"
+class dline2d;
 class dedge;
 
 // Topology
@@ -69,6 +70,9 @@ public:
 
    // return vertex opposite given edge
    size_t oppsite_vertex(const dedge* edge) const;
+
+   // check if line intersects line
+   bool intersects(const dline2d& line) const;
 
 protected:
    // declare this triangle a supertriangle. It adds a zero reference to its edges

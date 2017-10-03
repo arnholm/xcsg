@@ -102,7 +102,6 @@ bool dmesh::triangulate_profile(bool rmv_nonmat, bool split_loops, bool rmv_unbo
 
       repeat = false;
       triangulate_vertices();
-      remove_overlapping_triangles();
 
       // remove extra triangles
       if(rmv_nonmat) {

@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef DCIRCLE_H
 #define DCIRCLE_H
 
@@ -39,7 +39,7 @@ public:
    double radius() const           { return m_radius; }
 
    // check if position is inside circle
-   bool pos_inside(const dpos2d& p) { return (m_center.dist(p) <= m_radius); }
+   bool pos_inside(const dpos2d& p) const { return (m_center.dist(p) <= m_radius); }
 
 private:
    dpos2d m_center;
