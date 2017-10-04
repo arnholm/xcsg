@@ -19,6 +19,7 @@
 #include "clipper_csg_config.h"
 
 #include "dmesh/dpos2d.h"
+#include "dmesh/dbox2d.h"
 #include <vector>
 
 class contour2d {
@@ -46,6 +47,9 @@ public:
    // compute the signed area of the contour
    // CCW contours have positive areas
    double signed_area() const;
+
+   // return bounding box of this contour
+   dbox2d bounding_box() const;
 
    ClipperLib::Path path() const;
 private:

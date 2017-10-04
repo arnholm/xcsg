@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "polygon2d.h"
 
 polygon2d::polygon2d()
@@ -70,4 +70,15 @@ bool polygon2d::make_compatible(polygon2d& a, polygon2d& b, double epspnt)
    }
 
    return true;
+}
+
+dbox2d polygon2d::bounding_box() const
+{
+   dbox2d box;
+   for(size_t i=0;i<m_contours.size();i++) {
+      dbox2d cbox = m_contours[i]->bounding_box();
+      box.enclose(cbox.p1());
+      box.enclose(cbox.p2());
+   }
+   return box;
 }

@@ -33,6 +33,12 @@ public:
    iterator begin()    { return m_poly.begin(); }
    iterator end()      { return m_poly.end(); }
 
+   // return bounding box of this polyset
+   dbox2d bounding_box() const;
+
+   // return greatest extent in x or y
+   double greatest_extent() const;
+
 private:
    polygon2d_list m_poly;
 };

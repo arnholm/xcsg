@@ -184,3 +184,13 @@ double contour2d::signed_area() const
    double s_area = 0.5*sum;
    return s_area;
 }
+
+dbox2d contour2d::bounding_box() const
+{
+   dbox2d box;
+   for(size_t i=0; i<m_vert.size(); i++) {
+      const dpos2d& p = m_vert[i];
+      box.enclose(p);
+   }
+   return box;
+}
