@@ -48,7 +48,7 @@ public:
    size_t vertex3() const { return m_coedges[2]->vertex1(); }
 
    // return true if 'pos' is inside the triangle circumcircle
-   bool in_circumcircle(const dpos2d& pos);
+   bool in_circumcircle(const dpos2d& pos, double epspnt);
 
    // return true if 'pos' is inside the triangle (more expensive than in_circumcircle(...))
    bool in_triangle(const dpos2d& pos);

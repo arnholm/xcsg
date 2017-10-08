@@ -29,8 +29,9 @@
 #include <fstream>
 #include <iomanip>
 
-dmesh::dmesh()
-: m_profile(this)
+dmesh::dmesh(double epspnt)
+: m_epspnt(epspnt)
+, m_profile(this)
 {}
 
 dmesh::~dmesh()
@@ -220,6 +221,15 @@ bool dmesh::triangulate_vertices()
 
    // perform meshing by adding user points (skipping the super vertices)
    for(size_t iv=3; iv<m_vert.size(); iv++) {
+
+/*
+      std::string path = "/ssd1/tmp/dmesh_debug/dmesh_" + std::to_string(iv);
+      std::ofstream stl(path + ".stl");
+      debug_stl(stl);
+
+      std::ofstream txt(path + ".txt");
+      debug_mesh_report(txt);
+*/
       bowyer_watson(iv);
    }
 
@@ -266,7 +276,7 @@ void dmesh::bowyer_watson(size_t iv)
    std::unordered_set<dtriangle*> bad_triangles;
 
    for(auto triangle : m_tri) {
-      if(triangle->in_circumcircle(p)) {
+      if(triangle->in_circumcircle(p,m_epspnt)) {
          bad_triangles.insert(triangle);
       }
    }
@@ -705,23 +715,51 @@ void dmesh::debug_mesh_report(std::ostream& out) const
 
    out << endl;
    size_t itri=0;
+   dpos2d p11(100.0/3,100);
    for(auto& t : m_tri) {
+      const dcircle& c = t->circle();
+      const dpos2d& p  = c.center();
       out << "Triangle: "
           << setw(5)  << 't'+std::to_string(itri++)
-          << "   :  "
-          << setw(5)  << 'v'+std::to_string(t->vertex1())
-          << setw(5)  << 'v'+std::to_string(t->vertex2())
-          << setw(5)  << 'v'+std::to_string(t->vertex3())
-          << "   :  "
+          << "   :v "
+          << setw(4)  << 'v'+std::to_string(t->vertex1())
+          << setw(4)  << 'v'+std::to_string(t->vertex2())
+          << setw(4)  << 'v'+std::to_string(t->vertex3())
+          << "   :e "
           << setw(4)  << edge_names[t->coedge(0)->edge()]
           << setw(4)  << edge_names[t->coedge(1)->edge()]
           << setw(4)  << edge_names[t->coedge(2)->edge()]
-          << "   :  "
-          << setw(4)  << t->coedge(0)->edge()->use_count()
-          << setw(4)  << t->coedge(1)->edge()->use_count()
-          << setw(4)  << t->coedge(2)->edge()->use_count()
+          << "   :u "
+          << setw(2)  << t->coedge(0)->edge()->use_count()
+          << setw(2)  << t->coedge(1)->edge()->use_count()
+          << setw(2)  << t->coedge(2)->edge()->use_count()
+          << "   :c "
+          << setw(8)  << setprecision(5) << p.x()
+          << setw(8)  << setprecision(5) << p.y()
+          << "   :r "
+          << setw(20)  << setprecision(16) << c.radius()
+          << setw(20)  << setprecision(16) << p.dist(p11)
+          << setw(5)  << ( (t->in_circumcircle(p11,m_epspnt)) ? " T " : " " )
           << endl;
    }
 
+}
 
+void dmesh::debug_stl(std::ostream& out) const
+{
+   out << "solid dmesh-debug " << std::endl;
+   for(auto& t : m_tri) {
+      out << "facet normal 0 0 1" << std::endl;
+      out << "\touter loop" << std::endl;
+
+      std::vector<dpos2d> p = { m_vert[t->vertex1()]->pos(), m_vert[t->vertex2()]->pos(),m_vert[t->vertex3()]->pos() };
+
+      for(size_t iv=0; iv<p.size(); iv++ ) {
+         out << "\t\tvertex "<< std::setprecision(16) << p[iv].x() <<
+                         ' ' << std::setprecision(16) << p[iv].y() <<
+                         ' ' << "0.0" << std::endl;
+      }
+      out << "\tendloop" << std::endl;
+      out << "endfacet" << std::endl;
+   }
 }

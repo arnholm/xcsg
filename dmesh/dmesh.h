@@ -50,7 +50,7 @@ public:
    typedef std::unordered_set<dtriangle*>::iterator    triangle_iterator;
    typedef std::unordered_map<size_t,dedge*>::iterator edge_iterator;
 
-   dmesh();
+   dmesh(double epspnt = 1.0E-8);
    virtual ~dmesh();
 
    // Option A: triangulate from cloud of raw positions. Here it is important to "pepper" the
@@ -165,7 +165,11 @@ protected:
    // split the given edge and replace the neighbour elements
    size_t         split_edge(dedge* edge);
 
+
+   void debug_stl(std::ostream& out) const;
+
 private:
+   double                            m_epspnt;   // tolerance for circumcircles
    std::vector<dvertex*>             m_vert;     // user defined vertices
    std::unordered_map<size_t,dedge*> m_edge;     // map of edges key(v1,v2), allowing lookup of edge based on vertices
    std::unordered_set<dtriangle*>    m_tri;      // generated triangles

@@ -55,9 +55,9 @@ dtriangle::~dtriangle()
    clear();
 }
 
-bool dtriangle::in_circumcircle(const dpos2d& pos)
+bool dtriangle::in_circumcircle(const dpos2d& pos, double epspnt)
 {
-   return m_circle.pos_inside(pos);
+   return m_circle.pos_inside(pos,epspnt);
 }
 
 dcoedge* dtriangle::create_coedge(size_t iv1, size_t iv2)

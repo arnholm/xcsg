@@ -39,7 +39,7 @@ public:
    double radius() const           { return m_radius; }
 
    // check if position is inside circle
-   bool pos_inside(const dpos2d& p) const { return (m_center.dist(p) <= m_radius); }
+   bool pos_inside(const dpos2d& p, double epspnt) const { return (m_center.dist(p) <= (m_radius+epspnt) ); }
 
 private:
    dpos2d m_center;
