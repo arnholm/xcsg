@@ -25,8 +25,6 @@
 #include <string>
 #include <cmath>
 
-
-#include <fstream>
 #include <iomanip>
 
 dmesh::dmesh(double epspnt)
@@ -221,15 +219,6 @@ bool dmesh::triangulate_vertices()
 
    // perform meshing by adding user points (skipping the super vertices)
    for(size_t iv=3; iv<m_vert.size(); iv++) {
-
-/*
-      std::string path = "/ssd1/tmp/dmesh_debug/dmesh_" + std::to_string(iv);
-      std::ofstream stl(path + ".stl");
-      debug_stl(stl);
-
-      std::ofstream txt(path + ".txt");
-      debug_mesh_report(txt);
-*/
       bowyer_watson(iv);
    }
 

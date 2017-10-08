@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef MESH_UTILS_H
 #define MESH_UTILS_H
 
@@ -24,8 +24,8 @@ public:
    // default mesh thickness of 2d shapes when using carve mesh for 2d
    static double thickness() { return 1.0; }
 
-   // minimal accepted edge length
-   static double min_edge_length() { return 1.0E-3; }
+   // Factor expressing max edge length as fraction of profile dimention
+   static double maxlen_factor() { return 0.3; }
 
    // tolerances for adaptive meshing of circular curves/surfaces
    // The tolerance measures the distance from a segment chord to the true circular curve, i.e.  radius*(1-cos(angle/2))

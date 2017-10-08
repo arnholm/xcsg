@@ -7,20 +7,21 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "dmesh_adapter.h"
 
 #include "dmesh/dmesh.h"
 #include "dmesh/dvertex.h"
 #include "dmesh/dtriangle.h"
 
-dmesh_adapter::dmesh_adapter()
-: m_mesh(new polymesh2d())
+dmesh_adapter::dmesh_adapter(double maxlen)
+: m_maxlen(maxlen)
+, m_mesh(new polymesh2d())
 {}
 
 dmesh_adapter::~dmesh_adapter()
@@ -94,13 +95,7 @@ bool dmesh_adapter::add_contour(std::shared_ptr<polygon2d> poly, dmesh& dmesher)
       std::shared_ptr<const contour2d> contour = (*poly)[icontour];
 
       // add the loop to dmesh, first the list of positions
-      size_t nv = contour->size();
-      std::vector<dpos2d> loop;
-      loop.reserve(nv);
-      for(size_t i=0; i<nv;i++) {
-         const dpos2d& vtx = (*contour)[i];
-         loop.push_back(dpos2d(vtx.x(),vtx.y()));
-      }
+      std::vector<dpos2d> loop = build_loop_points(contour);
 
       // Then add the loop to dmesh
       dmesher.add_loop(loop);
@@ -108,3 +103,71 @@ bool dmesh_adapter::add_contour(std::shared_ptr<polygon2d> poly, dmesh& dmesher)
 
    return true;
 }
+
+std::vector<dpos2d> dmesh_adapter::build_loop_points(std::shared_ptr<const contour2d> contour)
+{
+   std::vector<dpos2d> loop;
+
+   size_t nv = contour->size();
+   loop.reserve(nv*2);
+   for(size_t i=0; i<nv;i++) {
+      const dpos2d& vtx = (*contour)[i];
+
+      if( (m_maxlen>0.0) && (i>0) ) {
+         // because of dmesh limitation we may limit the length of
+         // loop edges to get a good/correct mesh.
+         // If length is exceeded we compute interpolated points
+
+         // check if contour segment length is longer than m_maxlen
+         const dpos2d& vtx_prev = (*contour)[i-1];
+         dvec2d dir(vtx_prev,vtx);
+         double length = dir.length();
+         if(length > m_maxlen) {
+            // number of intermediate points required and length of new segments
+            size_t nseg = size_t(length/m_maxlen);
+            double dlen = length/nseg;
+            size_t np   = nseg-1;
+            dir.normalise();
+
+            // generate intermediate points
+            for(size_t ip=0; ip<np; ip++) {
+               dpos2d p = vtx_prev + (ip+1)*dlen*dir;
+               loop.push_back(p);
+            }
+         }
+      }
+
+      // push the contour point
+      loop.push_back(dpos2d(vtx.x(),vtx.y()));
+   }
+
+   // final edge
+   if( m_maxlen>0.0 ) {
+      // because of dmesh limitation we may limit the length of
+      // loop edges to get a good/correct mesh.
+      // If length is exceeded we compute interpolated points
+
+      // check if contour segment length is longer than m_maxlen
+      const dpos2d& vtx_prev = (*contour)[nv-1];
+      const dpos2d& vtx      = (*contour)[0];
+      dvec2d dir(vtx_prev,vtx);
+      double length = dir.length();
+      if(length > m_maxlen) {
+         // number of intermediate points required and length of new segments
+         size_t nseg = size_t(length/m_maxlen);
+         double dlen = length/nseg;
+         size_t np   = nseg-1;
+         dir.normalise();
+
+         // generate intermediate points
+         for(size_t ip=0; ip<np; ip++) {
+            dpos2d p = vtx_prev + (ip+1)*dlen*dir;
+            loop.push_back(p);
+         }
+      }
+   }
+
+
+   loop.shrink_to_fit();
+   return std::move(loop);
+ }

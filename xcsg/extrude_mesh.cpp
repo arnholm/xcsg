@@ -40,8 +40,11 @@ std::shared_ptr<carve::mesh::MeshSet<3>> extrude_mesh::linear_extrude(std::share
 {
    // here, we "simply" perform a linear sweep
 
-   dmesh_adapter tess;
-   tess.tesselate(profile->polyset());
+   std::shared_ptr<polyset2d> polyset = profile->polyset();
+   double maxlen = mesh_utils::maxlen_factor()*polyset->greatest_extent();
+
+   dmesh_adapter tess(maxlen);
+   tess.tesselate(polyset);
 
    std::shared_ptr<sweep_path_linear>  path(new sweep_path_linear(tess.mesh(),h));
    std::shared_ptr<xpolyhedron> poly = sweep_mesh(path,false).polyhedron();
@@ -66,9 +69,12 @@ std::shared_ptr<carve::mesh::MeshSet<3>> extrude_mesh::rotate_extrude(std::share
       cout << "...Info: rotate_extrude angle>=2*PI implies a torus" << endl;
    }
 
+   std::shared_ptr<polyset2d> polyset = profile->polyset();
+   double maxlen = mesh_utils::maxlen_factor()*polyset->greatest_extent();
+
    // first tesselate the 2d mesh
-   dmesh_adapter tess;
-   tess.tesselate(profile->polyset());
+   dmesh_adapter tess(maxlen);
+   tess.tesselate(polyset);
 
    // then use the 2d mesh as basis for sweep
    std::shared_ptr<sweep_path_rotate>  path(new sweep_path_rotate(tess.mesh(),angle,pitch));
@@ -98,6 +104,9 @@ std::shared_ptr<carve::mesh::MeshSet<3>> extrude_mesh::transform_extrude(const c
       throw logic_error("disjoint profiles not supported for 'transform_extrude' ");
    }
 
+   double maxlen_bot = mesh_utils::maxlen_factor()*pset_bot->greatest_extent();
+   double maxlen_top = mesh_utils::maxlen_factor()*pset_top->greatest_extent();
+
    // bottom and top at polygons (possibly with holes)
    std::shared_ptr<polygon2d> poly_bot = *(pset_bot->begin());
    std::shared_ptr<polygon2d> poly_top = *(pset_top->begin());
@@ -110,7 +119,7 @@ std::shared_ptr<carve::mesh::MeshSet<3>> extrude_mesh::transform_extrude(const c
    double epspnt = mesh_utils::secant_tolerance();
    polygon2d::make_compatible(*poly_bot,*poly_top,epspnt);
 
-   dmesh_adapter tess_bot,tess_top;
+   dmesh_adapter tess_bot(maxlen_bot),tess_top(maxlen_top);
    tess_bot.tesselate(pset_bot);
    tess_top.tesselate(pset_top);
 
@@ -129,9 +138,12 @@ std::shared_ptr<carve::mesh::MeshSet<3>> extrude_mesh::sweep_extrude(std::shared
                                                                      std::shared_ptr<const csplines::spline_path> spath,
                                                                      const carve::math::Matrix& t)
 {
+   std::shared_ptr<polyset2d> polyset = profile->polyset();
+   double maxlen = mesh_utils::maxlen_factor()*polyset->greatest_extent();
+
    // tesselate the profile
-   dmesh_adapter tess;
-   tess.tesselate(profile->polyset());
+   dmesh_adapter tess(maxlen);
+   tess.tesselate(polyset);
 
    // use the 2d mesh as basis for sweep
    int nseg = -4*static_cast<int>(spath->size());
