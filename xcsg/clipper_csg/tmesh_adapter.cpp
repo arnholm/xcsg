@@ -107,7 +107,7 @@ bool tmesh_adapter::tesselate(std::shared_ptr<polygon2d> poly)
    const int* vinds      = tessGetVertexIndices(m_tess);
 
    if(n_input_vertices != nverts) {
-      // this should not happen when we hae proper input with no new intersections
+      // this should not happen when we have proper input with no new intersections
       throw std::logic_error("tmesh_adapter:: extra vertices unaccounted for");
    }
 

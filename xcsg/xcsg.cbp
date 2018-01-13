@@ -76,6 +76,7 @@
 				<Option object_output=".cmp/gcc/obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="--stl /ssd1/angelcad/debug/xcsg/circle.xcsg" />
 				<Compiler>
 					<Add option="-std=c++0x" />
 					<Add option="-fPIC" />
@@ -92,6 +93,7 @@
 					<Add option="`$(#wx.config) --libs std,aui --static --debug`" />
 					<Add library="csplinesd" />
 					<Add library="qhulld" />
+					<Add library="tmeshd" />
 					<Add library="dmeshd" />
 					<Add library="carve" />
 					<Add library="boost_program_options" />
@@ -122,6 +124,7 @@
 					<Add option="`$(#wx.config) --libs std,aui --static`" />
 					<Add library="csplines" />
 					<Add library="qhull" />
+					<Add library="tmesh" />
 					<Add library="dmesh" />
 					<Add library="carve" />
 					<Add library="boost_program_options" />
@@ -220,6 +223,8 @@
 		<Unit filename="clipper_csg/polymesh2d.h" />
 		<Unit filename="clipper_csg/polyset2d.cpp" />
 		<Unit filename="clipper_csg/polyset2d.h" />
+		<Unit filename="clipper_csg/tmesh_adapter.cpp" />
+		<Unit filename="clipper_csg/tmesh_adapter.h" />
 		<Unit filename="clipper_csg/vmap2d.cpp" />
 		<Unit filename="clipper_csg/vmap2d.h" />
 		<Unit filename="extrude_mesh.cpp">

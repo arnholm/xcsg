@@ -3,10 +3,12 @@
 	<Workspace title="XCSG">
 		<Project filename="qhull/qhull.cbp" />
 		<Project filename="dmesh/dmesh.cbp" />
+		<Project filename="tmesh/tmesh.cbp" />
 		<Project filename="csplines/csplines.cbp" />
 		<Project filename="xcsg/xcsg.cbp">
 			<Depends filename="qhull/qhull.cbp" />
 			<Depends filename="dmesh/dmesh.cbp" />
+			<Depends filename="tmesh/tmesh.cbp" />
 			<Depends filename="csplines/csplines.cbp" />
 		</Project>
 	</Workspace>
