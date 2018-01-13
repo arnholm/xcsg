@@ -5,7 +5,7 @@
 		<Option title="xcsg" />
 		<Option pch_mode="2" />
 		<Option compiler="msvc" />
-		<Option virtualFolders="mesh/;shapes/3d/;shapes/;shapes/2d/;boolean/;XML/;Transforms/;boolean/3d/;boolean/2d/;mesh/sweep/;file_export/;boolean/sweep/;" />
+		<Option virtualFolders="mesh\;shapes\3d\;shapes\;shapes\2d\;boolean\;XML\;Transforms\;boolean\3d\;boolean\2d\;mesh\sweep\;file_export\;boolean\sweep\;" />
 		<Build>
 			<Target title="MSVC_Debug">
 				<Option output=".cmp/msvc/bin/Debug/xcsgd" prefix_auto="1" extension_auto="1" />
@@ -33,6 +33,7 @@
 					<Add library="msvcrtd.lib" />
 					<Add library="carve" />
 					<Add library="qhulld" />
+					<Add library="tmesh" />
 					<Add library="dmeshd" />
 					<Add library="csplinesd" />
 					<Add directory="$(#carve.lib_debug)" />
@@ -62,6 +63,7 @@
 					<Add library="msvcrt.lib" />
 					<Add library="carve" />
 					<Add library="qhull" />
+					<Add library="tmesh" />
 					<Add library="dmesh" />
 					<Add library="csplines" />
 					<Add directory="$(#carve.lib_release)" />
