@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef POLYMESH2D_H
 #define POLYMESH2D_H
 
@@ -28,6 +28,7 @@
 class polymesh2d {
 public:
    friend class dmesh_adapter;
+   friend class tmesh_adapter;
 
    typedef std::vector<dpos2d>      vertex_vector;
    typedef std::vector<size_t>        index_vector;    // a vector of indices into m_vert

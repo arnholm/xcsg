@@ -21,6 +21,7 @@
 #include "sweep_path_transform.h"
 #include "sweep_path_spline.h"
 #include "clipper_csg/dmesh_adapter.h"
+#include "clipper_csg/tmesh_adapter.h"
 #include "carve/mesh_simplify.hpp"
 
 static const double pi = 4.0*atan(1.0);
@@ -43,7 +44,8 @@ std::shared_ptr<carve::mesh::MeshSet<3>> extrude_mesh::linear_extrude(std::share
    std::shared_ptr<polyset2d> polyset = profile->polyset();
    double maxlen = mesh_utils::maxlen_factor()*polyset->greatest_extent();
 
-   dmesh_adapter tess(maxlen);
+ //  dmesh_adapter tess(maxlen);
+   tmesh_adapter tess;
    tess.tesselate(polyset);
 
    std::shared_ptr<sweep_path_linear>  path(new sweep_path_linear(tess.mesh(),h));
@@ -73,7 +75,8 @@ std::shared_ptr<carve::mesh::MeshSet<3>> extrude_mesh::rotate_extrude(std::share
    double maxlen = mesh_utils::maxlen_factor()*polyset->greatest_extent();
 
    // first tesselate the 2d mesh
-   dmesh_adapter tess(maxlen);
+  // dmesh_adapter tess(maxlen);
+   tmesh_adapter tess;
    tess.tesselate(polyset);
 
    // then use the 2d mesh as basis for sweep
@@ -119,7 +122,8 @@ std::shared_ptr<carve::mesh::MeshSet<3>> extrude_mesh::transform_extrude(const c
    double epspnt = mesh_utils::secant_tolerance();
    polygon2d::make_compatible(*poly_bot,*poly_top,epspnt);
 
-   dmesh_adapter tess_bot(maxlen_bot),tess_top(maxlen_top);
+//   dmesh_adapter tess_bot(maxlen_bot),tess_top(maxlen_top);
+   tmesh_adapter tess_bot,tess_top;
    tess_bot.tesselate(pset_bot);
    tess_top.tesselate(pset_top);
 
@@ -142,7 +146,8 @@ std::shared_ptr<carve::mesh::MeshSet<3>> extrude_mesh::sweep_extrude(std::shared
    double maxlen = mesh_utils::maxlen_factor()*polyset->greatest_extent();
 
    // tesselate the profile
-   dmesh_adapter tess(maxlen);
+//   dmesh_adapter tess(maxlen);
+   tmesh_adapter tess;
    tess.tesselate(polyset);
 
    // use the 2d mesh as basis for sweep

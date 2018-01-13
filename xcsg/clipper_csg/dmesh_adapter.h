@@ -20,7 +20,7 @@
 #include "polymesh2d.h"
 class dmesh;
 
-// dmesh_adapter (replaces libtess2d) manages meshing of 2d polygons and stores the result in a polymesh2d
+// dmesh_adapter (replaces tmesh_adapter) manages meshing of 2d polygons and stores the result in a polymesh2d
 
 class dmesh_adapter {
 public:
