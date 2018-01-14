@@ -42,6 +42,7 @@ public:
 
    // return number of contours
    size_t size() const;
+   std::shared_ptr<contour2d> get_contour(size_t i) const;
 
    // read access to selected contour [ 0,size() >
    std::shared_ptr<const contour2d> operator[](size_t i) const;

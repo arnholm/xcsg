@@ -40,6 +40,11 @@ size_t polygon2d::size() const
    return m_contours.size();
 }
 
+std::shared_ptr<contour2d> polygon2d::get_contour(size_t i) const
+{
+   return m_contours[i];
+}
+
 std::shared_ptr<const contour2d> polygon2d::operator[](size_t i) const
 {
    return m_contours[i];

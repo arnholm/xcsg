@@ -1,6 +1,8 @@
 #include "tmesh_adapter.h"
 #include <cstdlib>
 #include <memory>
+#include <map>
+#include <cmath>
 #include "tmesh/libtess2/Include/tesselator.h"
 
 static void *stdAlloc(void* userData, unsigned int size) {
@@ -12,7 +14,6 @@ static void stdFree(void* userData, void* ptr) {
 	TESS_NOTUSED(userData);
 	free(ptr);
 }
-
 
 tmesh_adapter::tmesh_adapter()
 : m_tess(0)
@@ -43,45 +44,47 @@ void tmesh_adapter::delete_tess()
 
 bool tmesh_adapter::tesselate(std::shared_ptr<polyset2d> polyset)
 {
+   // build a sorted map of contours, largest areas first
+   std::multimap<double,std::shared_ptr<contour2d>> sorted_contours;
    for(auto i=polyset->begin(); i!=polyset->end(); i++) {
       std::shared_ptr<polygon2d> poly = *i;
-      if(!tesselate(poly))return false;
+      size_t nc = poly->size();
+      for(size_t ic=0;ic<nc;ic++) {
+         std::shared_ptr<contour2d> contour = poly->get_contour(ic);
+         double area = fabs(contour->signed_area());
+         if(area > 0) {
+            sorted_contours.insert(std::make_pair(area,contour));
+         }
+      }
    }
-   return true;
+
+   // then tesselate the contours
+   return tesselate_contours(sorted_contours);
+
 }
 
-
-bool tmesh_adapter::tesselate(std::shared_ptr<polygon2d> poly)
+bool tmesh_adapter::tesselate_contours(ContourMap& contours)
 {
-   int polySize        = 3; // defines maximum vertices per polygons if output is polygons.
-   int vertexSize      = 2; // defines the number of coordinates in tesselation result vertex, must be 2 or 3.
+   const int polySize   = 3; // defines maximum vertices per polygon (i.e. triangle)
+   const int vertexSize = 2; // defines the number of coordinates in tesselation result vertex, must be 2 or 3.
 
    // make sure tess is initialised
    create_tess();
 
-   // number of vertices in mesh before this tesselation.
-   // this will be used as offset
-   size_t v_offset = m_mesh->nvertices();
-
    // number of vertices along polygon contours
-   size_t n_input_vertices = 0;
+   int n_input_vertices = 0;
 
-   // the following loop defines the vertex sequence
-   // N1 vertices from first contour
-   // N2 vertices from second contour ... etc
-   // the mesh vertices will be remapped to match this sequence
+   // traverse all contours and add them to the tesselator
+   for(auto& cp : contours) {
 
-   size_t ncontour = poly->size();
-   for(size_t icontour=0; icontour<ncontour; icontour++) {
-
-      // add the contour to the mesh, this will add vertices also in the mesh
-      std::shared_ptr<const contour2d> contour = (*poly)[icontour];
+      // add the contour to the mesh, this will add contour vertices also in the mesh
+      std::shared_ptr<contour2d> contour = cp.second;
       m_mesh->add_contour(contour);
 
-      // count the vertices for this contour
+      // count the vertices so far
       n_input_vertices += contour->size();
 
-      // contour coordinates in libtess2 format
+      // add the contour vertices to libtess2, coordinates in libtess2 format
       std::vector<TESSreal> coords;
       coords.reserve(contour->size()*vertexSize);
       for(size_t i=0; i<contour->size();i++) {
@@ -90,10 +93,11 @@ bool tmesh_adapter::tesselate(std::shared_ptr<polygon2d> poly)
          coords.push_back(static_cast<TESSreal>(vtx.y()));
       }
 
-      // add the contour to the tesselator
+      // add the contour vertices to the tesselator
       tessAddContour(m_tess,2,&coords[0],sizeof(TESSreal)*vertexSize,static_cast<int>(contour->size()));
    }
 
+   // compute the Constrained Delaunay mesh for the whole profile
    TESSreal* normalvec = 0; // normal automatically calculated
    bool success = (1 == tessTesselate(m_tess,TESS_WINDING_ODD,TESS_CONSTRAINED_DELAUNAY_TRIANGLES, polySize, vertexSize, normalvec));
    if(!success) return false;
@@ -106,7 +110,8 @@ bool tmesh_adapter::tesselate(std::shared_ptr<polygon2d> poly)
    const int nverts      = tessGetVertexCount(m_tess);
    const int* vinds      = tessGetVertexIndices(m_tess);
 
-   if(n_input_vertices != nverts) {
+   if(n_input_vertices < nverts) {
+      // extra vertices have been created
       // this should not happen when we have proper input with no new intersections
       throw std::logic_error("tmesh_adapter:: extra vertices unaccounted for");
    }
@@ -132,14 +137,14 @@ bool tmesh_adapter::tesselate(std::shared_ptr<polygon2d> poly)
          if(ivert == TESS_UNDEF) break;
          if(ivert >  nverts) break;
 
-         // Extract/adjust the face vertex indicies.
-         // using the vinds[ivert] lookup, we get indicies in the input vertex sequence for the current polygon.
-         // We must also offset for previously existing verticies
-         face.push_back(v_offset + vinds[ivert]);
+         // Extract/adjust the face vertex index.
+         // Using the vinds[ivert] lookup, we get index in the input vertex sequence.
+         // This way the faces will be referring to the original vertices in m_mesh
+         face.push_back(vinds[ivert]);
       }
 
       // add the completed face to the mesh
-      if(face.size() == 3)m_mesh->add_face(face);
+      if(face.size() == polySize)m_mesh->add_face(face);
    }
 
    // tess data structure no longer needed
@@ -147,3 +152,4 @@ bool tmesh_adapter::tesselate(std::shared_ptr<polygon2d> poly)
 
    return true;
 }
+
