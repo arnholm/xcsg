@@ -39,7 +39,12 @@ xfill2d ::~xfill2d ()
 
 size_t xfill2d::nbool()
 {
-   return 1;
+   size_t nbool = 0;
+   for(auto i=m_incl.begin(); i!=m_incl.end(); i++) {
+      std::shared_ptr<xshape2d> obj = *i;
+      nbool += (obj->nbool()+1);
+   }
+   return nbool;
 }
 
 std::shared_ptr<clipper_profile> xfill2d ::create_clipper_profile(const carve::math::Matrix& t) const
