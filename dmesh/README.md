@@ -1,6 +1,6 @@
 # dmesh 
 
-dmesh is the Delaunay triangulator library used in xcsg with 2d -> 3d extrusions.
+dmesh is a 2d Delaunay triangulator library. In xcsg, this library has been replaced by the tmesh library, based on libtess2.
 
-The library can triangulate a profile consisting of loops (closed contours). The outer countours must  be CCW as seen from +Z. Inner contours must be CW. 
+dmesh can triangulate a profile consisting of loops (closed contours). The outer countours must  be CCW as seen from +Z. Inner contours must be CW. 
 
