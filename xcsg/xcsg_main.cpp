@@ -35,6 +35,7 @@ using namespace std;
 #include "openscad_csg.h"
 #include "out_triangles.h"
 #include "amf_file.h"
+#include "dxf_file.h"
 
 xcsg_main::xcsg_main(const boost_command_line& cmd)
 : m_cmd(cmd)
@@ -200,14 +201,20 @@ bool xcsg_main::run_xshape2d(cf_xmlNode& node,const std::string& xcsg_file)
       size_t nmani = polyset->size();
       cout << "...result model contains " << nmani << ((nmani==1)? " lump.": " lumps.") << endl;
 
-      openscad_csg openscad(xcsg_file);
-      size_t imani = 0;
-      for(auto i=polyset->begin(); i!=polyset->end(); i++) {
-         std::shared_ptr<polygon2d> poly = *i;
-         cout << "...lump " << ++imani << ": " <<poly->size() << " contours " << endl;
-         openscad.write_polygon(poly);
+
+      if(m_cmd.count("dxf")>0) {
+         dxf_file dxf;
+         cout << "Created OpenSCAD file: " << dxf.write(polyset,xcsg_file) << endl;
       }
-      cout << "Created OpenSCAD file: " << openscad.path() << endl;
+      if(m_cmd.count("csg")>0) {
+         openscad_csg openscad(xcsg_file);
+         size_t imani = 0;
+         for(auto i=polyset->begin(); i!=polyset->end(); i++) {
+            std::shared_ptr<polygon2d> poly = *i;
+            openscad.write_polygon(poly);
+         }
+         cout << "Created OpenSCAD file: " << openscad.path() << endl;
+      }
    }
    else {
       throw logic_error("xcsg tree contains no data. ");
