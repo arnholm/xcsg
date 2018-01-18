@@ -170,11 +170,12 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
 
       amf_file amf;
       if(m_cmd.count("csg")>0)       cout << "Created OpenSCAD file: " << exporter.write_csg(xcsg_file) << endl;
-      if(m_cmd.count("stl")>0)       cout << "Created STL file     : " << exporter.write_stl(xcsg_file,true) << endl;
-      else if(m_cmd.count("astl")>0) cout << "Created STL file     : " << exporter.write_stl(xcsg_file,false) << endl;
       if(m_cmd.count("amf")>0)       cout << "Created AMF file     : " << amf.write(triangulate.carve_polyset(),xcsg_file) << endl;
       if(m_cmd.count("obj")>0)       cout << "Created OBJ file     : " << exporter.write_obj(xcsg_file) << endl;
       if(m_cmd.count("off")>0)       cout << "Created OFF file(s)  : " << exporter.write_off(xcsg_file) << endl;
+      // write STL last so it is the most recent updated format
+      if(m_cmd.count("stl")>0)       cout << "Created STL file     : " << exporter.write_stl(xcsg_file,true) << endl;
+      else if(m_cmd.count("astl")>0) cout << "Created STL file     : " << exporter.write_stl(xcsg_file,false) << endl;
 
    }
    else {
@@ -201,11 +202,6 @@ bool xcsg_main::run_xshape2d(cf_xmlNode& node,const std::string& xcsg_file)
       size_t nmani = polyset->size();
       cout << "...result model contains " << nmani << ((nmani==1)? " lump.": " lumps.") << endl;
 
-
-      if(m_cmd.count("dxf")>0) {
-         dxf_file dxf;
-         cout << "Created OpenSCAD file: " << dxf.write(polyset,xcsg_file) << endl;
-      }
       if(m_cmd.count("csg")>0) {
          openscad_csg openscad(xcsg_file);
          size_t imani = 0;
@@ -214,6 +210,12 @@ bool xcsg_main::run_xshape2d(cf_xmlNode& node,const std::string& xcsg_file)
             openscad.write_polygon(poly);
          }
          cout << "Created OpenSCAD file: " << openscad.path() << endl;
+      }
+
+      // write DXF last so it is the most recent updated format
+      if(m_cmd.count("dxf")>0) {
+         dxf_file dxf;
+         cout << "Created DXF      file: " << dxf.write(polyset,xcsg_file) << endl;
       }
    }
    else {
