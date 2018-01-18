@@ -53,6 +53,7 @@ std::string dxf_file::write( std::shared_ptr<polyset2d> polyset, const std::stri
    if(!m_out.is_open())  throw std::runtime_error("Could not open file: " + path);
 
    // write header
+   write_item(999,"DXF file created by xcsg (https://github.com/arnholm/xcsg)");
    write_item(0,"SECTION");
    write_item(2,"BLOCKS");
    write_item(0,"ENDSEC");
@@ -72,7 +73,6 @@ std::string dxf_file::write( std::shared_ptr<polyset2d> polyset, const std::stri
    // write footer
    write_item(0,"SECTION");
    write_item(2,"OBJECTS");
-   write_item(0,"DICTIONARY");
    write_item(0,"ENDSEC");
    write_item(0,"EOF");
 
