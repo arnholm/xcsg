@@ -6,13 +6,13 @@ xcsg is both a file format and an application. For the file format definition, p
 The xcsg application takes an input .xcsg file, compiles its data into a solid model, and exports it to common surface mesh file formats, including STL. The application uses the [Carve library](https://github.com/arnholm/abmesh-carve) for boolean operations.
 
     $ xcsg --help
-    xcsg version v1.0-00
-    
-    xcsg command line options & arguments:
-      -h [ --help ]         Show this help message.
-      -v [ --version ]      Show program version.
+   
+    xcsg command line options & arguments (v1.0-04):
+      -h [ --help ]         Show this help message.      
+      -v [ --version ]      Show program version (numeric part).
       --amf                 AMF output file format (Additive Manufacturing Format)
       --csg                 CSG output file format (OpenSCAD)
+      --dxf                 DXF output file format (AutoCAD DXF - 2D only)
       --stl                 STL output file format (STereoLitography)
       --astl                STL output file format (STereoLitography) - ASCII
       --obj                 OBJ output file format (Wavefront format)
