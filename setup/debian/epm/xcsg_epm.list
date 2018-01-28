@@ -1,0 +1,30 @@
+$instdir=/usr/local/
+$bindir=${instdir}/bin
+%product xcsg
+%copyright 2016-2017 Carsten Arnholm.
+%vendor Carsten Arnholm
+%description XML based Constructive Solid Geometry. 
+%description xcsg is an XML file protocol and an application 
+%description for creating 3d solid models based on Constructive 
+%description Solid Geometry (CSG). The file protocol provides a 
+%description way to define primitives, transformations and 
+%description operators for 2d and 3d objects. The xcsg application
+%description processes this information, creating a 3d solid model.
+%description xcsg may be used under the terms of either the GNU   
+%description General Public License version 2 or 3 (at your option)
+%description as published by the Free Software Foundation.
+%description xcsg is provided "AS IS" with NO WARRANTY OF ANY KIND,
+%description INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY 
+%description AND FITNESS FOR A PARTICULAR PURPOSE.
+%description https://github.com/arnholm/xcsg/wiki
+%version ${XCSG_VERSION}
+%readme README.txt
+%license LICENSE.txt
+%requires libboost-dev
+%requires libboost-program-options-dev
+%requires libboost-system-dev
+%requires libboost-filesystem-dev
+%requires libboost-thread-dev
+%postinstall ldconfig
+
+f 755 root sys ${bindir}/xcsg ${CPDE_USR}/bin/xcsg 
