@@ -2,4 +2,7 @@
 *.depend
 *.pdb
 *.exe
+*.zip
 .cmp
+linux-*
+windows-*
