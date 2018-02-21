@@ -67,7 +67,7 @@ std::string svg_file::write( std::shared_ptr<polyset2d> polyset, const std::stri
 
          // marketing
          cf_xmlNode title = root.add_child("title");
-         title.put_value("xcsg model");
+         title.put_value("xcsg: " +fullpath.stem().string());
 
          // Create the model data, written as a giant "path", containing several closed contours with "pen-ups" between them.
          // This loop creates the value of the "d" property
