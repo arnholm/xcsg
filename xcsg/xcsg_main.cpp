@@ -36,6 +36,7 @@ using namespace std;
 #include "out_triangles.h"
 #include "amf_file.h"
 #include "dxf_file.h"
+#include "svg_file.h"
 
 xcsg_main::xcsg_main(const boost_command_line& cmd)
 : m_cmd(cmd)
@@ -109,7 +110,9 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
       int nbool = static_cast<int>(obj->nbool());
       cout << "...completed CSG tree: " <<  nbool << " boolean operations to process." << endl;
 
-      cout << "...starting boolean operations" << endl;
+      if(nbool > 0) {
+         cout << "...starting boolean operations" << endl;
+      }
 
       boost::posix_time::ptime time_0 = boost::posix_time::microsec_clock::universal_time();
       carve_boolean csg;
@@ -194,7 +197,9 @@ bool xcsg_main::run_xshape2d(cf_xmlNode& node,const std::string& xcsg_file)
       int nbool = static_cast<int>(obj->nbool());
       cout << "...completed CSG tree: " <<  nbool << " boolean operations to process." << endl;
 
-      cout << "...starting boolean operations" << endl;
+      if(nbool > 0) {
+         cout << "...starting boolean operations" << endl;
+      }
       clipper_boolean csg;
       csg.compute(obj->create_clipper_profile(),ClipperLib::ctUnion);
 
@@ -210,6 +215,12 @@ bool xcsg_main::run_xshape2d(cf_xmlNode& node,const std::string& xcsg_file)
             openscad.write_polygon(poly);
          }
          cout << "Created OpenSCAD file: " << openscad.path() << endl;
+      }
+
+      // write SVG?
+      if(m_cmd.count("svg")>0) {
+         svg_file svg;
+         cout << "Created SVG      file: " << svg.write(polyset,xcsg_file) << endl;
       }
 
       // write DXF last so it is the most recent updated format

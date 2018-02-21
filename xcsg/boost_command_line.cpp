@@ -46,13 +46,14 @@ boost_command_line::boost_command_line(int argc , char **argv)
    generic.add_options()
         ("help,h",  "Show this help message.")
         ("version,v",  "Show program version (numeric part).")
-        ("amf",   "AMF output file format (Additive Manufacturing Format)")
-        ("csg",   "CSG output file format (OpenSCAD)")
-        ("dxf",   "DXF output file format (AutoCAD DXF - 2D only)")
-        ("stl",   "STL output file format (STereoLitography)")
-        ("astl",  "STL output file format (STereoLitography) - ASCII")
-        ("obj",   "OBJ output file format (Wavefront format)")
-        ("off",   "OFF output file format (Geomview Object File Format)")
+        ("amf",   "AMF output format (Additive Manufacturing Format)")
+        ("csg",   "CSG output format (OpenSCAD)")
+        ("dxf",   "DXF output format (AutoCAD DXF - 2D only)")
+        ("svg",   "SVG output format (Scalar Vector Graphics - 2D only)")
+        ("stl",   "STL output format (STereoLitography)")
+        ("astl",  "STL output format (STereoLitography) - ASCII")
+        ("obj",   "OBJ output format (Wavefront format)")
+        ("off",   "OFF output format (Geomview Object File Format)")
          ;
 
    hidden.add_options()
@@ -108,7 +109,7 @@ boost_command_line::boost_command_line(int argc , char **argv)
    }
 
    // check the output format specifiers
-   size_t out_count = vm.count("amf") + vm.count("csg") + vm.count("stl") + vm.count("astl") + vm.count("obj") + vm.count("off");
+   size_t out_count = vm.count("amf") + vm.count("csg") + vm.count("stl") + vm.count("astl") + vm.count("obj") + vm.count("off") + vm.count("dxf") + vm.count("svg");
    if(out_count == 0  && vm.count("xcsg-file")>0) {
 
       // input file name specified, but no output format(s)
