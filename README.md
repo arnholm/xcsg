@@ -7,18 +7,18 @@ The xcsg application takes an input .xcsg file, compiles its data into a solid m
 
     $ xcsg --help
    
-    xcsg command line options & arguments (v1.0-04):
-      -h [ --help ]         Show this help message.      
-      -v [ --version ]      Show program version (numeric part).
-      --amf                 AMF output file format (Additive Manufacturing Format)
-      --csg                 CSG output file format (OpenSCAD)
-      --dxf                 DXF output file format (AutoCAD DXF - 2D only)
-      --stl                 STL output file format (STereoLitography)
-      --astl                STL output file format (STereoLitography) - ASCII
-      --obj                 OBJ output file format (Wavefront format)
-      --off                 OFF output file format (Geomview Object File Format)
-      <xcsg-file>           path to input .xcsg file (required)
-
+	xcsg command line options & arguments (v1.0-04):
+	  -h [ --help ]         Show this help message.
+	  -v [ --version ]      Show program version (numeric part).
+	  --amf                 AMF output format (Additive Manufacturing Format)
+	  --csg                 CSG output format (OpenSCAD)
+	  --dxf                 DXF output format (AutoCAD DXF - 2D only)
+	  --svg                 SVG output format (Scalar Vector Graphics - 2D only)
+	  --stl                 STL output format (STereoLitography)
+	  --astl                STL output format (STereoLitography) - ASCII
+	  --obj                 OBJ output format (Wavefront format)
+	  --off                 OFF output format (Geomview Object File Format)
+	  <xcsg-file>           path to input .xcsg file (required)
 
 ### example
 To compute the difference between a cube and a sphere and store the result as STL
