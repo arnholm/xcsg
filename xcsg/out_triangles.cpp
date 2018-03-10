@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "out_triangles.h"
 #include <carve/poly.hpp>
 #include <fstream>
@@ -165,21 +165,27 @@ std::string out_triangles::write_obj(const std::string& xcsg_path)
    std::string object_id = fullpath.stem().string();
 
    out << "# OBJ file created by xcsg : " << path << std::endl;
+   out  << "o " << object_id << std::endl;
 
+   // ========= vertices =================
    for(size_t ipoly=0; ipoly<m_polyset->size(); ipoly++) {
-
-      out  << "o " << object_id << '_' << ipoly << std::endl;
 
       std::shared_ptr<carve::poly::Polyhedron> poly = (*m_polyset)[ipoly];
       std::vector<carve::poly::Geometry<3>::vertex_t>& vertices = poly->vertices;
 
-      // ========= vertices =================
       for(size_t ivert=0; ivert<vertices.size(); ivert++) {
          carve::poly::Geometry<3>::vertex_t& vtx = vertices[ivert];
          out << "v " << std::setprecision(12) << vtx.v[0] << ' ' << std::setprecision(12) << vtx.v[1] << ' ' << std::setprecision(12) <<  vtx.v[2] << std::endl;
       }
+   }
 
-      // ========= faces =================
+   // ========= faces =================
+   size_t vertex_offset = 0;
+   for(size_t ipoly=0; ipoly<m_polyset->size(); ipoly++) {
+
+      std::shared_ptr<carve::poly::Polyhedron> poly = (*m_polyset)[ipoly];
+      std::vector<carve::poly::Geometry<3>::vertex_t>& vertices = poly->vertices;
+
       for(size_t iface = 0; iface<poly->faces.size(); ++iface) {
          carve::poly::Face<3>& face = poly->faces[iface];
 
@@ -191,10 +197,12 @@ std::string out_triangles::write_obj(const std::string& xcsg_path)
             size_t index = poly->vertexToIndex(vloop[ivert]);
 
             // indices are 1-based in OBJ
-            out << 1+index << ' ';
+            out << vertex_offset + 1+index << ' ';
          }
          out << std::endl;
       }
+
+      vertex_offset += vertices.size();
    }
 
    return path;
