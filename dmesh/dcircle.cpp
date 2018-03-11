@@ -7,14 +7,15 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "dcircle.h"
 #include "dvec2d.h"
+#include <cmath>
 
 dcircle::dcircle(const dpos2d& center, double radius)
 : m_center(center)
@@ -48,7 +49,7 @@ void dcircle::circum_circle(const dpos2d& p1, const dpos2d& p2,const dpos2d& p3,
    double dp3p1 = p3p1.length();
    double dp1p3 = dp3p1;
 
-   radius = 0.5*(dp1p2*dp2p3*dp3p1)/p1p2.cross(p2p3);
+   radius = fabs(0.5*(dp1p2*dp2p3*dp3p1)/p1p2.cross(p2p3));
 
    double cross = p1p2.cross(p2p3);
    double denom = 2.0* cross*cross;
