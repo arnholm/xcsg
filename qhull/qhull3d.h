@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #ifndef QHULL3D_H
 #define QHULL3D_H
 
@@ -31,6 +31,8 @@ public:
    struct xyz {
       xyz() : x(0), y(0),z(0) {}
       xyz(double x_, double y_, double z_) : x(x_), y(y_),z(z_) {}
+      void add(const xyz& p) { x+=p.x; y+=p.y; z+=p.z; }
+      void scale(double factor) { x*=factor; y*=factor; z*=factor;}
       double x;
       double y;
       double z;

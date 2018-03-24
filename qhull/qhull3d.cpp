@@ -7,12 +7,12 @@
 // Public License version 2 or 3 (at your option) as published by the
 // Free Software Foundation and appearing in the files LICENSE.GPL2
 // and LICENSE.GPL3 included in the packaging of this file.
-// 
+//
 // This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
 // INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
 // EndLicense:
-   
+
 #include "qhull3d.h"
 #include "qvec3d.h"
 #include <iostream>
@@ -38,13 +38,25 @@ public:
 
    void add(qhull3d::xyz& xyz)
    {
-      xyzmin.x = std::min(xyzmin.x,xyz.x);
-      xyzmin.y = std::min(xyzmin.y,xyz.y);
-      xyzmin.z = std::min(xyzmin.z,xyz.z);
+      if(!init) {
+         xyzmin.x = xyz.x;
+         xyzmin.y = xyz.y;
+         xyzmin.z = xyz.z;
 
-      xyzmax.x = std::max(xyzmax.x,xyz.x);
-      xyzmax.y = std::max(xyzmax.y,xyz.y);
-      xyzmax.z = std::max(xyzmax.z,xyz.z);
+         xyzmax.x = xyz.x;
+         xyzmax.y = xyz.y;
+         xyzmax.z = xyz.z;
+         init = true;
+      }
+      else {
+         xyzmin.x = std::min(xyzmin.x,xyz.x);
+         xyzmin.y = std::min(xyzmin.y,xyz.y);
+         xyzmin.z = std::min(xyzmin.z,xyz.z);
+
+         xyzmax.x = std::max(xyzmax.x,xyz.x);
+         xyzmax.y = std::max(xyzmax.y,xyz.y);
+         xyzmax.z = std::max(xyzmax.z,xyz.z);
+      }
    }
 
    qhull3d::xyz center()
@@ -114,8 +126,9 @@ bool qhull3d::compute()
    map<size_t,size_t> vmap;
    size_t iinode = 0;
 
-   // boundary box for the hull
-   bbox box;
+   // compute mean hull coordinate, this will always be inside the convex hull
+   xyz pmean;
+   size_t nv = 0;
 
    // First collect vertices
    orgQhull::QhullVertexList  vertices = qhull.vertexList();
@@ -130,7 +143,8 @@ bool qhull3d::compute()
       xyz pnt(coords[0],coords[1],coords[2]);
 
       // add oint to boundary box
-      box.add(pnt);
+      pmean.add(pnt);
+      nv++;
 
       // insert in vertex map
       m_vert.insert(std::make_pair(iinode, pnt ));
@@ -139,8 +153,9 @@ bool qhull3d::compute()
       vmap[v.id()] = iinode++;
    }
 
-   // geometric center of hull
-   xyz hull_center = box.center();
+   // the "hull_center" is a point guaranteed to be inside the convex hull body
+   pmean.scale(1.0/nv);
+   xyz hull_center = pmean;
 
    int iface = 0;
    orgQhull::QhullFacetList facets = qhull.facetList();
