@@ -24,7 +24,6 @@
 					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
 					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
 					<Add option="/D_CRT_SECURE_DEPRECATE" />
-					<Add directory="./" />
 				</Compiler>
 				<Linker>
 					<Add option="`$(CPDE_USR)\bin\wx-config.exe  --prefix=$(#wx) --wxcfg=$(#wx.debug) --libs`" />
@@ -55,7 +54,6 @@
 					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
 					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
 					<Add option="/D_CRT_SECURE_DEPRECATE" />
-					<Add directory="./" />
 				</Compiler>
 				<Linker>
 					<Add option="`$(CPDE_USR)\bin\wx-config.exe  --prefix=$(#wx) --wxcfg=$(#wx.release) --libs`" />
@@ -80,7 +78,7 @@
 				<Option object_output=".cmp/gcc/obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters='--csg --dxf --stl --svg &quot;/work/DATA/DXF/xcsg/minkowski3d.xcsg&quot;' />
+				<Option parameters="--stl /work/DATA/DXF/xcsg/hull_bug.xcsg" />
 				<Compiler>
 					<Add option="-std=c++0x" />
 					<Add option="-fPIC" />
@@ -92,7 +90,6 @@
 					<Add option="-D_DEBUG" />
 					<Add directory="$(#carve.build_include)" />
 					<Add directory="$(#carve)/common" />
-					<Add directory="./" />
 				</Compiler>
 				<Linker>
 					<Add option="`$(#wx.config) --libs std,aui --static --debug`" />
@@ -124,7 +121,6 @@
 					<Add option="-DNOPCH" />
 					<Add directory="$(#carve.build_include)" />
 					<Add directory="$(#carve)/common" />
-					<Add directory="./" />
 				</Compiler>
 				<Linker>
 					<Add option="`$(#wx.config) --libs std,aui --static`" />
@@ -186,18 +182,6 @@
 			<Option virtualFolder="mesh/" />
 		</Unit>
 		<Unit filename="carve_mesh_thread.h">
-			<Option virtualFolder="mesh/" />
-		</Unit>
-		<Unit filename="carve_minkowski_hull.cpp">
-			<Option virtualFolder="mesh/" />
-		</Unit>
-		<Unit filename="carve_minkowski_hull.h">
-			<Option virtualFolder="mesh/" />
-		</Unit>
-		<Unit filename="carve_minkowski_thread.cpp">
-			<Option virtualFolder="mesh/" />
-		</Unit>
-		<Unit filename="carve_minkowski_thread.h">
 			<Option virtualFolder="mesh/" />
 		</Unit>
 		<Unit filename="carve_triangulate.cpp">
@@ -440,12 +424,6 @@
 			<Option virtualFolder="boolean/3d/" />
 		</Unit>
 		<Unit filename="xlinear_extrude.h">
-			<Option virtualFolder="boolean/3d/" />
-		</Unit>
-		<Unit filename="xminkowski3d.cpp">
-			<Option virtualFolder="boolean/3d/" />
-		</Unit>
-		<Unit filename="xminkowski3d.h">
 			<Option virtualFolder="boolean/3d/" />
 		</Unit>
 		<Unit filename="xoffset2d.cpp">
