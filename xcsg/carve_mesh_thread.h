@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <list>
 #include <boost/thread.hpp>
 #include "safe_queue.h"
 
@@ -25,6 +26,11 @@ public:
    // build the mesh queue in threads
    static void create_mesh_queue(const carve::math::Matrix& t,
                                  std::unordered_set<std::shared_ptr<xsolid>> objects,
+                                 safe_queue<MeshSet_ptr>& mesh_queue);
+
+   // build the mesh queue in threads
+   static void create_mesh_queue(const carve::math::Matrix& t,
+                                 std::list<std::shared_ptr<xsolid>> objects,
                                  safe_queue<MeshSet_ptr>& mesh_queue);
 
 protected:

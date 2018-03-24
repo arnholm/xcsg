@@ -52,3 +52,19 @@ void xsolid_collector::collect_children(const cf_xmlNode& parent, ShapeSet& A, s
       throw logic_error("Expected solids under " + parent.tag() + ", but found none.");
    }
 }
+
+void xsolid_collector::collect_children(const cf_xmlNode& parent, ShapeList& A)
+{
+   size_t icount=0;
+   cf_xmlNode tmp(parent);
+   for(auto i=tmp.begin(); i!=tmp.end(); i++) {
+      cf_xmlNode sub(i);
+      if(xcsg_factory::singleton().is_solid(sub)) {
+         A.push_back(xcsg_factory::singleton().make_solid(sub));
+         icount++;
+      }
+   }
+   if(icount == 0) {
+      throw logic_error("Expected solids under " + parent.tag() + ", but found none.");
+   }
+}

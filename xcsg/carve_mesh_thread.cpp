@@ -50,3 +50,29 @@ void carve_mesh_thread::create_mesh_queue(const carve::math::Matrix& t, std::uno
       throw std::logic_error(exception_queue.dequeue());
    }
 }
+
+void carve_mesh_thread::create_mesh_queue(const carve::math::Matrix& t, std::list<std::shared_ptr<xsolid>> objects, safe_queue<MeshSet_ptr>& mesh_queue)
+{
+   /*
+
+   // the time runs only when an actual meshing is taking place
+   safe_queue<std::string> exception_queue;
+   std::list<boost::thread>  mesh_threads;
+   for(auto i=objects.begin(); i!=objects.end(); i++) {
+       mesh_threads.push_back(boost::thread(carve_mesh_thread(t,*i,mesh_queue,exception_queue)));
+   }
+
+   // wait for the threads to finish
+   for(auto ithread=mesh_threads.begin(); ithread!=mesh_threads.end(); ithread++) {
+      ithread->join();
+   }
+
+   if(exception_queue.size() > 0) {
+      throw std::logic_error(exception_queue.dequeue());
+   }
+   */
+
+   for(auto& s : objects) {
+      mesh_queue.enqueue(s->create_carve_mesh(t));
+   }
+}

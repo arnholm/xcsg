@@ -32,6 +32,7 @@
 #include "xrotate_extrude.h"
 #include "xtransform_extrude.h"
 #include "xsweep.h"
+#include "xminkowski3d.h"
 
 #include "xcircle.h"
 #include "xpolygon.h"
@@ -61,6 +62,7 @@ xcsg_factory::xcsg_factory()
    m_solid_map.insert(std::make_pair("rotate_extrude",xcsg_factory::make_rotate_extrude));
    m_solid_map.insert(std::make_pair("transform_extrude",xcsg_factory::make_transform_extrude));
    m_solid_map.insert(std::make_pair("sweep",xcsg_factory::make_sweep));
+   m_solid_map.insert(std::make_pair("minkowski3d",xcsg_factory::make_minkowski3d));
 
    m_shape2d_map.insert(std::make_pair("circle",xcsg_factory::make_circle));
    m_shape2d_map.insert(std::make_pair("polygon",xcsg_factory::make_polygon));
@@ -115,6 +117,7 @@ std::shared_ptr<xsolid> xcsg_factory::make_linear_extrude(const cf_xmlNode& node
 std::shared_ptr<xsolid> xcsg_factory::make_rotate_extrude(const cf_xmlNode& node)     { return std::shared_ptr<xsolid>(new xrotate_extrude(node)); }
 std::shared_ptr<xsolid> xcsg_factory::make_transform_extrude(const cf_xmlNode& node)  { return std::shared_ptr<xsolid>(new xtransform_extrude(node)); }
 std::shared_ptr<xsolid> xcsg_factory::make_sweep(const cf_xmlNode& node)              { return std::shared_ptr<xsolid>(new xsweep(node));          }
+std::shared_ptr<xsolid> xcsg_factory::make_minkowski3d(const cf_xmlNode& node)        { return std::shared_ptr<xsolid>(new xminkowski3d(node));    }
 
 std::shared_ptr<xshape2d>  xcsg_factory::make_shape2d(const cf_xmlNode& node)
 {

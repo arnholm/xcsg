@@ -65,6 +65,7 @@ protected:
    static std::shared_ptr<xsolid> make_rotate_extrude(const cf_xmlNode& node);
    static std::shared_ptr<xsolid> make_transform_extrude(const cf_xmlNode& node);
    static std::shared_ptr<xsolid> make_sweep(const cf_xmlNode& node);
+   static std::shared_ptr<xsolid> make_minkowski3d(const cf_xmlNode& node);
 
 
    // concrete 2d types
