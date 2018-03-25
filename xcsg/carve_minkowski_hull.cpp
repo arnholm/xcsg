@@ -18,7 +18,7 @@ carve_minkowski_hull::~carve_minkowski_hull()
 
 void carve_minkowski_hull::run()
 {
-
+   // compute hull meshes as long as the hull queue is non-empty
    try {
       while(m_hull_queue.size() > 0) {
          hull_pair hp;
@@ -43,12 +43,12 @@ carve_minkowski_hull::MeshSet_ptr carve_minkowski_hull::compute_hull(hull_pair& 
    std::vector<xvertex>& coord = hp.first;
    MeshSet_ptr meshB           = hp.second;
 
-   size_t nfc = coord.size();
-
    qhull3d qhull;
    size_t nvert =  meshB->vertex_storage.size();
    qhull.reserve(nvert*coord.size());
    for(size_t i=0; i<coord.size(); i++) {
+      // use perturbation point to establish translation matrix
+      // and then translate all vertex coordinates in the B mesh
       carve::math::Matrix t;
       t.m[3][0] = coord[i].x;
       t.m[3][1] = coord[i].y;
@@ -60,7 +60,7 @@ carve_minkowski_hull::MeshSet_ptr carve_minkowski_hull::compute_hull(hull_pair& 
       }
    }
 
-   // compute the hull mesh and return as carve mesh
+   // compute the hull mesh and return it as carve mesh
    carve_boolean csg;
    csg.compute(qhull);
    return csg.mesh_set();

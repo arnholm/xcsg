@@ -8,9 +8,13 @@
 
 #include "xsolid.h"
 
+// carve_minkowski_thread fills the mesh queue.
+// it also does the main logic for minkowski
+
 class carve_minkowski_thread {
 public:
-   typedef std::shared_ptr<carve::mesh::MeshSet<3>> MeshSet_ptr;
+   typedef std::shared_ptr<carve::mesh::MeshSet<3>>     MeshSet_ptr;
+   typedef std::pair<std::vector<xvertex>,MeshSet_ptr>  hull_pair;
 
    carve_minkowski_thread();
    virtual ~carve_minkowski_thread();
@@ -21,6 +25,8 @@ public:
                                  safe_queue<MeshSet_ptr>& mesh_queue);
 
 protected:
+
+   static void add_face(carve::mesh::Face<3>* face, MeshSet_ptr meshB, safe_queue<hull_pair>& hull_queue);
 
 private:
 };

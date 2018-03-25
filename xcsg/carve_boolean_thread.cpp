@@ -30,6 +30,8 @@ carve_boolean_thread::~carve_boolean_thread()
 
 void carve_boolean_thread::run()
 {
+   // pick work from mesh queue as long as there are at least 2 meshes
+
    try {
       while(m_mesh_queue.size() > 1) {
 

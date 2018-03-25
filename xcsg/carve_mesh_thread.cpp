@@ -13,9 +13,7 @@ carve_mesh_thread::carve_mesh_thread(const carve::math::Matrix& t,
 {}
 
 carve_mesh_thread::~carve_mesh_thread()
-{
-   //dtor
-}
+{}
 
 void carve_mesh_thread::run()
 {
@@ -53,8 +51,6 @@ void carve_mesh_thread::create_mesh_queue(const carve::math::Matrix& t, std::uno
 
 void carve_mesh_thread::create_mesh_queue(const carve::math::Matrix& t, std::list<std::shared_ptr<xsolid>> objects, safe_queue<MeshSet_ptr>& mesh_queue)
 {
-   /*
-
    // the time runs only when an actual meshing is taking place
    safe_queue<std::string> exception_queue;
    std::list<boost::thread>  mesh_threads;
@@ -69,10 +65,5 @@ void carve_mesh_thread::create_mesh_queue(const carve::math::Matrix& t, std::lis
 
    if(exception_queue.size() > 0) {
       throw std::logic_error(exception_queue.dequeue());
-   }
-   */
-
-   for(auto& s : objects) {
-      mesh_queue.enqueue(s->create_carve_mesh(t));
    }
 }

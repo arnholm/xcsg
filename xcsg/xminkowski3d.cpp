@@ -6,6 +6,8 @@
 #include "carve_boolean_thread.h"
 #include "carve_minkowski_thread.h"
 
+#include "boolean_timer.h"
+
 xminkowski3d::xminkowski3d()
 {
    //ctor
@@ -22,9 +24,7 @@ xminkowski3d::xminkowski3d(const cf_xmlNode& node)
 
 
 xminkowski3d::~xminkowski3d()
-{
-   //dtor
-}
+{}
 
 size_t xminkowski3d::nbool()
 {
@@ -39,24 +39,16 @@ size_t xminkowski3d::nbool()
 
 std::shared_ptr<carve::mesh::MeshSet<3>> xminkowski3d::create_carve_mesh(const carve::math::Matrix& t) const
 {
-   // run booleans in threads
-
+   // first fill the mesh queue with objects to union
    safe_queue<std::string> exception_queue;
    safe_queue<carve_boolean_thread::MeshSet_ptr> mesh_queue;
    carve_minkowski_thread::create_mesh_queue(t*get_transform(),m_incl,mesh_queue);
 
-   carve_boolean csg;
-   while(mesh_queue.size() > 0) {
-      carve_boolean_thread::MeshSet_ptr mesh;
-      if(mesh_queue.try_dequeue(mesh)) {
-         csg.compute(mesh,carve::csg::CSG::UNION);
-      }
-   }
-   return csg.mesh_set();
+   // improve the timer estimate now that the number of booleans is known for this operation
+   boolean_timer::singleton().add_nbool(mesh_queue.size());
 
-   /*
    // union the resulting meshes
-   const size_t nthreads = 1; // carve_boolean_thread::default_nthreads();
+   const size_t nthreads = carve_boolean_thread::default_nthreads();
    list<boost::thread>  csg_threads;
    for(size_t i=0; i<nthreads; i++) {
       csg_threads.push_back(boost::thread(carve_boolean_thread(mesh_queue,carve::csg::CSG::UNION,exception_queue)));
@@ -71,5 +63,4 @@ std::shared_ptr<carve::mesh::MeshSet<3>> xminkowski3d::create_carve_mesh(const c
    }
 
    return mesh_queue.dequeue();
-   */
 }

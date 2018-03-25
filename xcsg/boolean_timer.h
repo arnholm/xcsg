@@ -25,6 +25,10 @@ public:
    // call init before starting booleans, provide estimated number of booleans
    void init(int nbool);
 
+   // for operations like minkowski, number of booleans are not known until later
+   // so it is possible to increase the total number of booleans when it is known
+   void add_nbool(int nbool);
+
    // measure time in each boolean and add elapsed seconds by calling add_elapsed
    void add_elapsed(double esec);
 
@@ -36,11 +40,11 @@ protected:
    virtual ~boolean_timer();
 
 private:
-   int    m_nbool_tot;                    // total number of booleans
 
 private:
 
    // variables that are updated by threads
+   std::atomic_uint  m_nbool_tot;           // total number of booleans
    std::atomic_uint  m_elapsed_millisec;    // total elapsed time added, actually sum of elapsed times in threads, not clock time
    std::atomic_uint  m_nbool;               // number of booleans processed so far
    std::atomic_uint  m_progress;            // A value from [0..1000] measuring progress, i.e. per thousand

@@ -31,6 +31,11 @@ void boolean_timer::init(int nbool)
    m_progress_report = 0;
 }
 
+void boolean_timer::add_nbool(int nbool)
+{
+   m_nbool_tot += nbool;
+}
+
 void boolean_timer::add_elapsed(double esec)
 {
    int millisec        = static_cast<int>(1000*esec);
