@@ -182,12 +182,6 @@
 		<Unit filename="carve_boolean_thread.h">
 			<Option virtualFolder="mesh/" />
 		</Unit>
-		<Unit filename="carve_convex_tesselator.cpp">
-			<Option virtualFolder="mesh/" />
-		</Unit>
-		<Unit filename="carve_convex_tesselator.h">
-			<Option virtualFolder="mesh/" />
-		</Unit>
 		<Unit filename="carve_mesh_thread.cpp">
 			<Option virtualFolder="mesh/" />
 		</Unit>

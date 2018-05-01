@@ -5,7 +5,7 @@
 #include <string>
 #include <boost/thread.hpp>
 #include "safe_queue.h"
-
+#include <carve/poly.hpp>
 #include "xsolid.h"
 
 // carve_minkowski_thread fills the mesh queue.
@@ -25,8 +25,10 @@ public:
                                  safe_queue<MeshSet_ptr>& mesh_queue);
 
 protected:
+   static void add_faces(std::shared_ptr<carve::poly::Polyhedron> poly, MeshSet_ptr meshB, safe_queue<hull_pair>& hull_queue);
 
-   static void add_face(carve::mesh::Face<3>* face, MeshSet_ptr meshB, safe_queue<hull_pair>& hull_queue);
+   // create triangulated polyhedra from mesh
+   static std::shared_ptr<std::vector<std::shared_ptr<carve::poly::Polyhedron>>>  triangulate(MeshSet_ptr mesh);
 
 private:
 };
