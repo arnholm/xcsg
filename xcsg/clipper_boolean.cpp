@@ -52,6 +52,35 @@ bool clipper_boolean::compute(std::shared_ptr<clipper_profile> b, ClipperLib::Cl
    return success;
 }
 
+bool clipper_boolean::minkowski_sum(std::shared_ptr<clipper_profile> a, std::shared_ptr<clipper_profile> b_brush )
+{
+   ClipperLib::Clipper clipper;
+   ClipperLib::Paths& a_paths = a->paths();
+   ClipperLib::Paths& b_paths = b_brush->paths();
+   if(b_paths.size() != 1) {
+      throw std::logic_error("clipper_boolean::minkowski_sum, 'b' parameter must contain exactly one path");
+   }
+
+   boost::posix_time::ptime p1 = boost::posix_time::microsec_clock::universal_time();
+
+   ClipperLib::Path& pattern = b_paths[0];
+   std::shared_ptr<clipper_profile> result(new clipper_profile);
+   bool pathIsClosed = true;
+   ClipperLib::MinkowskiSum(pattern,a_paths,result->paths(),pathIsClosed);
+   bool success = result->paths().size() > 0;
+   if(success) {
+      ClipperLib::CleanPolygons(result->paths());
+      m_profile = result;
+   }
+
+   boost::posix_time::time_duration  ptime_diff = boost::posix_time::microsec_clock::universal_time() - p1;
+   double elapsed_sec = 0.001*ptime_diff.total_milliseconds();
+
+   boolean_timer::singleton().add_elapsed(elapsed_sec);
+
+   return success;
+}
+
 std::shared_ptr<clipper_profile> clipper_boolean::profile()
 {
    return m_profile;

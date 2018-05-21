@@ -442,6 +442,12 @@
 		<Unit filename="xlinear_extrude.h">
 			<Option virtualFolder="boolean/3d/" />
 		</Unit>
+		<Unit filename="xminkowski2d.cpp">
+			<Option virtualFolder="boolean/2d/" />
+		</Unit>
+		<Unit filename="xminkowski2d.h">
+			<Option virtualFolder="boolean/2d/" />
+		</Unit>
 		<Unit filename="xminkowski3d.cpp">
 			<Option virtualFolder="boolean/3d/" />
 		</Unit>
