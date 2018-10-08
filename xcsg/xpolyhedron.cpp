@@ -179,7 +179,7 @@ std::shared_ptr<carve::mesh::MeshSet<3>> xpolyhedron::create_carve_mesh(const ca
       // Create instead a convex hull polyhedron, using only the vertices
       qhull3d qhull;
       for(size_t i=0; i<m_vertices.size(); i++) {
-         xvertex vertex = t*get_transform()*t*get_transform()*m_vertices[i];
+         xvertex vertex = t*get_transform()*m_vertices[i];
          qhull.push_back(vertex.v[0],vertex.v[1],vertex.v[2]);
       }
 
