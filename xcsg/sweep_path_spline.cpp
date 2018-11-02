@@ -15,7 +15,6 @@
 
 #include "sweep_path_spline.h"
 #include "mesh_utils.h"
-
 static const double pi = 4.0*atan(1.0);
 
 sweep_path_spline::sweep_path_spline(std::shared_ptr<const polymesh2d> pm2d, std::shared_ptr<const csplines::spline_path> path, int nseg)
@@ -23,16 +22,16 @@ sweep_path_spline::sweep_path_spline(std::shared_ptr<const polymesh2d> pm2d, std
 , m_path(path)
 , m_nseg(nseg)
 {
-   if(m_nseg < 1) {
+   if(nseg < 1) {
 
-      // start with a minimum of 2 segments and increase until the tolerance is satisfied
-      nseg = std::max(2,std::abs(m_nseg));
-
-      // estimate the max radius of the path
+      // estimate the max curvature of the path
+      std::shared_ptr<const csplines::spline_path> summed_path = path->summed_spline();
       int nseg_sample = 20;
-      double c_max = path->max_curvature(nseg_sample);
-      double srange = path->scaling_range();
+      double c_max = summed_path->max_curvature(nseg_sample);
       if(c_max > 1.0E-5) {
+
+         // start with a minimum of 2 segments and increase until the tolerance is satisfied
+         nseg = std::max(2,std::abs(nseg));
 
          double radius = 1.0/c_max;
          double angle  = 0.5*pi;   // Assuming 90 degree segment at given radius
@@ -48,7 +47,7 @@ sweep_path_spline::sweep_path_spline(std::shared_ptr<const polymesh2d> pm2d, std
          // scale actual number of segments by known path length
 
          double arclen = 0.5*pi*radius;
-         double slen   = path->length();
+         double slen   = summed_path->length();
          double factor = slen/arclen;
 
          if(factor > 0.0) {
@@ -57,12 +56,12 @@ sweep_path_spline::sweep_path_spline(std::shared_ptr<const polymesh2d> pm2d, std
          }
       }
 
+      double srange = path->scaling_range();
       if(srange > 0.0  && nseg == std::abs(m_nseg)) {
          nseg = std::max(nseg,nseg*static_cast<int>(srange+0.5));
       }
-
-      m_nseg = nseg;
    }
+   m_nseg = std::abs(nseg);
 }
 
 sweep_path_spline::~sweep_path_spline()

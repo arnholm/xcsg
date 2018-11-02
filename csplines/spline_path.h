@@ -19,6 +19,7 @@
 
 #include "csplines_config.h"
 #include "ap/ap.h"
+#include <memory>
 #include <vector>
 
 // spline_path expresses a spline curve in 3d space
@@ -33,6 +34,7 @@ namespace csplines {
       cpoint(double px_, double py_, double pz_, double vx_, double vy_, double vz_) : px(px_), py(py_), pz(pz_),vx(vx_),vy(vy_),vz(vz_) {}
       inline double dist(const cpoint& other) const {  double dx(px-other.px),dy(py-other.py),dz(pz-other.pz); return sqrt(dx*dx+dy*dy+dz*dz); }
       inline double length() const { return sqrt(vx*vx+vy*vy+vz*vz); }
+      inline cpoint summed_point() const { return cpoint(px+vx,py+vy,pz+vz,0,0,0);}
       double px,py,pz;
       double vx,vy,vz;
    };
@@ -50,9 +52,12 @@ namespace csplines {
       cpoint pos(double t) const;
 
       // return interpolated direction vectors using parameter [0,1]
+      // px,py,pz contains curve tangent
+      // vx,vy,vz contains interpolated vector
       cpoint dir(double t) const;
 
       // return max curvature observed by sampling nseg segments
+      // note that this evaluates points only (see summed_spline() to evaluate both)
       double max_curvature(int nseg) const;
 
       // return vector scaling range, largest minus smallest
@@ -63,6 +68,16 @@ namespace csplines {
 
       // return number of input control points
       size_t size() const;
+
+      // return equivalent spline where points and vectors are summed
+      std::shared_ptr<csplines::spline_path> summed_spline() const;
+
+      // return absolute curvature at parameter t [0,1]
+      // NOTE: use only with summed spline, because vectors are not evaluated
+      double curvature(double t) const;
+
+   protected:
+      std::vector<cpoint>  summed_points() const;
 
    private:
       std::vector<cpoint> m_points;
