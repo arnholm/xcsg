@@ -17,8 +17,11 @@
 #include <carve/tree.hpp>
 #include <carve/csg_triangulator.hpp>
 
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/convenience.hpp>
+#include "carve_triangulate_face.h"
+#include <forward_list>
+
+// #include <boost/filesystem.hpp>
+// #include <boost/filesystem/convenience.hpp>
 
 carve_triangulate::carve_triangulate()
 : m_polyset( new poly_vector )
@@ -130,3 +133,84 @@ void carve_triangulate::add(std::shared_ptr<carve::poly::Polyhedron> poly)
 {
    m_polyset->push_back(poly);
 }
+
+size_t carve_triangulate::compute2(std::shared_ptr<carve::poly::Polyhedron> poly)
+{
+   // the number of vertices shall remain unchanged
+//   const std::vector<carve::poly::Vertex<3>>& vertices = poly->vertices;
+
+   // triangulated faces
+   std::forward_list<carve::poly::Face<3> > tri_faces;
+   // unfortunately, std::forward_list has no size() member, so we must keep track of the face count ourselves
+   size_t tri_faces_size = 0;
+
+   // Traverse the input faces
+   for (size_t i = 0; i < poly->faces.size(); ++i) {
+      carve::poly::Face<3>& f = poly->faces[i];
+      size_t nv  = f.nVertices();
+      if(nv == 3) {
+         tri_faces.push_front(f);
+         tri_faces_size++;
+      }
+      else if(nv == 4) {
+
+         // just split the face into 2 triangles
+         std::vector<const carve::poly::Vertex<3> *> vloop;
+         f.getVertexLoop(vloop);
+         std::vector<const carve::poly::Vertex<3> *> tri_vloop1 =  { vloop[0], vloop[1], vloop[2]};
+         std::vector<const carve::poly::Vertex<3> *> tri_vloop2 =  { vloop[0], vloop[2], vloop[3]};
+         tri_faces.push_front(carve::poly::Face<3>(tri_vloop1));
+         tri_faces.push_front(carve::poly::Face<3>(tri_vloop2));
+         tri_faces_size += 2;
+
+      }
+      else if(nv > 4){
+         // 5 or more vertices, this face must be triangulated
+
+         // convert the face vertex loop to vector of vertex indices: vind refers to poly->vertices
+         // and also compute vector of projected 2d coordinates for the same face vertices
+         std::vector<size_t> vind;
+         std::vector<carve::geom2d::P2> vxy;
+
+         // get the face vertex loop
+         std::vector<const carve::poly::Vertex<3> *> vloop;
+         f.getVertexLoop(vloop);
+
+         // obtain the face vertex indices and
+         // project 3d vertex coordinates into 2d
+         carve::poly::p2_adapt_project<3> projector(f.project);
+         vind.reserve(nv);
+         vind.reserve(nv);
+         for(size_t iv=0; iv<nv; iv++) {
+            vind.push_back(poly->vertexToIndex_fast(vloop[iv]));
+            vxy.push_back(projector(vloop[iv]));
+         }
+
+         // use the face triangulator
+         carve_triangulate_face triangulator;
+         std::vector<std::vector<size_t>> tri_vinds = triangulator.compute(vind,vxy);
+
+         for(auto& tri_vind : tri_vinds) {
+           std::vector<const carve::poly::Vertex<3> *> tri_vloop =  { &poly->vertices[tri_vind[0]], &poly->vertices[tri_vind[1]], &poly->vertices[tri_vind[2]] };
+           tri_faces.push_front(carve::poly::Face<3>(tri_vloop));
+           tri_faces_size++;
+         }
+      }
+   }
+
+   // create the triangulated polyhedron
+   std::vector<carve::poly::Face<3> > faces;
+   faces.reserve(tri_faces_size);
+   for(auto& f : tri_faces) {
+      faces.push_back(f);
+   }
+
+   std::shared_ptr<carve::poly::Polyhedron> poly_triangle(new carve::poly::Polyhedron(faces, poly->vertices));
+
+   // add to the vector of triangulated polyhedrons
+   m_polyset->push_back(poly_triangle);
+
+   // return number of faces after triangulation
+   return poly_triangle->faces.size();
+}
+

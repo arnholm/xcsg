@@ -154,7 +154,8 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
             bool canonicalize = true;
             bool degen_check = true;
             cout << "...Triangulating lump ... " << std::endl;
-            cout << "...Triangulation completed with " << triangulate.compute(poly->create_carve_polyhedron(),improve,canonicalize,degen_check)<< " triangle faces ";
+//            cout << "...Triangulation completed with " << triangulate.compute(poly->create_carve_polyhedron(),improve,canonicalize,degen_check)<< " triangle faces ";
+            cout << "...Triangulation completed with " << triangulate.compute2(poly->create_carve_polyhedron())<< " triangle faces ";
 
             boost::posix_time::ptime time_2 = boost::posix_time::microsec_clock::universal_time();
             double elapsed_2 = 0.001*(time_2 - time_1).total_milliseconds();
