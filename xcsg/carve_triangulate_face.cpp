@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <memory>
 #include <cmath>
+#include <cstring> // for memset
 #include "tmesh/libtess2/Include/tesselator.h"
 
 static void *stdAlloc(void* userData, unsigned int size) {
@@ -61,7 +62,7 @@ std::vector<std::vector<size_t>> carve_triangulate_face::compute(const std::vect
    }
    tessAddContour(m_tess,2,&coords[0],sizeof(TESSreal)*vertexSize,static_cast<int>(vxy.size()));
 
-   // compute the Constrained Delaunay mesh for the whole profile
+   // compute the Constrained Delaunay mesh for the face
    TESSreal* normalvec = 0; // normal automatically calculated
    bool success = (1 == tessTesselate(m_tess,TESS_WINDING_ODD,TESS_CONSTRAINED_DELAUNAY_TRIANGLES, polySize, vertexSize, normalvec));
    if(!success) throw std::logic_error("carve_triangulate_face failed");
@@ -84,6 +85,7 @@ std::vector<std::vector<size_t>> carve_triangulate_face::compute(const std::vect
    for(int iiel=0; iiel<nelems; iiel++) {
 
       auto& face_vinds = tri_faces[iiel];
+      face_vinds.reserve(3);
 
       // p = pointer to polygon triangle, each polygon uses polySize*1 indices for TESS_CONSTRAINED_DELAUNAY_TRIANGLES
       const int* p = &elems[iiel*polySize];

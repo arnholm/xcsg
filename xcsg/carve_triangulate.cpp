@@ -136,11 +136,9 @@ void carve_triangulate::add(std::shared_ptr<carve::poly::Polyhedron> poly)
 
 size_t carve_triangulate::compute2(std::shared_ptr<carve::poly::Polyhedron> poly)
 {
-   // the number of vertices shall remain unchanged
-//   const std::vector<carve::poly::Vertex<3>>& vertices = poly->vertices;
-
-   // triangulated faces
+   // triangulated faces will be stored in tri_faces
    std::forward_list<carve::poly::Face<3> > tri_faces;
+
    // unfortunately, std::forward_list has no size() member, so we must keep track of the face count ourselves
    size_t tri_faces_size = 0;
 
@@ -190,6 +188,7 @@ size_t carve_triangulate::compute2(std::shared_ptr<carve::poly::Polyhedron> poly
          carve_triangulate_face triangulator;
          std::vector<std::vector<size_t>> tri_vinds = triangulator.compute(vind,vxy);
 
+         // extract the triangulated faces
          for(auto& tri_vind : tri_vinds) {
            std::vector<const carve::poly::Vertex<3> *> tri_vloop =  { &poly->vertices[tri_vind[0]], &poly->vertices[tri_vind[1]], &poly->vertices[tri_vind[2]] };
            tri_faces.push_front(carve::poly::Face<3>(tri_vloop));
@@ -198,16 +197,17 @@ size_t carve_triangulate::compute2(std::shared_ptr<carve::poly::Polyhedron> poly
       }
    }
 
-   // create the triangulated polyhedron
+   // convert the triangulated list to a vector
    std::vector<carve::poly::Face<3> > faces;
    faces.reserve(tri_faces_size);
    for(auto& f : tri_faces) {
       faces.push_back(f);
    }
 
+   // create the triangulated polyhedron
    std::shared_ptr<carve::poly::Polyhedron> poly_triangle(new carve::poly::Polyhedron(faces, poly->vertices));
 
-   // add to the vector of triangulated polyhedrons
+   // add to the vector of triangulated polyhedra
    m_polyset->push_back(poly_triangle);
 
    // return number of faces after triangulation
