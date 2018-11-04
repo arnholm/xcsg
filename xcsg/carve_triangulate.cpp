@@ -134,7 +134,7 @@ void carve_triangulate::add(std::shared_ptr<carve::poly::Polyhedron> poly)
    m_polyset->push_back(poly);
 }
 
-size_t carve_triangulate::compute2(std::shared_ptr<carve::poly::Polyhedron> poly)
+size_t carve_triangulate::compute2d(std::shared_ptr<carve::poly::Polyhedron> poly)
 {
    // triangulated faces will be stored in tri_faces
    std::forward_list<carve::poly::Face<3> > tri_faces;
@@ -168,25 +168,21 @@ size_t carve_triangulate::compute2(std::shared_ptr<carve::poly::Polyhedron> poly
          // convert the face vertex loop to vector of vertex indices: vind refers to poly->vertices
          // and also compute vector of projected 2d coordinates for the same face vertices
          std::vector<size_t> vind;
-         std::vector<carve::geom2d::P2> vxy;
+         std::vector<carve::geom2d::P2> vxy = f.projectedVertices();
 
          // get the face vertex loop
          std::vector<const carve::poly::Vertex<3> *> vloop;
          f.getVertexLoop(vloop);
 
-         // obtain the face vertex indices and
-         // project 3d vertex coordinates into 2d
-         carve::poly::p2_adapt_project<3> projector(f.project);
-         vind.reserve(nv);
+         // obtain the face vertex indices into the polyhedron vertex vector
          vind.reserve(nv);
          for(size_t iv=0; iv<nv; iv++) {
             vind.push_back(poly->vertexToIndex_fast(vloop[iv]));
-            vxy.push_back(projector(vloop[iv]));
          }
 
          // use the face triangulator
          carve_triangulate_face triangulator;
-         std::vector<std::vector<size_t>> tri_vinds = triangulator.compute(vind,vxy);
+         std::vector<std::vector<size_t>> tri_vinds = triangulator.compute2d(vind,vxy);
 
          // extract the triangulated faces
          for(auto& tri_vind : tri_vinds) {
@@ -198,7 +194,7 @@ size_t carve_triangulate::compute2(std::shared_ptr<carve::poly::Polyhedron> poly
    }
 
    // convert the triangulated list to a vector
-   std::vector<carve::poly::Face<3> > faces;
+   std::vector<carve::poly::Face<3>> faces;
    faces.reserve(tri_faces_size);
    for(auto& f : tri_faces) {
       faces.push_back(f);
@@ -213,4 +209,3 @@ size_t carve_triangulate::compute2(std::shared_ptr<carve::poly::Polyhedron> poly
    // return number of faces after triangulation
    return poly_triangle->faces.size();
 }
-

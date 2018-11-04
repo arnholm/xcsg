@@ -32,7 +32,7 @@ public:
    size_t compute(std::shared_ptr<carve::poly::Polyhedron> poly, bool improve, bool canonicalize, bool degen_check);
 
    // compute triangulated polyhedron and add to polyset, alternative implementation
-   size_t compute2(std::shared_ptr<carve::poly::Polyhedron> poly);
+   size_t compute2d(std::shared_ptr<carve::poly::Polyhedron> poly);
 
    // add polyhedron to polyset without triangulation
    void add(std::shared_ptr<carve::poly::Polyhedron> poly);

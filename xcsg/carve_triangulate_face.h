@@ -11,8 +11,8 @@ public:
 
    // returns a vector of triangulated faces in the form of vertex indices
    // the vertex indices returned will be one of the input indices only
-   std::vector<std::vector<size_t>> compute(const std::vector<size_t>&    vind,           // input face vertex indices (into polyhedron vertex vector)
-                                            const std::vector<carve::geom2d::P2>& vxy);   // computed 2d vertex coordinates
+   std::vector<std::vector<size_t>> compute2d(const std::vector<size_t>&    vind,           // input face vertex indices (into polyhedron vertex vector)
+                                             const std::vector<carve::geom2d::P2>& vxy);    // projected 2d vertex coordinates
 
 protected:
    void create_tess();

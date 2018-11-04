@@ -43,8 +43,8 @@ void carve_triangulate_face::delete_tess()
 
 
 
-std::vector<std::vector<size_t>> carve_triangulate_face::compute(const std::vector<size_t>&    vind,   // input face vertex indices (into polyhedron vertex vector)
-                                                         const std::vector<carve::geom2d::P2>& vxy)    // computed 2d vertex coordinates
+std::vector<std::vector<size_t>> carve_triangulate_face::compute2d(const std::vector<size_t>&    vind,          // input face vertex indices (into polyhedron vertex vector)
+                                                                   const std::vector<carve::geom2d::P2>& vxy)    // computed 2d vertex coordinates
 {
    const int polySize   = 3; // defines maximum vertices per polygon (i.e. triangle)
    const int vertexSize = 2; // defines the number of coordinates in tesselation result vertex, must be 2 or 3.
@@ -109,3 +109,4 @@ std::vector<std::vector<size_t>> carve_triangulate_face::compute(const std::vect
 
    return std::move(tri_faces);
 }
+
