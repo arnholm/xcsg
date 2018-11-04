@@ -107,8 +107,14 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
    std::shared_ptr<xsolid> obj = xcsg_factory::singleton().make_solid(node);
    if(obj.get()) {
 
-      int nbool = static_cast<int>(obj->nbool());
+      size_t nbool = static_cast<int>(obj->nbool());
       cout << "...completed CSG tree: " <<  nbool << " boolean operations to process." << endl;
+      if(nbool > m_cmd.max_bool()) {
+         ostringstream sout;
+         sout << "Max " << m_cmd.max_bool() << " boolean operations allowed in this configuration.";
+         throw std::logic_error(sout.str());
+      }
+
 
       if(nbool > 0) {
          cout << "...starting boolean operations" << endl;
@@ -150,11 +156,7 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
          poly->check_polyhedron(cout,num_non_tri);
 
          if(num_non_tri > 0) {
-            bool improve = true;
-            bool canonicalize = true;
-            bool degen_check = true;
             cout << "...Triangulating lump ... " << std::endl;
-//            cout << "...Triangulation completed with " << triangulate.compute(poly->create_carve_polyhedron(),improve,canonicalize,degen_check)<< " triangle faces ";
             cout << "...Triangulation completed with " << triangulate.compute2d(poly->create_carve_polyhedron())<< " triangle faces ";
 
             boost::posix_time::ptime time_2 = boost::posix_time::microsec_clock::universal_time();
@@ -195,8 +197,13 @@ bool xcsg_main::run_xshape2d(cf_xmlNode& node,const std::string& xcsg_file)
    std::shared_ptr<xshape2d> obj = xcsg_factory::singleton().make_shape2d(node);
    if(obj.get()) {
 
-      int nbool = static_cast<int>(obj->nbool());
+      size_t nbool = static_cast<int>(obj->nbool());
       cout << "...completed CSG tree: " <<  nbool << " boolean operations to process." << endl;
+      if(nbool > m_cmd.max_bool()) {
+         ostringstream sout;
+         sout << "Max " << m_cmd.max_bool() << " boolean operations allowed in this configuration.";
+         throw std::logic_error(sout.str());
+      }
 
       if(nbool > 0) {
          cout << "...starting boolean operations" << endl;

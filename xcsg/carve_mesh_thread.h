@@ -14,7 +14,7 @@ public:
   typedef std::shared_ptr<carve::mesh::MeshSet<3>> MeshSet_ptr;
 
    carve_mesh_thread(const carve::math::Matrix& t,
-                     std::shared_ptr<xsolid>    solid,
+                     const std::unordered_set<std::shared_ptr<xsolid>>& solids,
                      safe_queue<MeshSet_ptr>&   mesh_queue,
                      safe_queue<std::string>&   exception_queue);
 
@@ -37,10 +37,10 @@ protected:
    void run();
 
 private:
-   carve::math::Matrix       m_t;
-   std::shared_ptr<xsolid>   m_solid;
-   safe_queue<MeshSet_ptr>&  m_mesh_queue;
-   safe_queue<std::string>&  m_exception_queue;
+   carve::math::Matrix                           m_t;
+   std::unordered_set<std::shared_ptr<xsolid>>   m_solids;
+   safe_queue<MeshSet_ptr>&                      m_mesh_queue;
+   safe_queue<std::string>&                      m_exception_queue;
 };
 
 #endif // CARVE_MESH_THREAD_H

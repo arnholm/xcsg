@@ -15,8 +15,9 @@ static void stdFree(void* userData, void* ptr) {
 	free(ptr);
 }
 
-carve_triangulate_face::carve_triangulate_face()
+carve_triangulate_face::carve_triangulate_face(std::shared_ptr<spec>  spec)
 : m_tess(0)
+, m_spec(spec)
 {}
 
 carve_triangulate_face::~carve_triangulate_face()
@@ -39,6 +40,12 @@ void carve_triangulate_face::delete_tess()
 {
    if(m_tess)tessDeleteTess(m_tess);
    m_tess = 0;
+}
+
+void carve_triangulate_face::compute()
+{
+   m_tri  = compute2d(m_spec->vind,m_spec->vxy);
+   m_spec = nullptr;
 }
 
 std::vector<std::vector<size_t>> carve_triangulate_face::compute2d(const std::vector<size_t>&    vind,          // input face vertex indices (into polyhedron vertex vector)
@@ -105,6 +112,9 @@ std::vector<std::vector<size_t>> carve_triangulate_face::compute2d(const std::ve
       }
 
    }
+
+   // cleanup
+   delete_tess();
 
    return std::move(tri_faces);
 }

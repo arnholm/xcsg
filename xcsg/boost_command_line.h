@@ -36,6 +36,8 @@ public:
 
    bool parsed_ok() { return m_parse_ok; }
 
+   size_t max_bool() const { return m_max_bool; }
+
 private:
    boost::program_options::options_description generic;
    boost::program_options::options_description hidden;
@@ -44,6 +46,7 @@ private:
    bool  m_parse_ok;
    bool  m_help_shown;
    bool  m_version_shown;
+   size_t m_max_bool;
 };
 
 #endif // BOOST_COMMAND_LINE_H

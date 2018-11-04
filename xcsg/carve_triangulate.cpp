@@ -186,20 +186,21 @@ size_t carve_triangulate::compute2d(std::shared_ptr<carve::poly::Polyhedron> pol
          else {
             // 5 or more vertices, this face must be triangulated
 
+            auto spec  = std::make_shared<carve_triangulate_face::spec>();
+            spec->vxy  = f.projectedVertices();
+
             // convert the face vertex loop to vector of vertex indices: vind refers to poly->vertices
             // and also compute vector of projected 2d coordinates for the same face vertices
-            std::vector<size_t> vind;
-            std::vector<carve::geom2d::P2> vxy = f.projectedVertices();
-
-            // obtain the face vertex indices into the polyhedron vertex vector
-            vind.reserve(nv);
+            spec->vind.reserve(nv);
             for(size_t iv=0; iv<nv; iv++) {
-               vind.push_back(poly->vertexToIndex_fast(vloop[iv]));
+               spec->vind.push_back(poly->vertexToIndex_fast(vloop[iv]));
             }
 
-            // use the face triangulator to create a triangle mesh. Keep the triangles instead of the original face
-            carve_triangulate_face triangulator;
-            std::vector<std::vector<size_t>> tri_vinds = triangulator.compute2d(vind,vxy);
+            // use the face triangulator to create a triangle mesh.
+            // it is done in 3 steps to be prepared for threading later
+            carve_triangulate_face triangulator(spec);
+            triangulator.compute();
+            std::vector<std::vector<size_t>> tri_vinds = triangulator.move_triangles();
 
             // extract the triangles
             for(auto& tri_vind : tri_vinds) {

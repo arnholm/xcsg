@@ -23,6 +23,7 @@
 #include <boost/filesystem/convenience.hpp>
 
 #include <sstream>
+#include <numeric>
 #include <vector>
 #include <list>
 #include <exception>
@@ -42,6 +43,7 @@ boost_command_line::boost_command_line(int argc , char **argv)
 , m_parse_ok(false)
 , m_help_shown(false)
 , m_version_shown(false)
+, m_max_bool(std::numeric_limits<size_t>::max())
 {
    generic.add_options()
         ("help,h",  "Show this help message.")
@@ -54,6 +56,7 @@ boost_command_line::boost_command_line(int argc , char **argv)
         ("astl",  "STL output format (STereoLitography) - ASCII")
         ("obj",   "OBJ output format (Wavefront format)")
         ("off",   "OFF output format (Geomview Object File Format)")
+        ("max_bool", po::value<size_t>(),  "Max number of booleans allowed")
          ;
 
    hidden.add_options()
@@ -128,6 +131,10 @@ boost_command_line::boost_command_line(int argc , char **argv)
    if(vm.count("xcsg-file") == 0 && out_count==0 ) {
       if(help_count==0) error_list.push_back("ERROR: No input file specified");
       error_count++;
+   }
+
+   if(vm.count("max_bool") > 0) {
+      m_max_bool = get<size_t>("max_bool");
    }
 
    // some things are counted as errors without error message
