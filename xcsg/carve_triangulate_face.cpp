@@ -41,8 +41,6 @@ void carve_triangulate_face::delete_tess()
    m_tess = 0;
 }
 
-
-
 std::vector<std::vector<size_t>> carve_triangulate_face::compute2d(const std::vector<size_t>&    vind,          // input face vertex indices (into polyhedron vertex vector)
                                                                    const std::vector<carve::geom2d::P2>& vxy)    // computed 2d vertex coordinates
 {
@@ -77,13 +75,15 @@ std::vector<std::vector<size_t>> carve_triangulate_face::compute2d(const std::ve
 
    // Here, we rely on the fact that no new vertices will be added by TESS
    // We therefore ignore the mesh coordinates in the tesselator output (they are single precision anyway).
-   // However, we must use the "vinds" lookup table as the order of the vertices have been changed by the tesselator
+   // However, we must use the "vinds" lookup table as the order of the vertices may have been changed by the tesselator
 
+   // make room for all triangles
    tri_faces.resize(nelems);
 
    // traverse the tesselator faces and add them to the mesh
    for(int iiel=0; iiel<nelems; iiel++) {
 
+      // get the vertex index vector for this triangle, and allocate space for exactly 3 vertices
       auto& face_vinds = tri_faces[iiel];
       face_vinds.reserve(3);
 
@@ -99,8 +99,7 @@ std::vector<std::vector<size_t>> carve_triangulate_face::compute2d(const std::ve
 
          // Extract/adjust the face vertex index.
          // Using the vinds[ivert] lookup, we get index in the coords vertex sequence.
-         // using vind[vinds[ivert]], we get the original vertex indices of the polyhedron
-         // This way the faces will be referring to the original vertices of the polyhedron
+         // using vind[vinds[ivert]], we get the original vertex index into the polyhedron vertex vector.
          size_t vertex_index = vind[vinds[ivert]];
          face_vinds.push_back(vertex_index);
       }
