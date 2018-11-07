@@ -212,6 +212,12 @@
 		<Unit filename="carve_triangulate_face.h">
 			<Option virtualFolder="mesh/" />
 		</Unit>
+		<Unit filename="carve_triangulate_thread.cpp">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="carve_triangulate_thread.h">
+			<Option virtualFolder="mesh/" />
+		</Unit>
 		<Unit filename="cf_xmlNode.cpp">
 			<Option virtualFolder="XML/" />
 		</Unit>

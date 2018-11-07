@@ -18,10 +18,8 @@
 #include <carve/csg_triangulator.hpp>
 
 #include "carve_triangulate_face.h"
+#include "carve_triangulate_thread.h"
 #include <forward_list>
-
-// #include <boost/filesystem.hpp>
-// #include <boost/filesystem/convenience.hpp>
 
 carve_triangulate::carve_triangulate()
 : m_polyset( new poly_vector )
@@ -30,30 +28,6 @@ carve_triangulate::carve_triangulate()
 carve_triangulate::~carve_triangulate()
 {}
 
-/*
-static double polyhedron_edge_length(const carve::poly::Polyhedron::vertex_t* v0,
-                                     const carve::poly::Polyhedron::vertex_t* v1)
-{
-   double dx = v1->v[0] - v0->v[0];
-   double dy = v1->v[1] - v0->v[1];
-   double dz = v1->v[2] - v0->v[2];
-   return sqrt(dx*dx + dy*dy + dz*dz);
-   return 0;
-}
-
-static double polyhedron_face_area( const carve::poly::Polyhedron::vertex_t* va,
-                                    const carve::poly::Polyhedron::vertex_t* vb,
-                                    const carve::poly::Polyhedron::vertex_t* vc)
-{
-   // https://en.wikipedia.org/wiki/Heron's_formula
-
-   double a = polyhedron_edge_length(va,vb);
-   double b = polyhedron_edge_length(vb,vc);
-   double c = polyhedron_edge_length(vc,va);
-   double s = 0.5*(a+b+c);
-   return sqrt(s*(s-a)*(s-b)*(s-c));
-}
-*/
 static double polyhedron_face_area( const carve::poly::Polyhedron::vertex_t* va,
                                     const carve::poly::Polyhedron::vertex_t* vb,
                                     const carve::poly::Polyhedron::vertex_t* vc)
@@ -136,6 +110,9 @@ void carve_triangulate::add(std::shared_ptr<carve::poly::Polyhedron> poly)
 
 size_t carve_triangulate::compute2d(std::shared_ptr<carve::poly::Polyhedron> poly)
 {
+
+   safe_queue<std::shared_ptr<carve_triangulate_face::spec>>      in_queue;        // input faces to be triangulated
+
    typedef std::vector<const carve::poly::Vertex<3> *> VertexLoop;
 
    // triangulated faces will temporarily be stored in tri_faces (as vertex loops)
@@ -185,7 +162,6 @@ size_t carve_triangulate::compute2d(std::shared_ptr<carve::poly::Polyhedron> pol
          }
          else {
             // 5 or more vertices, this face must be triangulated
-
             auto spec  = std::make_shared<carve_triangulate_face::spec>();
             spec->vxy  = f.projectedVertices();
 
@@ -196,19 +172,25 @@ size_t carve_triangulate::compute2d(std::shared_ptr<carve::poly::Polyhedron> pol
                spec->vind.push_back(poly->vertexToIndex_fast(vloop[iv]));
             }
 
-            // use the face triangulator to create a triangle mesh.
-            // it is done in 3 steps to be prepared for threading later
-            carve_triangulate_face triangulator(spec);
-            triangulator.compute();
-            std::vector<std::vector<size_t>> tri_vinds = triangulator.move_triangles();
-
-            // extract the triangles
-            for(auto& tri_vind : tri_vinds) {
-              VertexLoop tri_vloop =  { &poly->vertices[tri_vind[0]], &poly->vertices[tri_vind[1]], &poly->vertices[tri_vind[2]] };
-              tri_faces.push_front(tri_vloop);
-              tri_faces_size++;
-            }
+            // place the spec in the triangulation queue
+            in_queue.enqueue(spec);
          }
+      }
+   }
+
+   // run triangulation, result returned in triangle_queue
+   const size_t num_threads = 12;
+   safe_queue<std::shared_ptr<carve_triangulate_face::triangles>> triangle_queue;
+   carve_triangulate_thread::run_threads(num_threads,in_queue,triangle_queue);
+
+   // extract the triangles
+   while(triangle_queue.size() > 0) {
+      auto triangles = triangle_queue.dequeue();
+      std::vector<std::vector<size_t>>& tri_vinds = triangles->tri_faces;
+      for(auto& tri_vind : tri_vinds) {
+        VertexLoop tri_vloop =  { &poly->vertices[tri_vind[0]], &poly->vertices[tri_vind[1]], &poly->vertices[tri_vind[2]] };
+        tri_faces.push_front(tri_vloop);
+        tri_faces_size++;
       }
    }
 

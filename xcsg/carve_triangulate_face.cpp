@@ -1,9 +1,27 @@
+// BeginLicense:
+// Part of: xcsg - XML based Constructive Solid Geometry
+// Copyright (C) 2017 Carsten Arnholm
+// All rights reserved
+//
+// This file may be used under the terms of either the GNU General
+// Public License version 2 or 3 (at your option) as published by the
+// Free Software Foundation and appearing in the files LICENSE.GPL2
+// and LICENSE.GPL3 included in the packaging of this file.
+//
+// This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
+// INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE. ALL COPIES OF THIS FILE MUST INCLUDE THIS LICENSE.
+// EndLicense:
+
 #include "carve_triangulate_face.h"
 #include <cstdlib>
 #include <memory>
 #include <cmath>
 #include <cstring> // for memset
 #include "tmesh/libtess2/Include/tesselator.h"
+
+#include <iostream>
+using namespace std;
 
 static void *stdAlloc(void* userData, unsigned int size) {
 	TESS_NOTUSED(userData);
@@ -42,21 +60,20 @@ void carve_triangulate_face::delete_tess()
    m_tess = 0;
 }
 
-void carve_triangulate_face::compute()
+std::shared_ptr<carve_triangulate_face::triangles> carve_triangulate_face::compute()
 {
-   m_tri  = compute2d(m_spec->vind,m_spec->vxy);
-   m_spec = nullptr;
+   return compute2d(m_spec->vind,m_spec->vxy);
 }
 
-std::vector<std::vector<size_t>> carve_triangulate_face::compute2d(const std::vector<size_t>&    vind,          // input face vertex indices (into polyhedron vertex vector)
-                                                                   const std::vector<carve::geom2d::P2>& vxy)    // computed 2d vertex coordinates
+std::shared_ptr<carve_triangulate_face::triangles>  carve_triangulate_face::compute2d(const std::vector<size_t>&    vind,          // input face vertex indices (into polyhedron vertex vector)
+                                                                                   const std::vector<carve::geom2d::P2>& vxy)    // computed 2d vertex coordinates
 {
    const int polySize   = 3; // defines maximum vertices per polygon (i.e. triangle)
    const int vertexSize = 2; // defines the number of coordinates in tesselation result vertex, must be 2 or 3.
 
    create_tess();
 
-   std::vector<std::vector<size_t>> tri_faces;
+   auto res = std::make_shared<carve_triangulate_face::triangles>();
 
    // add the face vertices to libtess2, coordinates in libtess2 format
    std::vector<TESSreal> coords;
@@ -85,13 +102,13 @@ std::vector<std::vector<size_t>> carve_triangulate_face::compute2d(const std::ve
    // However, we must use the "vinds" lookup table as the order of the vertices may have been changed by the tesselator
 
    // make room for all triangles
-   tri_faces.resize(nelems);
+   res->tri_faces.resize(nelems);
 
    // traverse the tesselator faces and add them to the mesh
    for(int iiel=0; iiel<nelems; iiel++) {
 
       // get the vertex index vector for this triangle, and allocate space for exactly 3 vertices
-      auto& face_vinds = tri_faces[iiel];
+      auto& face_vinds = res->tri_faces[iiel];
       face_vinds.reserve(3);
 
       // p = pointer to polygon triangle, each polygon uses polySize*1 indices for TESS_CONSTRAINED_DELAUNAY_TRIANGLES
@@ -116,6 +133,6 @@ std::vector<std::vector<size_t>> carve_triangulate_face::compute2d(const std::ve
    // cleanup
    delete_tess();
 
-   return std::move(tri_faces);
+   return res;
 }
 
