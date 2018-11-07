@@ -16,7 +16,9 @@
 #ifndef CARVE_TRIANGULATE_FACE_H
 #define CARVE_TRIANGULATE_FACE_H
 
-#include <carve/csg.hpp>
+#include "carve/polyhedron_base.hpp"
+
+#include <vector>
 #include <memory>
 struct TESStesselator;
 
@@ -24,7 +26,7 @@ class carve_triangulate_face {
 public:
    struct spec {
       std::vector<size_t>            vind; // input face vertex indices (into polyhedron vertex vector)
-      std::vector<carve::geom2d::P2> vxy;  // projected 2d vertex coordinates
+      carve::poly::Face<3>           f;
    };
 
    struct triangles {

@@ -163,7 +163,7 @@ size_t carve_triangulate::compute2d(std::shared_ptr<carve::poly::Polyhedron> pol
          else {
             // 5 or more vertices, this face must be triangulated
             auto spec  = std::make_shared<carve_triangulate_face::spec>();
-            spec->vxy  = f.projectedVertices();
+            spec->f = f;
 
             // convert the face vertex loop to vector of vertex indices: vind refers to poly->vertices
             // and also compute vector of projected 2d coordinates for the same face vertices
@@ -179,7 +179,7 @@ size_t carve_triangulate::compute2d(std::shared_ptr<carve::poly::Polyhedron> pol
    }
 
    // run triangulation, result returned in triangle_queue
-   const size_t num_threads = 12;
+   const size_t num_threads = 8;
    safe_queue<std::shared_ptr<carve_triangulate_face::triangles>> triangle_queue;
    carve_triangulate_thread::run_threads(num_threads,in_queue,triangle_queue);
 
@@ -200,6 +200,7 @@ size_t carve_triangulate::compute2d(std::shared_ptr<carve::poly::Polyhedron> pol
    for(auto& tri_vloop : tri_faces) {
       faces.push_back(carve::poly::Face<3>(tri_vloop));
    }
+   tri_faces.clear();
 
    // create the triangulated polyhedron
    std::shared_ptr<carve::poly::Polyhedron> poly_triangle(new carve::poly::Polyhedron(faces, poly->vertices));

@@ -14,6 +14,7 @@
 // EndLicense:
 
 #include "carve_triangulate_face.h"
+
 #include <cstdlib>
 #include <memory>
 #include <cmath>
@@ -62,7 +63,8 @@ void carve_triangulate_face::delete_tess()
 
 std::shared_ptr<carve_triangulate_face::triangles> carve_triangulate_face::compute()
 {
-   return compute2d(m_spec->vind,m_spec->vxy);
+   auto vxy  = m_spec->f.projectedVertices();
+   return compute2d(m_spec->vind,vxy);
 }
 
 std::shared_ptr<carve_triangulate_face::triangles>  carve_triangulate_face::compute2d(const std::vector<size_t>&    vind,          // input face vertex indices (into polyhedron vertex vector)

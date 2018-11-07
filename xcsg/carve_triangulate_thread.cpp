@@ -29,14 +29,14 @@ carve_triangulate_thread::~carve_triangulate_thread()
 void carve_triangulate_thread::run()
 {
    size_t icount = 0;
-
    try {
       while(m_in_queue.size() > 0) {
          std::shared_ptr<carve_triangulate_face::spec> spec;
          if(m_in_queue.try_dequeue(spec)) {
-            // triangulate this face and store in triangle queue
+            // triangulate this face and store result in triangle queue
             carve_triangulate_face triangulator(spec);
             m_triangle_queue.enqueue(triangulator.compute());
+            icount++;
          }
       }
    }
