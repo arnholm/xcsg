@@ -114,7 +114,8 @@ std::string out_triangles::write_off(const std::string& xcsg_path)
    for(size_t ipoly=0; ipoly<m_polyset->size(); ipoly++) {
 
       std::ostringstream postfix;
-      postfix << '_' << ipoly << ".off";
+      if(ipoly > 0)postfix << '_' << ipoly;
+      postfix << ".off";
 
       path = csg_path.string() + postfix.str();
       std::replace(path.begin(),path.end(), '\\', '/');

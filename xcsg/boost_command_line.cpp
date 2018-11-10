@@ -57,6 +57,7 @@ boost_command_line::boost_command_line(int argc , char **argv)
         ("obj",   "OBJ output format (Wavefront format)")
         ("off",   "OFF output format (Geomview Object File Format)")
         ("max_bool", po::value<size_t>(),  "Max number of booleans allowed")
+        ("web",   "web mode")
          ;
 
    hidden.add_options()
