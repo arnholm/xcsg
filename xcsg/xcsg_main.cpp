@@ -118,7 +118,7 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
       bool web_mode  = m_cmd.count("web")>0;
       bool show_path = !web_mode;
 
-      int nbool = static_cast<int>(obj->nbool());
+      size_t nbool = obj->nbool();
       cout << "...completed CSG tree: " <<  nbool << " boolean operations to process." << endl;
       if(nbool > m_cmd.max_bool()) {
          ostringstream sout;
@@ -135,7 +135,7 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
       carve_boolean csg;
       try {
 
-         boolean_timer::singleton().init(nbool);
+         boolean_timer::singleton().init(static_cast<int>(nbool));
          csg.compute(obj->create_carve_mesh(),carve::csg::CSG::OP::UNION);
          boost::posix_time::time_duration  ptime_diff = boost::posix_time::microsec_clock::universal_time() - time_0;
          double elapsed_sec = 0.001*ptime_diff.total_milliseconds();
@@ -212,7 +212,7 @@ bool xcsg_main::run_xshape2d(cf_xmlNode& node,const std::string& xcsg_file)
       bool web_mode  = m_cmd.count("web")>0;
       bool show_path = !web_mode;
 
-      int nbool = static_cast<int>(obj->nbool());
+      size_t nbool = obj->nbool();
       cout << "...completed CSG tree: " <<  nbool << " boolean operations to process." << endl;
       if(nbool > m_cmd.max_bool()) {
          ostringstream sout;
