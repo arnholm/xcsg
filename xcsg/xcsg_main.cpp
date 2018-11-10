@@ -118,7 +118,7 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
       bool web_mode  = m_cmd.count("web")>0;
       bool show_path = !web_mode;
 
-      size_t nbool = static_cast<int>(obj->nbool());
+      int nbool = static_cast<int>(obj->nbool());
       cout << "...completed CSG tree: " <<  nbool << " boolean operations to process." << endl;
       if(nbool > m_cmd.max_bool()) {
          ostringstream sout;
@@ -212,7 +212,7 @@ bool xcsg_main::run_xshape2d(cf_xmlNode& node,const std::string& xcsg_file)
       bool web_mode  = m_cmd.count("web")>0;
       bool show_path = !web_mode;
 
-      size_t nbool = static_cast<int>(obj->nbool());
+      int nbool = static_cast<int>(obj->nbool());
       cout << "...completed CSG tree: " <<  nbool << " boolean operations to process." << endl;
       if(nbool > m_cmd.max_bool()) {
          ostringstream sout;
@@ -251,6 +251,7 @@ bool xcsg_main::run_xshape2d(cf_xmlNode& node,const std::string& xcsg_file)
          dxf_file dxf;
          cout << "Created DXF      file: " << std_filename(dxf.write(polyset,xcsg_file)).DisplayName(show_path) << endl;
       }
+
    }
    else {
       throw logic_error("xcsg tree contains no data. ");
