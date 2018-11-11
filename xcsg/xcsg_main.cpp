@@ -66,9 +66,8 @@ bool xcsg_main::run()
       throw std::logic_error(sout.str());
    }
 
-   // determine if we run in web mode or not
-   bool web_mode  = m_cmd.count("web")>0;
-   bool show_path = !web_mode;
+   // determine if we shall display full file paths
+   bool show_path = m_cmd.count("fullpath")>0;
 
    cf_xmlTree tree;
    if(tree.read_xml(xcsg_file)) {
@@ -114,9 +113,8 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
    std::shared_ptr<xsolid> obj = xcsg_factory::singleton().make_solid(node);
    if(obj.get()) {
 
-      // determine if we run in web mode or not
-      bool web_mode  = m_cmd.count("web")>0;
-      bool show_path = !web_mode;
+      // determine if we shall display full file paths
+      bool show_path = m_cmd.count("fullpath")>0;
 
       size_t nbool = obj->nbool();
       cout << "...completed CSG tree: " <<  nbool << " boolean operations to process." << endl;
@@ -208,9 +206,8 @@ bool xcsg_main::run_xshape2d(cf_xmlNode& node,const std::string& xcsg_file)
    std::shared_ptr<xshape2d> obj = xcsg_factory::singleton().make_shape2d(node);
    if(obj.get()) {
 
-      // determine if we run in web mode or not
-      bool web_mode  = m_cmd.count("web")>0;
-      bool show_path = !web_mode;
+      // determine if we shall display full file paths
+      bool show_path = m_cmd.count("fullpath")>0;
 
       size_t nbool = obj->nbool();
       cout << "...completed CSG tree: " <<  nbool << " boolean operations to process." << endl;
