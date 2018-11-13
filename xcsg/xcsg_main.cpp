@@ -40,6 +40,11 @@ using namespace std;
 
 #include "std_filename.h"
 
+static std::string DisplayName(const std_filename& fname, bool show_path)
+{
+   return ((show_path)? fname.GetFullPath() : fname.GetFullName());
+}
+
 xcsg_main::xcsg_main(const boost_command_line& cmd)
 : m_cmd(cmd)
 {}
@@ -73,7 +78,7 @@ bool xcsg_main::run()
    if(tree.read_xml(xcsg_file)) {
 
       std_filename file(xcsg_file);
-      cout << "xcsg processing: " << std_filename(xcsg_file).DisplayName(show_path) << endl;
+      cout << "xcsg processing: " << DisplayName(file,show_path) << endl;
 
       cf_xmlNode root;
       if(tree.get_root(root)) {
@@ -184,13 +189,13 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
       out_triangles exporter(triangulate.carve_polyset());
 
       amf_file amf;
-      if(m_cmd.count("csg")>0)       cout << "Created OpenSCAD file: " << std_filename(exporter.write_csg(xcsg_file)).DisplayName(show_path) << endl;
-      if(m_cmd.count("amf")>0)       cout << "Created AMF file     : " << std_filename(amf.write(triangulate.carve_polyset(),xcsg_file)).DisplayName(show_path) << endl;
-      if(m_cmd.count("obj")>0)       cout << "Created OBJ file     : " << std_filename(exporter.write_obj(xcsg_file)).DisplayName(show_path) << endl;
-      if(m_cmd.count("off")>0)       cout << "Created OFF file(s)  : " << std_filename(exporter.write_off(xcsg_file)).DisplayName(show_path) << endl;
+      if(m_cmd.count("csg")>0)       cout << "Created OpenSCAD file: " << DisplayName(std_filename(exporter.write_csg(xcsg_file)),show_path) << endl;
+      if(m_cmd.count("amf")>0)       cout << "Created AMF file     : " << DisplayName(std_filename(amf.write(triangulate.carve_polyset(),xcsg_file)),show_path) << endl;
+      if(m_cmd.count("obj")>0)       cout << "Created OBJ file     : " << DisplayName(std_filename(exporter.write_obj(xcsg_file)),show_path) << endl;
+      if(m_cmd.count("off")>0)       cout << "Created OFF file(s)  : " << DisplayName(std_filename(exporter.write_off(xcsg_file)),show_path) << endl;
       // write STL last so it is the most recent updated format
-      if(m_cmd.count("stl")>0)       cout << "Created STL file     : " << std_filename(exporter.write_stl(xcsg_file,true)).DisplayName(show_path) << endl;
-      else if(m_cmd.count("astl")>0) cout << "Created STL file     : " << std_filename(exporter.write_stl(xcsg_file,false)).DisplayName(show_path) << endl;
+      if(m_cmd.count("stl")>0)       cout << "Created STL file     : " << DisplayName(std_filename(exporter.write_stl(xcsg_file,true)),show_path) << endl;
+      else if(m_cmd.count("astl")>0) cout << "Created STL file     : " << DisplayName(std_filename(exporter.write_stl(xcsg_file,false)),show_path) << endl;
 
    }
    else {
@@ -234,19 +239,19 @@ bool xcsg_main::run_xshape2d(cf_xmlNode& node,const std::string& xcsg_file)
             std::shared_ptr<polygon2d> poly = *i;
             openscad.write_polygon(poly);
          }
-         cout << "Created OpenSCAD file: " << std_filename(openscad.path()).DisplayName(show_path) << endl;
+         cout << "Created OpenSCAD file: " << DisplayName(std_filename(openscad.path()),show_path) << endl;
       }
 
       // write SVG?
       if(m_cmd.count("svg")>0) {
          svg_file svg;
-         cout << "Created SVG      file: " << std_filename(svg.write(polyset,xcsg_file)).DisplayName(show_path) << endl;
+         cout << "Created SVG      file: " << DisplayName(std_filename(svg.write(polyset,xcsg_file)),show_path) << endl;
       }
 
       // write DXF last so it is the most recent updated format
       if(m_cmd.count("dxf")>0) {
          dxf_file dxf;
-         cout << "Created DXF      file: " << std_filename(dxf.write(polyset,xcsg_file)).DisplayName(show_path) << endl;
+         cout << "Created DXF      file: " << DisplayName(std_filename(dxf.write(polyset,xcsg_file)),show_path) << endl;
       }
 
    }

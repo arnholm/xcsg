@@ -1,15 +1,17 @@
-#ifndef std_filename_H
-#define std_filename_H
+#ifndef STD_FILENAME_H
+#define STD_FILENAME_H
 
 // std_filename is intended to mimic some of the most common features in
 // wxWidgets::wxFileName, but using std::string and boost for implementation
 // The function names use wxWidgets CamelCase and are supposed to have the same meaning as in wxFileName
 
 #include <string>
+#include <vector>
 #include <boost/filesystem.hpp>
 
 class std_filename {
 public:
+   std_filename();
    std_filename(const std::string& file_path);
    virtual ~std_filename();
 
@@ -34,6 +36,9 @@ public:
    // Returns the full path with name and extension.
    std::string GetFullPath() const;
 
+   // return the directories as a vector of strings
+   std::vector<std::string> GetDirs() const;
+
    // The full name is the file name and extension (but without the path).
    void SetFullName(const std::string& fullname);
 
@@ -46,10 +51,19 @@ public:
    // Sets the path.
    void SetPath(const std::string& path);
 
-   /* Extensions, not part of wxFileName */
+   // Removes last directory component from the path.
+   void RemoveLastDir();
 
-   // return a "display name" as GetFullPath() or GetFullName()
-   std::string DisplayName(bool show_path);
+   // EXTENSIONS (not in wxFileName)
+
+   // returns the current directory
+   static std::string get_current_directory();
+
+   // sets the current directory
+   static void  set_current_directory(const std::string& dir_path);
+
+   // create directory
+   static void create_directory(const std::string& dir_path, bool throw_if_exists = true);
 
 private:
    boost::filesystem::path m_path;
