@@ -5,7 +5,7 @@
 		<Option title="xcsg" />
 		<Option pch_mode="2" />
 		<Option compiler="msvc" />
-		<Option virtualFolders="mesh/;shapes/3d/;shapes/;shapes/2d/;boolean/;XML/;Transforms/;boolean/3d/;boolean/2d/;mesh/sweep/;file_export/;boolean/sweep/;" />
+		<Option virtualFolders="mesh/;shapes/3d/;shapes/;shapes/2d/;boolean/;XML/;Transforms/;boolean/3d/;boolean/2d/;mesh/sweep/;file_export/;boolean/sweep/" />
 		<Build>
 			<Target title="MSVC_Debug">
 				<Option output=".cmp/msvc/bin/Debug/xcsgd" prefix_auto="1" extension_auto="1" />
@@ -90,6 +90,8 @@
 					<Add option="`$(#wx.config) --cxxflags --debug`" />
 					<Add option="-DNOPCH" />
 					<Add option="-D_DEBUG" />
+					<Add option="-DBOOST_ERROR_CODE_HEADER_ONLY" />
+					<Add option="-DBOOST_SYSTEM_NO_DEPRECATED" />
 					<Add directory="$(#carve.build_include)" />
 					<Add directory="$(#carve)/common" />
 					<Add directory="./" />
@@ -122,6 +124,8 @@
 					<Add option="-fexceptions" />
 					<Add option="`$(#wx.config) --cxxflags`" />
 					<Add option="-DNOPCH" />
+					<Add option="-DBOOST_ERROR_CODE_HEADER_ONLY" />
+					<Add option="-DBOOST_SYSTEM_NO_DEPRECATED" />
 					<Add directory="$(#carve.build_include)" />
 					<Add directory="$(#carve)/common" />
 					<Add directory="./" />
