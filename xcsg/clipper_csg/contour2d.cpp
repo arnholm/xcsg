@@ -18,6 +18,7 @@
 #include <utility>
 #include <map>
 #include <limits>
+#include <algorithm>
 
 contour2d::contour2d()
 {}
