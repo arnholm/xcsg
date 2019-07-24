@@ -310,6 +310,12 @@
 		<Unit filename="primitives3d.h">
 			<Option virtualFolder="mesh/" />
 		</Unit>
+		<Unit filename="project_mesh.cpp">
+			<Option virtualFolder="mesh/" />
+		</Unit>
+		<Unit filename="project_mesh.h">
+			<Option virtualFolder="mesh/" />
+		</Unit>
 		<Unit filename="safe_queue.h" />
 		<Unit filename="std_filename.cpp">
 			<Option virtualFolder="file_export/" />
@@ -487,6 +493,12 @@
 		</Unit>
 		<Unit filename="xpolyhedron.h">
 			<Option virtualFolder="shapes/3d/" />
+		</Unit>
+		<Unit filename="xprojection2d.cpp">
+			<Option virtualFolder="boolean/2d/" />
+		</Unit>
+		<Unit filename="xprojection2d.h">
+			<Option virtualFolder="boolean/2d/" />
 		</Unit>
 		<Unit filename="xrectangle.cpp">
 			<Option virtualFolder="shapes/2d/" />

@@ -45,6 +45,7 @@
 #include "xfill2d.h"
 #include "xoffset2d.h"
 #include "xminkowski2d.h"
+#include "xprojection2d.h"
 
 xcsg_factory::xcsg_factory()
 {
@@ -76,6 +77,7 @@ xcsg_factory::xcsg_factory()
    m_shape2d_map.insert(std::make_pair("fill2d",xcsg_factory::make_fill2d));
    m_shape2d_map.insert(std::make_pair("offset2d",xcsg_factory::make_offset2d));
    m_shape2d_map.insert(std::make_pair("minkowski2d",xcsg_factory::make_minkowski2d));
+   m_shape2d_map.insert(std::make_pair("projection2d",xcsg_factory::make_projection2d));
 }
 
 xcsg_factory::~xcsg_factory()
@@ -144,3 +146,4 @@ std::shared_ptr<xshape2d> xcsg_factory::make_hull2d(const cf_xmlNode& node)     
 std::shared_ptr<xshape2d> xcsg_factory::make_fill2d(const cf_xmlNode& node)         { return std::shared_ptr<xshape2d>(new xfill2d(node));         }
 std::shared_ptr<xshape2d> xcsg_factory::make_offset2d(const cf_xmlNode& node)       { return std::shared_ptr<xshape2d>(new xoffset2d(node));       }
 std::shared_ptr<xshape2d> xcsg_factory::make_minkowski2d(const cf_xmlNode& node)    { return std::shared_ptr<xshape2d>(new xminkowski2d(node));    }
+std::shared_ptr<xshape2d> xcsg_factory::make_projection2d(const cf_xmlNode& node)   { return std::shared_ptr<xshape2d>(new xprojection2d(node));   }

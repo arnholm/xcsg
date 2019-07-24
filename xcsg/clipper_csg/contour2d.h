@@ -48,6 +48,9 @@ public:
    // CCW contours have positive areas
    double signed_area() const;
 
+   // reverse the winding order of the contour
+   void reverse();
+
    // return bounding box of this contour
    dbox2d bounding_box() const;
 

@@ -194,3 +194,8 @@ dbox2d contour2d::bounding_box() const
    }
    return box;
 }
+
+void contour2d::reverse()
+{
+   std::reverse(m_vert.begin(),m_vert.end());
+}

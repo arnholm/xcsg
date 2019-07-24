@@ -73,6 +73,7 @@ protected:
    static std::shared_ptr<xshape2d> make_polygon(const cf_xmlNode& node);
    static std::shared_ptr<xshape2d> make_rectangle(const cf_xmlNode& node);
    static std::shared_ptr<xshape2d> make_square(const cf_xmlNode& node);
+
    static std::shared_ptr<xshape2d> make_difference2d(const cf_xmlNode& node);
    static std::shared_ptr<xshape2d> make_intersection2d(const cf_xmlNode& node);
    static std::shared_ptr<xshape2d> make_union2d(const cf_xmlNode& node);
@@ -80,6 +81,7 @@ protected:
    static std::shared_ptr<xshape2d> make_fill2d(const cf_xmlNode& node);
    static std::shared_ptr<xshape2d> make_offset2d(const cf_xmlNode& node);
    static std::shared_ptr<xshape2d> make_minkowski2d(const cf_xmlNode& node);
+   static std::shared_ptr<xshape2d> make_projection2d(const cf_xmlNode& node);
 
 private:
    typedef std::map<std::string,solid_factory> solid_factory_map;
