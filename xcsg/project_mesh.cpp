@@ -26,7 +26,7 @@ std::shared_ptr<clipper_profile> project_mesh::project(std::shared_ptr<carve::me
    size_t nmesh = meshset->meshes.size();
 
    // vertices are shared between the meshes in the mesh set
-   const std::vector<carve::mesh::MeshSet<3>::vertex_t>& vertex_storage = meshset->vertex_storage;
+   // const std::vector<carve::mesh::MeshSet<3>::vertex_t>& vertex_storage = meshset->vertex_storage;
 
    clipper_boolean csg;
 
@@ -57,7 +57,7 @@ std::shared_ptr<clipper_profile> project_mesh::project(std::shared_ptr<carve::me
          std::shared_ptr<contour2d> cont = poly->get_contour(0);
          if(cont->signed_area() < 0.0) cont->reverse();
 
-         // turn polygon into a clipper profile and add it to the projection using clipper
+         // turn polygon into a clipper profile and add its paths to the projection using clipper
          std::shared_ptr<clipper_profile> poly_prof = std::make_shared<clipper_profile>();
          poly_prof->AddPaths(poly->paths());
          csg.compute(poly_prof,ClipperLib::ctUnion);
