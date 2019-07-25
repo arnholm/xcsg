@@ -44,6 +44,9 @@ bool clipper_boolean::compute(std::shared_ptr<clipper_profile> b, ClipperLib::Cl
          ClipperLib::CleanPolygons(result->paths());
          m_profile = result;
       }
+      else {
+         throw std::logic_error("clipper_boolean::compute, operation failed");
+      }
       boost::posix_time::time_duration  ptime_diff = boost::posix_time::microsec_clock::universal_time() - p1;
       double elapsed_sec = 0.001*ptime_diff.total_milliseconds();
 
@@ -79,6 +82,11 @@ bool clipper_boolean::minkowski_sum(std::shared_ptr<clipper_profile> a, std::sha
    boolean_timer::singleton().add_elapsed(elapsed_sec);
 
    return success;
+}
+
+void clipper_boolean::sort()
+{
+   m_profile->sort();
 }
 
 std::shared_ptr<clipper_profile> clipper_boolean::profile()

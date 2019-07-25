@@ -32,6 +32,9 @@ public:
    // add a number of paths to the profile, following the rules of Clipper
    void AddPaths( std::shared_ptr<ClipperLib::Paths> paths);
 
+   // sort contained profile paths according to area, with positive areas first
+   void sort();
+
    // return access to the Clipper paths
    ClipperLib::Paths& paths();
 

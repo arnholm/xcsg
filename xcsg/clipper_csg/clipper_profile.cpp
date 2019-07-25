@@ -14,6 +14,9 @@
 // EndLicense:
 
 #include "clipper_profile.h"
+#include <map>
+#include <iostream>
+using namespace std;
 
 clipper_profile::clipper_profile()
 {}
@@ -68,4 +71,19 @@ void clipper_profile::positive_profiles(std::list<std::shared_ptr<clipper_profil
          profiles.push_back(prof);
       }
    }
+}
+
+void clipper_profile::sort()
+{
+   cout << "   DEBUG: clipper_profile::sort(), number of paths= " << m_paths.size() << endl;
+
+   // build a sorted map of paths, largest positive areas first
+   std::multimap<double,ClipperLib::Path> path_map;
+   for(size_t i=0; i<m_paths.size(); i++) {
+      double area = ClipperLib::Area(m_paths[i]);
+      path_map.insert(std::make_pair(-area,m_paths[i]));
+   }
+   m_paths.clear();
+   m_paths.reserve(path_map.size());
+   for(auto p : path_map) m_paths.push_back(p.second);
 }

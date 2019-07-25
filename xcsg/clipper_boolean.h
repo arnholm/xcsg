@@ -27,6 +27,9 @@ public:
    // compute boolean against current mesh using a MeshSet as "b"
    bool compute(std::shared_ptr<clipper_profile> b, ClipperLib::ClipType op);
 
+   // sort contained profile paths according to area, with positive areas first
+   void sort();
+
    // return the current profile
    std::shared_ptr<clipper_profile> profile();
 
