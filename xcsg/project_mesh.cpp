@@ -20,6 +20,8 @@
 #include "primitives2d.h"
 
 #include "clipper_boolean.h"
+#include <iostream>
+using namespace std;
 
 std::shared_ptr<clipper_profile> project_mesh::project(std::shared_ptr<carve::mesh::MeshSet<3>> meshset)
 {
@@ -41,28 +43,54 @@ std::shared_ptr<clipper_profile> project_mesh::project(std::shared_ptr<carve::me
 
          // coordinates of face to be stored in this vector
          std::vector<xvertex> face_coords;
-         face_coords.reserve(3);  // triangular faces mostly
+         face_coords.reserve(24);  // triangular faces mostly
 
          // traverse face vertices and extract vertex coordinates
          carve::mesh::Face<3>* face = mesh->faces[iface];
          std::vector<carve::mesh::Face<3>::vertex_t*> verts;
          face->getVertices(verts);
+         set<carve::mesh::Vertex<3>*> vseen;
+         carve::mesh::Face<3>::vertex_t* vprev=0;
          for(size_t i=0;i<verts.size();i++) {
             carve::mesh::Face<3>::vertex_t* vertex = verts[i];
-            face_coords.push_back(vertex->v);
+         /*
+            cout << " face " << iface << " vertex " << i << " " << vertex
+                             << " " << vertex->v[0] << " " << vertex->v[1] << " " << vertex->v[2]
+                             << endl;
+         */
+            if(vseen.find(vertex) == vseen.end()) {
+               face_coords.push_back(vertex->v);
+               vseen.insert(vertex);
+            }
+            else {
+            //   cout << " face " << iface << " dup vertex " << i << " of " << verts.size()  << " " << vertex << endl;
+            }
+            vprev = vertex;
          }
 
-         // create 2d polygon and make sure winding order is CCW
+         // create 2d polygon
+         // This causes z coordinate to be dropped, i.e. projection to XY plane
          std::shared_ptr<polygon2d> poly = primitives2d::make_polygon(face_coords);
          std::shared_ptr<contour2d> cont = poly->get_contour(0);
-         if(cont->signed_area() < 0.0) cont->reverse();
 
-         // turn polygon into a clipper profile and add its paths to the projection using clipper
-         std::shared_ptr<clipper_profile> poly_prof = std::make_shared<clipper_profile>();
-         poly_prof->AddPaths(poly->paths());
-         csg.compute(poly_prof,ClipperLib::ctUnion);
+         // skip any polygons with zero area, i.e. face was perpendicular to XY plane
+         double signed_area = cont->signed_area();
+
+         if(fabs(signed_area) > 0.0) {
+
+            // make sure winding order is CCW
+            if(signed_area < 0.0) cont->reverse();
+
+            // turn polygon into a clipper profile and add its paths to the projection using clipper
+            std::shared_ptr<clipper_profile> poly_prof = std::make_shared<clipper_profile>();
+            poly_prof->AddPaths(poly->paths());
+            csg.compute(poly_prof,ClipperLib::ctUnion);
+         }
       }
    }
+
+   // make sure paths are sorted with positive path first
+   csg.sort();
 
    // return completed projection profile
    return csg.profile();
