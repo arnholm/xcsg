@@ -75,7 +75,7 @@ void clipper_profile::positive_profiles(std::list<std::shared_ptr<clipper_profil
 
 void clipper_profile::sort()
 {
-   cout << "   DEBUG: clipper_profile::sort(), number of paths= " << m_paths.size() << endl;
+//   cout << "   DEBUG: clipper_profile::sort(), number of paths= " << m_paths.size() << endl;
 
    // build a sorted map of paths, largest positive areas first
    std::multimap<double,ClipperLib::Path> path_map;
