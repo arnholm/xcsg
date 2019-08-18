@@ -1,4 +1,4 @@
-Copyright (C) 2017,2018 Carsten Arnholm arnholm@arnholm.org
+Copyright (C) 2017-2019 Carsten Arnholm arnholm@arnholm.org
 
 The xcsg wiki documents the input file format to the xcsg application
 Please see 

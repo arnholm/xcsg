@@ -1,4 +1,4 @@
-Copyright (C) 2017 Carsten Arnholm arnholm@arnholm.org
+Copyright (C) 2017-2019 Carsten Arnholm arnholm@arnholm.org
 
 xcsg may be used under the terms of either the GNU General 
 Public License version 2 or 3 (at your option) as published by the 

@@ -1,6 +1,6 @@
 echo off
 setlocal
-set CPDE_USR=E:\cpde3\usr
+REM set CPDE_USR=E:\cpde3\usr
 REM === This is how elegant backticks are on windows :-)
 for /f "tokens=1* delims=" %%a in ('xcsg --version') do set XCSG_VER=%%a
 REM ===
