@@ -3,7 +3,7 @@ xcsg is both a file format and an application. For the file format definition, p
 
 ## The xcsg application 
 
-The xcsg application takes an input .xcsg file, compiles its data into a solid model, and exports it to common surface mesh file formats, including STL. The application uses the [Carve library](https://github.com/arnholm/abmesh-carve) for boolean operations.
+The xcsg application takes an input .xcsg file, compiles its data into a solid model, and exports it to common surface mesh file formats, including STL. The application uses the [Carve library](https://github.com/arnholm/carve) for boolean operations.
 
     $ xcsg --help
    
