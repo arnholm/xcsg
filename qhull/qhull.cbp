@@ -59,7 +59,7 @@
 				<Option working_dir="" />
 				<Option object_output=".cmp/gcc/obj/Debug/" />
 				<Option type="2" />
-				<Option compiler="gcc" />
+				<Option compiler="gcc_generic" />
 				<Option createDefFile="1" />
 				<Compiler>
 					<Add option="-std=c++0x" />
@@ -80,7 +80,7 @@
 				<Option working_dir="" />
 				<Option object_output=".cmp/gcc/obj/Release/" />
 				<Option type="2" />
-				<Option compiler="gcc" />
+				<Option compiler="gcc_generic" />
 				<Option createDefFile="1" />
 				<Compiler>
 					<Add option="-Os" />
