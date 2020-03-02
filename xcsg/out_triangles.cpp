@@ -70,7 +70,7 @@ std::string  out_triangles::write_csg(const std::string& xcsg_path)
             carve::poly::Geometry<3>::vertex_t& vtx = vertices[ivert];
             out << "\t\t";
             if(ivert > 0) out << ',';
-            out << '[' << std::setprecision(12) << vtx.v[0] << ',' << std::setprecision(12) << vtx.v[1] << ',' << std::setprecision(12) <<  vtx.v[2] << ']' << std::endl;
+            out << '[' << std::setprecision(16) << vtx.v[0] << ',' << std::setprecision(16) << vtx.v[1] << ',' << std::setprecision(16) <<  vtx.v[2] << ']' << std::endl;
          }
          out << "\t]," << std::endl;
 
@@ -133,7 +133,7 @@ std::string out_triangles::write_off(const std::string& xcsg_path)
       // ========= vertices =================
       for(size_t ivert=0; ivert<vertices.size(); ivert++) {
          carve::poly::Geometry<3>::vertex_t& vtx = vertices[ivert];
-         out << std::setprecision(12) << vtx.v[0] << ' ' << std::setprecision(12) << vtx.v[1] << ' ' << std::setprecision(12) <<  vtx.v[2] << std::endl;
+         out << std::setprecision(16) << vtx.v[0] << ' ' << std::setprecision(16) << vtx.v[1] << ' ' << std::setprecision(16) <<  vtx.v[2] << std::endl;
       }
 
       // ========= faces =================
@@ -176,7 +176,7 @@ std::string out_triangles::write_obj(const std::string& xcsg_path)
 
       for(size_t ivert=0; ivert<vertices.size(); ivert++) {
          carve::poly::Geometry<3>::vertex_t& vtx = vertices[ivert];
-         out << "v " << std::setprecision(12) << vtx.v[0] << ' ' << std::setprecision(12) << vtx.v[1] << ' ' << std::setprecision(12) <<  vtx.v[2] << std::endl;
+         out << "v " << std::setprecision(16) << vtx.v[0] << ' ' << std::setprecision(16) << vtx.v[1] << ' ' << std::setprecision(16) <<  vtx.v[2] << std::endl;
       }
    }
 

@@ -58,7 +58,7 @@ void openscad_csg::write_polyhedron(std::shared_ptr<xpolyhedron> poly)
       const carve::geom3d::Vector& pos = poly->v_get(ivert);
       m_out << "\t\t";
       if(ivert > 0) m_out << ',';
-      m_out << '[' << std::setprecision(12) << pos[0] << ',' << std::setprecision(12) <<  pos[1] << ',' << std::setprecision(12) <<  pos[2] << ']' << std::endl;
+      m_out << '[' << std::setprecision(16) << pos[0] << ',' << std::setprecision(16) <<  pos[1] << ',' << std::setprecision(16) <<  pos[2] << ']' << std::endl;
    }
    m_out << "\t\t]," << std::endl;
 
@@ -98,7 +98,7 @@ void openscad_csg::write_polygon(std::shared_ptr<polygon2d> poly )
             m_out << "\t\t";
             if(ivcount == 0) m_out << ' ';
             else             m_out << ',';
-            m_out << '[' << std::setprecision(12) << pos.x() << ',' << std::setprecision(12) <<   pos.y() << ']' << std::endl;
+            m_out << '[' << std::setprecision(16) << pos.x() << ',' << std::setprecision(16) <<   pos.y() << ']' << std::endl;
             ivcount++;
          }
       }
@@ -132,7 +132,7 @@ void openscad_csg::write_transform(const carve::math::Matrix& t)
       m_out << '[';
       for(size_t icol=0;icol<4; icol++) {
          if(icol > 0) m_out << ',';
-         m_out << setprecision(12) <<  t.m[icol][irow];
+         m_out << setprecision(16) <<  t.m[icol][irow];
       }
       m_out << ']';
    }
