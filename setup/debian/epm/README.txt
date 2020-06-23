@@ -1,4 +1,4 @@
-Copyright (C) 2017,2018 Carsten Arnholm arnholm@arnholm.org
+Copyright (C) 2017-2020 Carsten Arnholm arnholm@arnholm.org
 
 Linux : The software is installed to /usr/local/bin
 Use the regular Debian package installer to maintain this package
