@@ -1,7 +1,7 @@
 $instdir=/usr/local/
 $bindir=${instdir}/bin
 %product xcsg
-%copyright 2016-2017 Carsten Arnholm.
+%copyright 2016-2020 Carsten Arnholm.
 %vendor Carsten Arnholm
 %description XML based Constructive Solid Geometry. 
 %description xcsg is an XML file protocol and an application 
