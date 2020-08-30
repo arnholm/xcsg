@@ -16,6 +16,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdexcept>
+#include <cmath>
 
 #include "csg_node.h"
 #include "csg_scalar.h"
@@ -255,7 +256,7 @@ void csg_node::assign_matrix()
    if(matrix->size() != 4) throw std::runtime_error("csg_node::assign_matrix(), multimatrix size != 4 ");
 
    for(size_t i=0; i<4; i++) {
-      auto& row = matrix->get(i);
+      auto row = matrix->get(i);
       if(row->size() != 4) throw std::runtime_error("csg_node::assign_matrix(), multimatrix row size != 4 ");
       for(size_t j=0; j<4; j++) {
          m_matrix(i,j) = row->get(j)->to_double();
@@ -380,7 +381,7 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                // == 2d square/rectangle
 
                // size can be scalar or vector
-               auto& siz = get_value("size");
+               auto siz = get_value("size");
                if(siz->size() > 1) {
                   xml_this.add_property("dx",siz->get(0)->to_string());
                   xml_this.add_property("dy",siz->get(1)->to_string());
@@ -394,17 +395,17 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
             else if(xcsg_tag=="polygon") {
                // == 2d polygon
 
-               auto& points = get_value("points");
+               auto points = get_value("points");
                size_t np = points->size();
                vector<size_t> path(np);
                for(size_t ip=0; ip<np; ip++) path[ip]=ip;
 
-               auto& paths = get_value("paths");
+               auto paths = get_value("paths");
                if(paths.get()) {
                   if(paths->is_vector()) {
                      // we allow max one specified path (=outer path)
                      if(paths->size()==1) {
-                        auto& outer_path = paths->get(0);
+                        auto outer_path = paths->get(0);
                         path.clear();
                         np = outer_path->size();
                         path.resize(np);
@@ -418,7 +419,7 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
 
                cf_xmlNode xml_vertices = xml_this.add_child("vertices");
                for(size_t ip=0; ip<np; ip++) {
-                  auto& point = points->get(path[ip]);
+                  auto point = points->get(path[ip]);
                   cf_xmlNode xml_vertex = xml_vertices.add_child("vertex");
                   xml_vertex.add_property("x",point->get(0)->to_string());
                   xml_vertex.add_property("y",point->get(1)->to_string());
@@ -454,7 +455,7 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
             else if(xcsg_tag=="cuboid") {
                // == 3d cube/cuboid
 
-               auto& siz = get_value("size");
+               auto siz = get_value("size");
                if(siz->size() > 1) {
                   xml_this.add_property("dx",siz->get(0)->to_string());
                   xml_this.add_property("dy",siz->get(1)->to_string());
@@ -575,13 +576,13 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
             else if(xcsg_tag=="polyhedron") {
                // 3d polyhedron
 
-               auto& points = get_value("points");
+               auto points = get_value("points");
                size_t np    = points->size();
                if(np<4)  throw std::runtime_error(line_no + ": polyhedron with too few points: "+ par());
                cf_xmlNode xml_vertices = xml_this.add_child("vertices");
                for(size_t ip=0; ip<np; ip++) {
                   cf_xmlNode xml_vertex = xml_vertices.add_child("vertex");
-                  auto& point = points->get(ip);
+                  auto point = points->get(ip);
                   if(point->size()<3)  throw std::runtime_error(line_no +": polyhedron points must have 3 values: "+ par());
                   xml_vertex.add_property("x",point->get(0)->to_string());
                   xml_vertex.add_property("y",point->get(1)->to_string());
@@ -589,12 +590,12 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                }
 
                // Handle face list with variable number of vertices
-               auto& faces  = get_value("faces");
+               auto faces  = get_value("faces");
                if(faces.get()) {
                   cf_xmlNode xml_faces = xml_this.add_child("faces");
                   size_t nf = faces->size();
                   for(size_t iface=0; iface<nf; iface++) {
-                     auto& face = faces->get(iface);
+                     auto face = faces->get(iface);
                      cf_xmlNode xml_face = xml_faces.add_child("face");
                      size_t nfv=face->size();
                      if(nfv<3)  throw std::runtime_error(line_no +": polyhedron face must have 3 or more values: "+ par());
