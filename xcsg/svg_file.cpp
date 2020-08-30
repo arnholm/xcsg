@@ -6,7 +6,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/convenience.hpp>
 
-#include "cf_xmlTree.h"
+#include "csg_parser/cf_xmlTree.h"
 
 svg_file::svg_file()
 {

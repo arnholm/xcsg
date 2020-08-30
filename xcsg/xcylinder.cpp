@@ -1,6 +1,6 @@
 // BeginLicense:
 // Part of: xcsg - XML based Constructive Solid Geometry
-// Copyright (C) 2017 Carsten Arnholm
+// Copyright (C) 2017-2020 Carsten Arnholm
 // All rights reserved
 //
 // This file may be used under the terms of either the GNU General
@@ -15,7 +15,7 @@
 
 #include "xcylinder.h"
 #include "primitives3d.h"
-#include "cf_xmlNode.h"
+#include "csg_parser/cf_xmlNode.h"
 #include "carve/mesh_simplify.hpp"
 
 static const double pi = 4.0*atan(1.0);

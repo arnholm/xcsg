@@ -1,6 +1,6 @@
 // BeginLicense:
 // Part of: xcsg - XML based Constructive Solid Geometry
-// Copyright (C) 2017 Carsten Arnholm
+// Copyright (C) 2017-2020 Carsten Arnholm
 // All rights reserved
 //
 // This file may be used under the terms of either the GNU General
@@ -14,7 +14,7 @@
 // EndLicense:
 
 #include "xspline_path.h"
-#include "cf_xmlNode.h"
+#include "csg_parser/cf_xmlNode.h"
 #include "mesh_utils.h"
 
 xspline_path::xspline_path()

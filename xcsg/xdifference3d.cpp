@@ -1,6 +1,6 @@
 // BeginLicense:
 // Part of: xcsg - XML based Constructive Solid Geometry
-// Copyright (C) 2017 Carsten Arnholm
+// Copyright (C) 2017-2020 Carsten Arnholm
 // All rights reserved
 //
 // This file may be used under the terms of either the GNU General
@@ -17,7 +17,7 @@
 
 #include "xdifference3d.h"
 #include "carve_boolean.h"
-#include "cf_xmlNode.h"
+#include "csg_parser/cf_xmlNode.h"
 #include "xcsg_factory.h"
 #include "xsolid_collector.h"
 
@@ -51,7 +51,8 @@ std::shared_ptr<carve::mesh::MeshSet<3>> xdifference3d::compute_union(const carv
       throw std::logic_error(exception_queue.dequeue());
    }
 
-   return mesh_queue.dequeue();
+   if(mesh_queue.size() > 0) return mesh_queue.dequeue();
+   else return nullptr;
 }
 
 
@@ -64,7 +65,7 @@ std::shared_ptr<carve::mesh::MeshSet<3>> xdifference3d::create_carve_mesh(const 
 
    carve_boolean csg;
    csg.compute(a,carve::csg::CSG::UNION);
-   csg.compute(b,carve::csg::CSG::A_MINUS_B);
+   if(b.get())csg.compute(b,carve::csg::CSG::A_MINUS_B);
    csg.eliminate_short_edges();
 
    return csg.mesh_set();

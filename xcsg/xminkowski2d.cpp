@@ -1,5 +1,5 @@
 #include "xminkowski2d.h"
-#include "cf_xmlNode.h"
+#include "csg_parser/cf_xmlNode.h"
 #include "xshape2d_collector.h"
 
 #include "clipper_boolean.h"

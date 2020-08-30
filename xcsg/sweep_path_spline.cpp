@@ -1,6 +1,6 @@
 // BeginLicense:
 // Part of: xcsg - XML based Constructive Solid Geometry
-// Copyright (C) 2017 Carsten Arnholm
+// Copyright (C) 2017-2020 Carsten Arnholm
 // All rights reserved
 //
 // This file may be used under the terms of either the GNU General
@@ -59,6 +59,16 @@ sweep_path_spline::sweep_path_spline(std::shared_ptr<const polymesh2d> pm2d, std
       double srange = path->scaling_range();
       if(srange > 0.0  && nseg == std::abs(m_nseg)) {
          nseg = std::max(nseg,nseg*static_cast<int>(srange+0.5));
+      }
+
+      if(nseg == -1) {
+         // in case of a twisted straight curve, we just set 10 segments
+         csplines::cpoint v0 = path->dir(0.0);
+         csplines::cpoint v1 = path->dir(1.0);
+         double dvx = v1.vx - v0.vx;
+         double dvy = v1.vy - v0.vy;
+         double dvz = v1.vz - v0.vz;
+         if(sqrt(dvx*dvx+dvy*dvy+dvz*dvz) > 1.0E-3)nseg = 10;
       }
    }
    m_nseg = std::abs(nseg);

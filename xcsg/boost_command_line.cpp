@@ -1,6 +1,6 @@
 // BeginLicense:
 // Part of: xcsg - XML based Constructive Solid Geometry
-// Copyright (C) 2017 Carsten Arnholm
+// Copyright (C) 2017-2020 Carsten Arnholm
 // All rights reserved
 //
 // This file may be used under the terms of either the GNU General
@@ -17,8 +17,8 @@
 #include "version.h"
 
 #include <boost/program_options/parsers.hpp>
-#include <boost/tokenizer.hpp>
-#include <boost/token_functions.hpp>
+//#include <boost/tokenizer.hpp>
+//#include <boost/token_functions.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/convenience.hpp>
 
@@ -104,7 +104,7 @@ boost_command_line::boost_command_line(int argc , char **argv)
    }
    else {
       boost::filesystem::path fullpath(get<std::string>("xcsg-file"));
-      if(fullpath.extension() != ".xcsg") {
+      if(fullpath.extension() != ".xcsg" && fullpath.extension() != ".csg") {
          ostringstream sout;
          sout << "ERROR: Input file extension must be '.xcsg', file name was " << fullpath;
          error_list.push_back(sout.str());

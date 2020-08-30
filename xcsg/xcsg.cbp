@@ -37,6 +37,7 @@
 					<Add library="tmesh" />
 					<Add library="dmeshd" />
 					<Add library="csplinesd" />
+					<Add library="csg_parserd" />
 					<Add directory="$(#carve.lib_debug)" />
 				</Linker>
 			</Target>
@@ -68,6 +69,7 @@
 					<Add library="tmesh" />
 					<Add library="dmesh" />
 					<Add library="csplines" />
+					<Add library="csg_parser" />
 					<Add directory="$(#carve.lib_release)" />
 				</Linker>
 				<ExtraCommands>
@@ -215,18 +217,6 @@
 		</Unit>
 		<Unit filename="carve_triangulate_face.h">
 			<Option virtualFolder="mesh/" />
-		</Unit>
-		<Unit filename="cf_xmlNode.cpp">
-			<Option virtualFolder="XML/" />
-		</Unit>
-		<Unit filename="cf_xmlNode.h">
-			<Option virtualFolder="XML/" />
-		</Unit>
-		<Unit filename="cf_xmlTree.cpp">
-			<Option virtualFolder="XML/" />
-		</Unit>
-		<Unit filename="cf_xmlTree.h">
-			<Option virtualFolder="XML/" />
 		</Unit>
 		<Unit filename="clipper_boolean.cpp">
 			<Option virtualFolder="mesh/" />
@@ -597,9 +587,6 @@
 			<Option virtualFolder="boolean/3d/" />
 		</Unit>
 		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>

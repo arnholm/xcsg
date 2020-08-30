@@ -1,6 +1,6 @@
 // BeginLicense:
 // Part of: xcsg - XML based Constructive Solid Geometry
-// Copyright (C) 2017 Carsten Arnholm
+// Copyright (C) 2017-2020 Carsten Arnholm
 // All rights reserved
 //
 // This file may be used under the terms of either the GNU General
@@ -20,7 +20,7 @@
 #include <sstream>
 #include <stdexcept>
 using namespace std;
-#include "cf_xmlTree.h"
+#include "csg_parser/cf_xmlTree.h"
 
 #include "xshape2d.h"
 
@@ -39,6 +39,8 @@ using namespace std;
 #include "svg_file.h"
 
 #include "std_filename.h"
+
+#include "csg_parser/csg_parser.h"
 
 static std::string DisplayName(const std_filename& fname, bool show_path)
 {
@@ -75,9 +77,21 @@ bool xcsg_main::run()
    bool show_path = m_cmd.count("fullpath")>0;
 
    cf_xmlTree tree;
+   std_filename file(xcsg_file);
+   if(file.GetExt() == ".csg") {
+
+      cout << "Converting from OpenSCAD " << xcsg_file << endl;
+      std::ifstream csg(xcsg_file);
+      csg_parser parser(csg);
+      parser.to_xcsg(tree);
+
+      file.SetExt("xcsg");
+      xcsg_file = file.GetFullPath();
+      tree.write_xml(xcsg_file);
+   }
+
    if(tree.read_xml(xcsg_file)) {
 
-      std_filename file(xcsg_file);
       cout << "xcsg processing: " << DisplayName(file,show_path) << endl;
 
       cf_xmlNode root;

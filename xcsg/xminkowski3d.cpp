@@ -1,5 +1,5 @@
 #include "xminkowski3d.h"
-#include "cf_xmlNode.h"
+#include "csg_parser/cf_xmlNode.h"
 #include "xsolid_collector.h"
 
 #include "carve_boolean.h"
