@@ -23,8 +23,8 @@
 class csg_vector : public csg_value {
 public:
    csg_vector();
-   csg_vector(const std::vector<std::string>& vec);
-   csg_vector(const std::vector<std::shared_ptr<csg_value>>& vec);
+   csg_vector(const std::vector<std::string>& vec,size_t line_no);
+   csg_vector(const std::vector<std::shared_ptr<csg_value>>& vec,size_t line_no);
    virtual ~csg_vector();
 
    virtual bool is_vector() const { return true; }

@@ -41,16 +41,27 @@ void csg_parser::init_func(const std::string& csg)
    size_t level = 0;
    size_t line_no = 1;
 
-   for(size_t i=0; i<csg.size(); i++) {
+   size_t i=0;
+   while(i<csg.size()) {
 
       // get current character
-      char c = csg[i];
+      char c = csg[i++];
+
+      // Skip // comment line
+      while(c=='/' && csg[i]=='/') {
+         while(csg[++i]!='\n') c = csg[i];
+         c = csg[++i];
+         line_no++;
+      }
 
       // update the tree level
            if( c=='{') ++level;
       else if( c=='}') --level;
 
-      if( c=='\n') line_no++;
+      if( c=='\n') {
+         line_no++;
+         token.clear();
+      }
 
       // characters not contributing to token
       if( c==' ' || c=='\t' || c=='\n' || c==';' || c=='{' || c=='}' || c=='#' || c=='%') continue;
@@ -63,11 +74,13 @@ void csg_parser::init_func(const std::string& csg)
          func.push_back(func_data(token,std::make_pair(level,line_no)));
          token.clear();
       }
+
    }
 
    // build the tree
    size_t index = 0;
    m_root->build_tree(func,index);
+//   m_root->dump();
 }
 
 bool csg_parser::to_xcsg(cf_xmlTree& tree)

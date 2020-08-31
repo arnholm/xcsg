@@ -23,7 +23,7 @@
 class csg_scalar : public csg_value {
 public:
    csg_scalar();
-   csg_scalar(const std::string& value);
+   csg_scalar(const std::string& value,size_t line_no);
    virtual ~csg_scalar();
 
    size_t size() const { return 1; }

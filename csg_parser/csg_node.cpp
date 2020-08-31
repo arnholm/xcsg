@@ -175,7 +175,7 @@ void csg_node::parse_params()
 
          // extract value, parse it and assign it to parameter map
          std::string value_str = par_value(params,ieq);
-         std::shared_ptr<csg_value> value = csg_value::parse(value_str);
+         std::shared_ptr<csg_value> value = csg_value::parse(value_str,m_line_no);
          if(value.get()) m_par[name] = value;
 
          // truncate the parameter list from left

@@ -90,7 +90,7 @@ protected:
 
 private:
    int                                    m_level;     // level of this node in tree (root has level -1)
-   size_t                                 m_line_no;   // csg file no
+   size_t                                 m_line_no;   // csg file line no
    std::string                            m_func;      // openscad function signature
    par_map                                m_par;       // parsed parameter list
    std::vector<std::shared_ptr<csg_node>> m_children;  // child nodes

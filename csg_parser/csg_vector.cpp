@@ -18,17 +18,20 @@
 #include <stdexcept>
 
 csg_vector::csg_vector()
+: csg_value(0)
 {}
 
-csg_vector::csg_vector(const std::vector<std::string>& vec)
+csg_vector::csg_vector(const std::vector<std::string>& vec,size_t line_no)
+: csg_value(line_no)
 {
    for(size_t i=0; i<vec.size(); i++) {
-      m_vector.push_back(std::make_shared<csg_scalar>(vec[i]));
+      m_vector.push_back(std::make_shared<csg_scalar>(vec[i],line_no));
    }
 }
 
-csg_vector::csg_vector(const std::vector<std::shared_ptr<csg_value>>& vec)
-: m_vector(vec)
+csg_vector::csg_vector(const std::vector<std::shared_ptr<csg_value>>& vec,size_t line_no)
+: csg_value(line_no)
+, m_vector(vec)
 {}
 
 csg_vector::~csg_vector()

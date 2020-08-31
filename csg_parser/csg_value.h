@@ -22,12 +22,12 @@
 // abstract parameter value for csg node
 class csg_value {
 public:
-   csg_value();
+   csg_value(size_t line_no);
    virtual ~csg_value();
 
    // convert a value string into a csg_value, possibly a scalar or (nested) vector
-   static std::shared_ptr<csg_value> parse(const std::string& value_str);
-   static std::shared_ptr<csg_value> parse_vector(const std::string& value_str);
+   static std::shared_ptr<csg_value> parse(const std::string& value_str, size_t line_no);
+   static std::shared_ptr<csg_value> parse_vector(const std::string& value_str, size_t line_no);
 
    virtual bool is_vector() const { return false; }
 
@@ -42,6 +42,11 @@ public:
    virtual bool to_bool() const;
    virtual int to_int() const;
    virtual double to_double() const;
+
+   size_t line_no() const { return m_line_no; }
+
+private:
+   size_t m_line_no;   // csg file line no
 };
 
 #endif // CSG_VALUE_H

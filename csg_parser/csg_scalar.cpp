@@ -18,10 +18,12 @@
 #include <boost/lexical_cast.hpp>
 
 csg_scalar::csg_scalar()
+: csg_value(0)
 {}
 
-csg_scalar::csg_scalar(const std::string& value)
-:m_value(value)
+csg_scalar::csg_scalar(const std::string& value,size_t line_no)
+: csg_value(line_no)
+, m_value(value)
 {}
 
 csg_scalar::~csg_scalar()

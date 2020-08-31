@@ -18,7 +18,8 @@
 #include "csg_vector.h"
 #include <stdexcept>
 
-csg_value::csg_value()
+csg_value::csg_value(size_t line_no)
+: m_line_no(line_no)
 {}
 
 csg_value::~csg_value()
@@ -26,30 +27,30 @@ csg_value::~csg_value()
 
 std::string csg_value::to_string() const
 {
-   throw std::runtime_error("csg_value::to_string(), value is not a scalar");
+   throw std::runtime_error(".csg file line " + std::to_string(m_line_no) +", csg_value::to_string(), value is not a scalar");
 }
 
 bool csg_value::to_bool() const
 {
-   throw std::runtime_error("csg_value::to_bool(), value is not a scalar");
+   throw std::runtime_error(".csg file line " + std::to_string(m_line_no) +", csg_value::to_bool(), value is not a scalar");
 }
 
 int csg_value::to_int() const
 {
-   throw std::runtime_error("csg_value::to_int(), value is not a scalar");
+   throw std::runtime_error(".csg file line " + std::to_string(m_line_no) +", csg_value::to_int(), value is not a scalar");
 }
 
 double csg_value::to_double() const
 {
-   throw std::runtime_error("csg_value::to_double(), value is not a scalar");
+   throw std::runtime_error(".csg file line " + std::to_string(m_line_no) +", csg_value::to_double(), value is not a scalar");
 }
 
 std::shared_ptr<csg_value> csg_value::get(size_t i) const
 {
-   throw std::runtime_error("csg_value::get(), value is not a vector");
+   throw std::runtime_error(".csg file line " + std::to_string(m_line_no) +", csg_value::get(), value is not a vector");
 }
 
-std::shared_ptr<csg_value> csg_value::parse(const std::string& value_str)
+std::shared_ptr<csg_value> csg_value::parse(const std::string& value_str, size_t line_no)
 {
    std::shared_ptr<csg_value> value;
 
@@ -68,18 +69,18 @@ std::shared_ptr<csg_value> csg_value::parse(const std::string& value_str)
 
          // strip the [] pair from both sides
          // so we end up with a string of comma separated values (which may be vectors)
-         return parse_vector(value_str.substr(i+1,i2-1));
+         return parse_vector(value_str.substr(i+1,i2-1),line_no);
       }
       else {
          // found a scalar
-         return std::make_shared<csg_scalar>(value_str);
+         return std::make_shared<csg_scalar>(value_str,line_no);
       }
    }
 
    return value;
 }
 
-std::shared_ptr<csg_value> csg_value::parse_vector(const std::string& values)
+std::shared_ptr<csg_value> csg_value::parse_vector(const std::string& values, size_t line_no)
 {
    std::vector<std::shared_ptr<csg_value>> vec;
    std::string token;
@@ -96,7 +97,7 @@ std::shared_ptr<csg_value> csg_value::parse_vector(const std::string& values)
          // end of vector data
          size_t len = token.size();
          std::string vals = token.substr(1,len-2);
-         vec.push_back(parse_vector(vals));
+         vec.push_back(parse_vector(vals,line_no));
          token  = "";
          icount = 0;
 
@@ -107,12 +108,12 @@ std::shared_ptr<csg_value> csg_value::parse_vector(const std::string& values)
          // end of scalar data
          size_t len = (c == ',')? token.size()-1 : token.size();
          std::string val = token.substr(0,len);
-         vec.push_back(std::make_shared<csg_scalar>(val));
+         vec.push_back(std::make_shared<csg_scalar>(val,line_no));
          token  = "";
          icount = 0;
       }
    }
-   return std::make_shared<csg_vector>(vec);
+   return std::make_shared<csg_vector>(vec,line_no);
 }
 
 
