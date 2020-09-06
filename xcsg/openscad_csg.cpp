@@ -49,7 +49,50 @@ std::string openscad_csg::path() const
    return m_path;
 }
 
-void openscad_csg::write_polyhedron(std::shared_ptr<xpolyhedron> poly)
+
+void openscad_csg::write_polyhedron(std::shared_ptr<xpolyhedron> poly, bool raw)
+{
+   if(raw) write_polyhedron_raw(poly);
+   else    write_polyhedron_pretty(poly);
+}
+
+void openscad_csg::write_polygon(std::shared_ptr<polygon2d> poly, bool raw)
+{
+   if(raw) write_polygon_raw(poly);
+   else    write_polygon_pretty(poly);
+}
+
+void openscad_csg::write_polyhedron_raw(std::shared_ptr<xpolyhedron> poly)
+{
+   m_out << "\tpolyhedron( ";;
+
+   m_out << "points=[ ";
+   for(size_t ivert=0; ivert<poly->v_size(); ivert++) {
+      const carve::geom3d::Vector& pos = poly->v_get(ivert);
+      if(ivert > 0) m_out << ',';
+      m_out << '[' << std::setprecision(16) << pos[0] << ',' << std::setprecision(16) <<  pos[1] << ',' << std::setprecision(16) <<  pos[2] << ']';;
+   }
+   m_out << "],";;
+
+   m_out << " faces=[ ";
+   for(size_t iface=0; iface<poly->f_size(); iface++) {
+      const xface& face = poly->f_get(iface);
+      if(iface > 0) m_out << ',';
+      m_out << '[';
+      size_t iv=0;
+      for(auto i=face.rbegin(); i!=face.rend(); i++) {
+         if(iv++ > 0) m_out << ',';
+         m_out << *i;
+      }
+      m_out << ']';
+   }
+   m_out << "] ";
+
+   m_out << ");" << std::endl;
+}
+
+
+void openscad_csg::write_polyhedron_pretty(std::shared_ptr<xpolyhedron> poly)
 {
    m_out << "\tpolyhedron( " << std::endl;
 
@@ -80,8 +123,48 @@ void openscad_csg::write_polyhedron(std::shared_ptr<xpolyhedron> poly)
    m_out << "\t);" << std::endl;
 }
 
+void openscad_csg::write_polygon_raw(std::shared_ptr<polygon2d> poly )
+{
+   // number of contours in polygon
+   size_t nc = poly->size();
 
-void openscad_csg::write_polygon(std::shared_ptr<polygon2d> poly )
+   m_out << "\tpolygon( ";
+
+   // first write all the  points in all contours
+   size_t ivcount = 0;
+   m_out << "points=[ ";
+      for(size_t ic=0; ic<nc; ic++) {
+         std::shared_ptr<const contour2d> contour = (*poly)[ic];
+         for(size_t i=0; i<contour->size(); i++) {
+            dpos2d pos = (*contour)[i];
+            if(ivcount == 0) m_out << ' ';
+            else             m_out << ',';
+            m_out << '[' << std::setprecision(16) << pos.x() << ',' << std::setprecision(16) <<   pos.y() << ']';
+            ivcount++;
+         }
+      }
+   m_out << "],";
+
+   // then write all the contours, referring to the points
+   ivcount = 0;
+   m_out << "paths=[ ";
+      for(size_t ic=0; ic<nc; ic++) {
+         std::shared_ptr<const contour2d> contour = (*poly)[ic];
+         size_t nv = contour->size();
+         m_out << '[';
+         for(size_t iv=0; iv<nv; iv++) {
+            if(iv > 0) m_out << ',';
+            m_out << ivcount++;
+         }
+         m_out << ']';
+      }
+   m_out << "] ";
+
+   m_out << ");" << std::endl;
+}
+
+
+void openscad_csg::write_polygon_pretty(std::shared_ptr<polygon2d> poly )
 {
    // number of contours in polygon
    size_t nc = poly->size();

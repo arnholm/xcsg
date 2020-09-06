@@ -33,10 +33,19 @@ public:
    // return path to the file created
    std::string path() const;
 
-   void write_polyhedron(std::shared_ptr<xpolyhedron> poly );
-   void write_polygon(std::shared_ptr<polygon2d> poly );
+   void write_polyhedron(std::shared_ptr<xpolyhedron> poly, bool raw=true );
+   void write_polygon(std::shared_ptr<polygon2d> poly, bool raw=true  );
 
    void write_transform(const carve::math::Matrix& t);
+
+protected:
+   void write_polyhedron_raw(std::shared_ptr<xpolyhedron> poly );
+   void write_polygon_raw(std::shared_ptr<polygon2d> poly );
+
+   void write_polyhedron_pretty(std::shared_ptr<xpolyhedron> poly );
+   void write_polygon_pretty(std::shared_ptr<polygon2d> poly );
+
+
 private:
    std::ofstream m_out;
    std::string   m_path;
