@@ -73,11 +73,14 @@ bool xcsg_main::run()
       throw std::logic_error(sout.str());
    }
 
+   if(!std_filename::Exists(xcsg_file)) throw std::runtime_error("File does not exist: " + xcsg_file);
+
    // determine if we shall display full file paths
    bool show_path = m_cmd.count("fullpath")>0;
 
    cf_xmlTree tree;
    std_filename file(xcsg_file);
+
    if(file.GetExt() == ".csg") {
 
       cout << "Converting from OpenSCAD " << xcsg_file << endl;
