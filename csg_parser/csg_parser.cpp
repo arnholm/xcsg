@@ -50,8 +50,7 @@ void csg_parser::init_func(const std::string& csg)
       // Skip // comment line
       while(c=='/' && csg[i]=='/') {
          while(csg[++i]!='\n') c = csg[i];
-         c = csg[++i];
-         line_no++;
+         c = csg[i];
       }
 
       // update the tree level
