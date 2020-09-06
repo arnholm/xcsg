@@ -236,7 +236,8 @@ std::string  csg_node::get_scalar(const std::string& name)
    if(i !=m_par.end()) {
       return i->second->to_string();
    }
-   throw std::runtime_error("csg_node::get_scalar(), parameter '" + name + "' not found for " + tag());
+   std::string line_no = ".csg file line " + std::to_string(m_line_no);
+   throw std::runtime_error("csg_node::get_scalar(), "+line_no +" parameter '" + name + "' not found for " + tag());
 }
 
 std::shared_ptr<csg_value> csg_node::get_value(const std::string& name)
@@ -245,7 +246,8 @@ std::shared_ptr<csg_value> csg_node::get_value(const std::string& name)
    if(i !=m_par.end()) {
       return i->second;
    }
-   throw std::runtime_error("csg_node::get_value(), parameter '" + name + "' not found for " + tag());
+   std::string line_no = ".csg file line " + std::to_string(m_line_no);
+   throw std::runtime_error("csg_node::get_value(), "+line_no +" parameter '" + name + "' not found for " + tag());
 }
 
 
@@ -512,7 +514,7 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                // with no twist we use only one segment.
                // with non-zero twist we compute number of spline control points from the twist angle
                size_t nseg = 1;
-               if(fabs(tw) > 0) nseg = 36*fabs(tw)/(2*pi);
+               if(fabs(tw) > 0) nseg = static_cast<size_t>(36*fabs(tw)/(2*pi));
                dz         = dz/nseg;
                double da  = tw/nseg;
 
