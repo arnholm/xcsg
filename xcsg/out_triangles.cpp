@@ -62,26 +62,24 @@ std::string  out_triangles::write_csg(const std::string& xcsg_path)
          std::shared_ptr<carve::poly::Polyhedron> poly = (*m_polyset)[ipoly];
          std::vector<carve::poly::Geometry<3>::vertex_t>& vertices = poly->vertices;
 
-         out << "\tpolyhedron( " << std::endl;
+         out << "\tpolyhedron( ";
 
          // ========= points / vertices =================
-         out << "\tpoints=[ "<< std::endl;
+         out << " points=[ ";
          for(size_t ivert=0; ivert<vertices.size(); ivert++) {
             carve::poly::Geometry<3>::vertex_t& vtx = vertices[ivert];
-            out << "\t\t";
             if(ivert > 0) out << ',';
-            out << '[' << std::setprecision(16) << vtx.v[0] << ',' << std::setprecision(16) << vtx.v[1] << ',' << std::setprecision(16) <<  vtx.v[2] << ']' << std::endl;
+            out << '[' << std::setprecision(16) << vtx.v[0] << ',' << std::setprecision(16) << vtx.v[1] << ',' << std::setprecision(16) <<  vtx.v[2] << ']';
          }
-         out << "\t]," << std::endl;
+         out << "],";
 
          // ========= faces =================
-         out << "\tfaces=[ "<< std::endl;
+         out << " faces=[ ";
          for(size_t iface = 0; iface<poly->faces.size(); ++iface) {
             carve::poly::Face<3>& face = poly->faces[iface];
 
             size_t nvert = face.nVertices();
             if(nvert != 3)throw std::logic_error("carve_triangulate:: detected non-triangular face after triangulation!");
-            out << "\t\t";
             if(iface > 0) out << ',';
             out << '[';
             std::vector<const carve::poly::Polyhedron::vertex_t *> vloop;
@@ -91,11 +89,11 @@ std::string  out_triangles::write_csg(const std::string& xcsg_path)
                size_t index = poly->vertexToIndex(vloop[2-ivert]); // reverse vertex order in OpenSCAD
                out << index;
             }
-            out << ']' << std::endl;
+            out << ']';
          }
-         out << "\t] " << std::endl;
+         out << "] ";
 
-         out << "\t);" << std::endl;
+         out << ");" << std::endl;
       }
 
    out << "};" << std::endl;
