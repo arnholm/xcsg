@@ -62,8 +62,14 @@ public:
    // sets the current directory
    static void  set_current_directory(const std::string& dir_path);
 
-   // create directory
-   static void create_directory(const std::string& dir_path, bool throw_if_exists = true);
+   // create directory (everything but last part must pre-exist)
+   // returns true if the directory exists or was created
+   static bool create_directory(const std::string& dir_path, bool throw_if_exists = true);
+
+   // create directories:
+   // Establishes the postcondition by calling create_directory() for any element of dir_path that does not exist.
+   // returns true if the directory exists or was created
+   static bool create_directories(const std::string& dir_path, bool throw_if_exists = true);
 
 private:
    boost::filesystem::path m_path;

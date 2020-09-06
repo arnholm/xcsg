@@ -17,6 +17,7 @@
 #define OUT_TRIANGLES_H
 
 #include <vector>
+#include <set>
 #include <memory>
 #include <carve/csg.hpp>
 #include <ostream>
@@ -43,6 +44,12 @@ public:
    // export to OpenSCAD .csg
    std::string  write_csg(const std::string& xcsg_path);
 
+   // add additional path to written files
+   void add_file_written(const std::string& file_path) { m_files_written.insert(file_path); }
+
+   // copy all previously written files to target directory, return set of target files copied
+   std::set<std::string> copy_to(const std::string& dir_path);
+
 private:
    // write to ASCII STL, return the path to the file created
    // input is full path to file, file extension will be replaced to ".stl"
@@ -54,6 +61,8 @@ private:
 
 private:
    std::shared_ptr<poly_vector> m_polyset;
+
+   std::set<std::string> m_files_written;  // contains one entry per call to write_* functions
 };
 
 #endif // OUT_TRIANGLES_H

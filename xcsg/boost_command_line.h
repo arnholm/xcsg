@@ -38,6 +38,8 @@ public:
 
    size_t max_bool() const { return m_max_bool; }
 
+   std::pair<bool,std::string> export_dir() { return m_export_dir; }
+
 private:
    boost::program_options::options_description generic;
    boost::program_options::options_description hidden;
@@ -47,6 +49,7 @@ private:
    bool  m_help_shown;
    bool  m_version_shown;
    size_t m_max_bool;
+   std::pair<bool,std::string> m_export_dir;
 };
 
 #endif // BOOST_COMMAND_LINE_H

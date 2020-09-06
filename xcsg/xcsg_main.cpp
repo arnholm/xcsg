@@ -205,15 +205,25 @@ bool xcsg_main::run_xsolid(cf_xmlNode& node,const std::string& xcsg_file)
       // create object for file export
       out_triangles exporter(triangulate.carve_polyset());
 
-      amf_file amf;
       if(m_cmd.count("csg")>0)       cout << "Created OpenSCAD file: " << DisplayName(std_filename(exporter.write_csg(xcsg_file)),show_path) << endl;
-      if(m_cmd.count("amf")>0)       cout << "Created AMF file     : " << DisplayName(std_filename(amf.write(triangulate.carve_polyset(),xcsg_file)),show_path) << endl;
+      if(m_cmd.count("amf")>0) {
+         amf_file amf;
+         std::string amf_path = amf.write(triangulate.carve_polyset(),xcsg_file);
+         cout << "Created AMF file     : " << DisplayName(std_filename(amf_path),show_path) << endl;
+         exporter.add_file_written(amf_path);
+      }
       if(m_cmd.count("obj")>0)       cout << "Created OBJ file     : " << DisplayName(std_filename(exporter.write_obj(xcsg_file)),show_path) << endl;
       if(m_cmd.count("off")>0)       cout << "Created OFF file(s)  : " << DisplayName(std_filename(exporter.write_off(xcsg_file)),show_path) << endl;
       // write STL last so it is the most recent updated format
       if(m_cmd.count("stl")>0)       cout << "Created STL file     : " << DisplayName(std_filename(exporter.write_stl(xcsg_file,true)),show_path) << endl;
       else if(m_cmd.count("astl")>0) cout << "Created STL file     : " << DisplayName(std_filename(exporter.write_stl(xcsg_file,false)),show_path) << endl;
 
+      // check if export is requested
+      auto export_pair = m_cmd.export_dir();
+      if(export_pair.first) {
+         auto files_copied = exporter.copy_to(export_pair.second);
+         for(auto& f : files_copied) cout << "Exported to          : " << f << endl;
+      }
    }
    else {
       throw logic_error("xcsg tree contains no data. ");
@@ -259,18 +269,30 @@ bool xcsg_main::run_xshape2d(cf_xmlNode& node,const std::string& xcsg_file)
          cout << "Created OpenSCAD file: " << DisplayName(std_filename(openscad.path()),show_path) << endl;
       }
 
+      out_triangles exporter(nullptr);
+
       // write SVG?
       if(m_cmd.count("svg")>0) {
          svg_file svg;
-         cout << "Created SVG      file: " << DisplayName(std_filename(svg.write(polyset,xcsg_file)),show_path) << endl;
+         std::string svg_path = svg.write(polyset,xcsg_file);
+         exporter.add_file_written(svg_path);
+         cout << "Created SVG      file: " << DisplayName(std_filename(svg_path),show_path) << endl;
       }
 
       // write DXF last so it is the most recent updated format
       if(m_cmd.count("dxf")>0) {
          dxf_file dxf;
-         cout << "Created DXF      file: " << DisplayName(std_filename(dxf.write(polyset,xcsg_file)),show_path) << endl;
+         std::string dxf_path = dxf.write(polyset,xcsg_file);
+         exporter.add_file_written(dxf_path);
+         cout << "Created DXF      file: " << DisplayName(std_filename(dxf_path),show_path) << endl;
       }
 
+      // check if export is requested
+      auto export_pair = m_cmd.export_dir();
+      if(export_pair.first) {
+         auto files_copied = exporter.copy_to(export_pair.second);
+         for(auto& f : files_copied) cout << "Exported to          : " << f << endl;
+      }
    }
    else {
       throw logic_error("xcsg tree contains no data. ");

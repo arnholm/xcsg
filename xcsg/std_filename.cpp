@@ -95,11 +95,20 @@ void std_filename::set_current_directory(const std::string& dir_path)
    boost::filesystem::current_path(dir_path);
 }
 
-void std_filename::create_directory(const std::string& dir_path, bool throw_if_exists)
+bool std_filename::create_directory(const std::string& dir_path, bool throw_if_exists)
 {
    if(boost::filesystem::exists(dir_path)) {
       if(throw_if_exists) throw std::logic_error("Directory already exists: " + dir_path);
-      return;
+      return true;
    }
-   boost::filesystem::create_directory(dir_path);
+   return boost::filesystem::create_directory(dir_path);
+}
+
+bool std_filename::create_directories(const std::string& dir_path, bool throw_if_exists)
+{
+   if(boost::filesystem::exists(dir_path)) {
+      if(throw_if_exists) throw std::logic_error("Directory already exists: " + dir_path);
+      return true;
+   }
+   return boost::filesystem::create_directories(dir_path);
 }

@@ -44,6 +44,7 @@ boost_command_line::boost_command_line(int argc , char **argv)
 , m_help_shown(false)
 , m_version_shown(false)
 , m_max_bool(std::numeric_limits<size_t>::max())
+, m_export_dir(false,"")
 {
    generic.add_options()
         ("help,h",  "Show this help message.")
@@ -56,6 +57,7 @@ boost_command_line::boost_command_line(int argc , char **argv)
         ("astl",  "STL output format (STereoLitography) - ASCII")
         ("obj",   "OBJ output format (Wavefront format)")
         ("off",   "OFF output format (Geomview Object File Format)")
+        ("export_dir", po::value<std::string>(), "Export output files to directory")
         ("max_bool", po::value<size_t>(),  "Max number of booleans allowed")
         ("fullpath", "Show full file paths.")
          ;
@@ -112,6 +114,18 @@ boost_command_line::boost_command_line(int argc , char **argv)
       }
    }
 
+
+   if(vm.count("export_dir") > 0) {
+      std::string dir = get<std::string>("export_dir");
+      if(dir.length() > 0) m_export_dir = std::make_pair(true,dir);
+      else {
+         ostringstream sout;
+         sout << "ERROR: 'export_dir' specified, but no directory provided";
+         error_list.push_back(sout.str());
+         error_count++;
+      }
+   }
+
    // check the output format specifiers
    size_t out_count = vm.count("amf") + vm.count("csg") + vm.count("stl") + vm.count("astl") + vm.count("obj") + vm.count("off") + vm.count("dxf") + vm.count("svg");
    if(out_count == 0  && vm.count("xcsg-file")>0) {
@@ -126,11 +140,6 @@ boost_command_line::boost_command_line(int argc , char **argv)
    // check combination of input file and output specifiers
    if(vm.count("xcsg-file") == 0 && out_count>0 ) {
       error_list.push_back("ERROR: Output format(s) specified, but no input file name.");
-      error_count++;
-   }
-
-   if(vm.count("xcsg-file") == 0 && out_count==0 ) {
-      if(help_count==0) error_list.push_back("ERROR: No input file specified");
       error_count++;
    }
 

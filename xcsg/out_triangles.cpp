@@ -16,6 +16,7 @@
 #include "out_triangles.h"
 #include <carve/poly.hpp>
 #include <fstream>
+#include "std_filename.h"
 
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/convenience.hpp>
@@ -98,6 +99,7 @@ std::string  out_triangles::write_csg(const std::string& xcsg_path)
 
    out << "};" << std::endl;
 
+   m_files_written.insert(path);
    return path;
 }
 
@@ -150,6 +152,7 @@ std::string out_triangles::write_off(const std::string& xcsg_path)
       }
    }
 
+   m_files_written.insert(path);
    return path;
 }
 
@@ -203,7 +206,7 @@ std::string out_triangles::write_obj(const std::string& xcsg_path)
 
       vertex_offset += vertices.size();
    }
-
+   m_files_written.insert(path);
    return path;
 }
 
@@ -272,7 +275,7 @@ std::string  out_triangles::write_stl_ascii(const std::string& file_path)
       std::string message = "stl_io::write_ascii(...)  Failed to open: " + file_path;
       throw std::logic_error(message);
    }
-
+   m_files_written.insert(path);
    return path;
 }
 
@@ -351,5 +354,41 @@ std::string  out_triangles::write_stl_binary(const std::string& file_path)
       std::string message = "out_triangles::write_stl_binary(...)  Failed to open: " + file_path;
       throw std::logic_error(message);
    }
+   m_files_written.insert(path);
    return path;
+}
+
+std::set<std::string> out_triangles::copy_to(const std::string& dir_path)
+{
+   namespace bfs = boost::filesystem;
+
+   std::string target_dir = dir_path;
+
+   // if the input path contains a file name, extract only the directory path
+   std_filename target_fname(target_dir);
+   if(target_fname.GetExt() != "") {
+      target_dir = target_fname.GetPath();
+   }
+
+   // make sure the target directory exists
+   if(!std_filename::Exists(target_dir)) {
+      std_filename::create_directories(target_dir);
+   }
+
+   // traverse the files to be copied
+   std::set<std::string> files_copied;
+   for(auto& file : m_files_written) {
+      std_filename source_file(file);
+      std_filename target_file(file);
+      target_file.SetPath(target_dir);
+      bfs::copy_file(source_file.GetFullPath(),target_file.GetFullPath(),bfs::copy_option::overwrite_if_exists);
+
+      if(std_filename::Exists(target_file.GetFullPath())) {
+         std::string copied_path = target_file.GetFullPath();
+         std::replace(copied_path.begin(),copied_path.end(), '\\', '/');
+         files_copied.insert(copied_path);
+      }
+   }
+
+   return std::move(files_copied);
 }
