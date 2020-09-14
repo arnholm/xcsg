@@ -489,6 +489,8 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                double tw = (itwi != m_par.end())? -itwi->second->to_double()*pi/180. : 0.0;
                auto icen = m_par.find("center");
                std::string center = (icen != m_par.end())? icen->second->to_string() : "false";
+               auto isli = m_par.find("slices");
+               int slices = (isli != m_par.end())? isli->second->to_int() : -1;
 
                // check if scale is specified, i.e. top surface scaling relative to bottom
                double scx=1.0,scy=1.0;
@@ -515,6 +517,7 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                // with non-zero twist we compute number of spline control points from the twist angle
                size_t nseg = 1;
                if(fabs(tw) > 0) nseg = static_cast<size_t>(36*fabs(tw)/(2*pi));
+               if(slices > 0 && slices > nseg) nseg = slices;
                dz         = dz/nseg;
                double da  = tw/nseg;
 
