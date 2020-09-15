@@ -480,9 +480,14 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
 
                xml_this.add_property("dz",get_scalar("height"));
                xml_this.add_property("center",get_scalar("center") );
+
+               if(m_children.size() > 1) throw std::runtime_error(line_no +": linear_extrude with multiple children is not supported, please fix by adding explicit union: " + m_func);
+
             }
             else if(xcsg_tag=="sweep") {
                // == linear extrude translated to sweep, here non-zero twist is supported
+
+               if(m_children.size() > 1) throw std::runtime_error(line_no +": linear_extrude with multiple children is not supported, please fix by adding explicit union: " + m_func);
 
                double dz = get_value("height")->to_double();
                auto itwi = m_par.find("twist");
