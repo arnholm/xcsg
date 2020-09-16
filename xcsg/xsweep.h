@@ -33,7 +33,7 @@ public:
 protected:
 
 private:
-   std::shared_ptr<xshape2d>     m_profile;
+   std::unordered_set<std::shared_ptr<xshape2d>> m_incl;
    std::shared_ptr<xspline_path> m_path;
 };
 

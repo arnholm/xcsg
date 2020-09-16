@@ -20,6 +20,7 @@
 #include "xshape2d.h"
 #include "extrude_mesh.h"
 #include "clipper_boolean.h"
+#include "xshape2d_collector.h"
 
 xsweep::xsweep()
 {}
@@ -29,20 +30,18 @@ xsweep::xsweep(const cf_xmlNode& const_node)
    set_transform(const_node);
 
    cf_xmlNode node = const_node;
+   xshape2d_collector::collect_children(node,m_incl);
+
    for(auto i=node.begin(); i!=node.end(); i++) {
 
       cf_xmlNode sub(i);
-      if(xcsg_factory::singleton().is_shape2d(sub)) {
-         if(!m_profile.get()) m_profile = xcsg_factory::singleton().make_shape2d(sub);
-         else throw logic_error("xsweep: More than one sweep profile specified.");
-      }
-      else if(sub.tag()=="spline_path") {
+      if(sub.tag()=="spline_path") {
          if(!m_path.get()) m_path = std::shared_ptr<xspline_path>(new xspline_path(sub));
          else throw logic_error("xsweep: More than one spline_path specified.");
       }
    }
 
-   if(!m_profile.get()) throw logic_error("xsweep: No sweep profile specified.");
+   if(m_incl.size()==0) throw logic_error("xsweep: No sweep profile specified.");
    if(!m_path.get()) throw logic_error("xsweep: No sweep path specified.");
 }
 
@@ -54,7 +53,11 @@ std::shared_ptr<carve::mesh::MeshSet<3>> xsweep::create_carve_mesh(const carve::
 {
    // create profile in native 2d system
    clipper_boolean csg;
-   csg.compute(m_profile->create_clipper_profile(carve::math::Matrix()),ClipperLib::ctUnion);
+   for(auto i=m_incl.begin(); i!=m_incl.end(); i++) {
+      // create profile in native 2d system
+      csg.compute((*i)->create_clipper_profile(carve::math::Matrix()),ClipperLib::ctUnion);
+   }
+
 
    // apply 3d transformation when creating 3d mesh
    std::shared_ptr<const csplines::spline_path> spline(new csplines::spline_path(m_path->cp()));
@@ -65,5 +68,10 @@ std::shared_ptr<carve::mesh::MeshSet<3>> xsweep::create_carve_mesh(const carve::
 
 size_t xsweep::nbool()
 {
-   return m_profile->nbool();
+   size_t nbool = 0;
+   for(auto i=m_incl.begin(); i!=m_incl.end(); i++) {
+      std::shared_ptr<xshape2d> obj = *i;
+      nbool += (obj->nbool()+1);
+   }
+   return nbool-1;
 }
