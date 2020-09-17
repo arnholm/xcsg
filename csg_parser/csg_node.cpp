@@ -287,9 +287,21 @@ size_t csg_node::dimension()
    // figure out if this node generates a 2d or 3d object
    // by inspecting child nodes
 
-   if(m_children.size()==0) return 0;
-
    size_t dim = 0;
+   std::string this_tag = tag();
+   if(this_tag      == "circle")dim=2;
+   else if(this_tag == "square")dim=2;
+   else if(this_tag == "polygon")dim=2;
+   else if(this_tag == "projection")dim=2;
+
+   else if(this_tag == "sphere")dim=3;
+   else if(this_tag == "cylinder")dim=3;
+   else if(this_tag == "cube")dim=3;
+   else if(this_tag == "polyhedron")dim=3;
+
+   if(dim>0)return dim;
+
+   if(m_children.size()==0) return 0;
 
    for(auto& c : m_children) {
 
@@ -377,21 +389,28 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
 
             if(xcsg_tag=="circle") {
                // == 2d circle
-               xml_this.add_property("r",get_scalar("r"));
+               double r = get_value("r")->to_double();
+               if(r<=0.0) throw std::runtime_error(line_no +": r must be > 0.0 " + m_func);
+               xml_this.add_property("r",r);
             }
             else if(xcsg_tag=="rectangle") {
                // == 2d square/rectangle
 
                // size can be scalar or vector
                auto siz = get_value("size");
+               double dx=0.0, dy=0.0;
                if(siz->size() > 1) {
-                  xml_this.add_property("dx",siz->get(0)->to_string());
-                  xml_this.add_property("dy",siz->get(1)->to_string());
+                  dx = siz->get(0)->to_double();
+                  dy = siz->get(1)->to_double();
                }
                else {
-                  xml_this.add_property("dx",siz->to_string());
-                  xml_this.add_property("dy",siz->to_string());
+                  dx = siz->to_double();
+                  dy = siz->to_double();
                }
+               if(dx<=0.0) throw std::runtime_error(line_no +": dx must be > 0.0 " + m_func);
+               if(dy<=0.0) throw std::runtime_error(line_no +": dy must be > 0.0 " + m_func);
+               xml_this.add_property("dx",dx);
+               xml_this.add_property("dy",dy);
                xml_this.add_property("center",get_scalar("center") );
             }
             else if(xcsg_tag=="polygon") {
@@ -444,30 +463,46 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
             else if(xcsg_tag=="cone") {
                // == 3d cylinder/cone
 
-               xml_this.add_property("h",get_scalar("h"));
-               xml_this.add_property("r1",get_scalar("r1"));
-               xml_this.add_property("r2",get_scalar("r2"));
+               double h  = get_value("h")->to_double();
+               double r1 = get_value("r1")->to_double();
+               double r2 = get_value("r2")->to_double();
+               if(h<=0.0) throw std::runtime_error(line_no +": h must be > 0.0 " + m_func);
+               if(r1<=0.0) throw std::runtime_error(line_no +": r1 must be > 0.0 " + m_func);
+               if(r2<=0.0) throw std::runtime_error(line_no +": r2 must be > 0.0 " + m_func);
+
+               xml_this.add_property("h",h);
+               xml_this.add_property("r1",r1);
+               xml_this.add_property("r2",r2);
                xml_this.add_property("center",get_scalar("center") );
             }
             else if(xcsg_tag=="sphere") {
                // ==3d sphere
 
-               xml_this.add_property("r",get_scalar("r"));
+               double r = get_value("r")->to_double();
+               if(r<=0.0) throw std::runtime_error(line_no +": r must be > 0.0 " + m_func);
+               xml_this.add_property("r",r);
             }
             else if(xcsg_tag=="cuboid") {
                // == 3d cube/cuboid
 
                auto siz = get_value("size");
+               double dx=0.0, dy=0.0, dz=0.0;
                if(siz->size() > 1) {
-                  xml_this.add_property("dx",siz->get(0)->to_string());
-                  xml_this.add_property("dy",siz->get(1)->to_string());
-                  xml_this.add_property("dz",siz->get(2)->to_string());
+                  dx = siz->get(0)->to_double();
+                  dy = siz->get(1)->to_double();
+                  dz = siz->get(2)->to_double();
                }
                else {
-                  xml_this.add_property("dx",siz->to_string());
-                  xml_this.add_property("dy",siz->to_string());
-                  xml_this.add_property("dz",siz->to_string());
+                  dx = siz->to_double();
+                  dy = siz->to_double();
+                  dz = siz->to_double();
                }
+               if(dx<=0.0) throw std::runtime_error(line_no +": dx must be > 0.0 " + m_func);
+               if(dy<=0.0) throw std::runtime_error(line_no +": dy must be > 0.0 " + m_func);
+               if(dz<=0.0) throw std::runtime_error(line_no +": dz must be > 0.0 " + m_func);
+               xml_this.add_property("dx",dx);
+               xml_this.add_property("dy",dy);
+               xml_this.add_property("dz",dz);
                xml_this.add_property("center",get_scalar("center") );
             }
             else if(xcsg_tag=="linear_extrude") {
@@ -486,6 +521,8 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                // == linear extrude translated to sweep, here non-zero twist is supported
 
                double dz = get_value("height")->to_double();
+               if(dz<=0.0) throw std::runtime_error(line_no +": height must be > 0.0 " + m_func);
+
                auto itwi = m_par.find("twist");
                double tw = (itwi != m_par.end())? -itwi->second->to_double()*pi/180. : 0.0;
                auto icen = m_par.find("center");
@@ -613,15 +650,30 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                   }
                }
             }
-            else if(xcsg_tag.substr(0,4)=="unio" ||
-                    xcsg_tag.substr(0,4)=="diff" ||
+            else if(xcsg_tag.substr(0,4)=="diff" ||
                     xcsg_tag.substr(0,4)=="inte" ||
+                    xcsg_tag.substr(0,4)=="mink"
+                    )
+            {
+               if(m_children.size() < 2) throw std::runtime_error(line_no +": Fewer than 2 children provided to '" + openscad_tag + "' --> " + xcsg_tag);
+               size_t idim=0;
+               for(auto c : m_children) {
+                  size_t dim = c->dimension();
+                  if(idim == 0)idim=dim;
+                  else if(idim != dim) throw std::runtime_error(line_no +": Mixed dimension children provided to '" + openscad_tag + "' --> " + xcsg_tag);
+               }
+            }
+            else if(xcsg_tag.substr(0,4)=="unio" ||
                     xcsg_tag.substr(0,4)=="proj" ||
-                    xcsg_tag.substr(0,4)=="mink" ||
                     xcsg_tag.substr(0,4)=="hull"
                     )
             {
-               // NO-OP . These operations take no parameters
+               size_t idim=0;
+               for(auto c : m_children) {
+                  size_t dim = c->dimension();
+                  if(idim == 0)idim=dim;
+                  else if(idim != dim) throw std::runtime_error(line_no +": Mixed dimension children provided to '" + openscad_tag + "' --> " + xcsg_tag);
+               }
             }
             else {
                throw std::runtime_error(line_no +": Not supported : '" + openscad_tag + "' --> " + xcsg_tag + ": " + m_func);
