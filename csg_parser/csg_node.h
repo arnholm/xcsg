@@ -70,6 +70,9 @@ protected:
 
    void dump();
 
+   // dummy nodes such as group(); with zero children
+   bool is_dummy();
+
    // return parameter substring
    std::string par() const;
 

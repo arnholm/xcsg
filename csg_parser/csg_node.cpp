@@ -230,6 +230,12 @@ void  csg_node::dump()
    for(auto& c : m_children) c->dump();
 }
 
+bool csg_node::is_dummy()
+{
+   if(tag() == "group" && m_children.size()==0)return true;
+   return false;
+}
+
 std::string  csg_node::get_scalar(const std::string& name)
 {
    auto i = m_par.find(name);
@@ -298,6 +304,8 @@ size_t csg_node::dimension()
    else if(this_tag == "cylinder")dim=3;
    else if(this_tag == "cube")dim=3;
    else if(this_tag == "polyhedron")dim=3;
+   else if(this_tag == "linear_extrude")dim=3;
+   else if(this_tag == "rotate_extrude")dim=3;
 
    if(dim>0)return dim;
 
@@ -658,9 +666,11 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                if(m_children.size() < 2) throw std::runtime_error(line_no +": Fewer than 2 children provided to '" + openscad_tag + "' --> " + xcsg_tag);
                size_t idim=0;
                for(auto c : m_children) {
-                  size_t dim = c->dimension();
-                  if(idim == 0)idim=dim;
-                  else if(idim != dim) throw std::runtime_error(line_no +": Mixed dimension children provided to '" + openscad_tag + "' --> " + xcsg_tag);
+                  if(!c->is_dummy()) {
+                     size_t dim = c->dimension();
+                     if(idim == 0)idim=dim;
+                     else if(idim != dim) throw std::runtime_error(line_no +": Mixed dimension children provided to '" + openscad_tag + "' --> " + xcsg_tag);
+                  }
                }
             }
             else if(xcsg_tag.substr(0,4)=="unio" ||
@@ -670,9 +680,11 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
             {
                size_t idim=0;
                for(auto c : m_children) {
-                  size_t dim = c->dimension();
-                  if(idim == 0)idim=dim;
-                  else if(idim != dim) throw std::runtime_error(line_no +": Mixed dimension children provided to '" + openscad_tag + "' --> " + xcsg_tag);
+                  if(!c->is_dummy()) {
+                     size_t dim = c->dimension();
+                     if(idim == 0)idim=dim;
+                     else if(idim != dim) throw std::runtime_error(line_no +": Mixed dimension children provided to '" + openscad_tag + "' --> " + xcsg_tag);
+                  }
                }
             }
             else {
