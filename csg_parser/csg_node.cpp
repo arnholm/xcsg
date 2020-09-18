@@ -553,8 +553,8 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                // compute number of required segments for the sweep
                // with no twist we use only one segment.
                // with non-zero twist we compute number of spline control points from the twist angle
-               size_t nseg = 1;
-               if(fabs(tw) > 0) nseg = static_cast<size_t>(36*fabs(tw)/(2*pi));
+               int nseg = 1;
+               if(fabs(tw) > 0) nseg = static_cast<int>(36*fabs(tw)/(2*pi));
                if(slices > 0 && slices > nseg) nseg = slices;
                dz         = dz/nseg;
                double da  = tw/nseg;
@@ -578,7 +578,7 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                xml_p0.add_property("vz",vz0);
 
                // other control points
-               for(size_t iseg=0; iseg<nseg; iseg++) {
+               for(int iseg=0; iseg<nseg; iseg++) {
 
                   z     += dz;
                   angle += da;
