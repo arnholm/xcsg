@@ -182,7 +182,10 @@ double contour2d::signed_area() const
 
    sum += (x2 - x1)*(y2 + y1);
 
-   double s_area = 0.5*sum;
+   // we reverse the sign here as positive areas shall correspond to CCW loops
+   // whereas the above formula gives a negative result for CCW.
+
+   double s_area = -0.5*sum;
    return s_area;
 }
 
