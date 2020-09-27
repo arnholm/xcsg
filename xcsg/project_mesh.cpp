@@ -90,9 +90,9 @@ std::shared_ptr<clipper_profile> project_mesh::project(std::shared_ptr<carve::me
             // here, there is always just a single contour
             std::shared_ptr<contour2d> cont = polygon->get_contour(0);
 
-            // skip any triangles with zero, i.e. face was perpendicular to XY plane.
+            // skip any triangles with zero area, i.e. face was perpendicular to XY plane.
             // we also consider only triangles with positive winding order. The ones with negative winding
-            // are always hidden by those with positive winding order and can safely be ignored
+            // are always hidden by those with positive winding order (CCW) and can safely be ignored
             double signed_area = cont->signed_area();
             if(signed_area > 0.0) {
 
