@@ -475,8 +475,9 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                double r1 = get_value("r1")->to_double();
                double r2 = get_value("r2")->to_double();
                if(h<=0.0) throw std::runtime_error(line_no +": h must be > 0.0 " + m_func);
-               if(r1<=0.0) throw std::runtime_error(line_no +": r1 must be > 0.0 " + m_func);
-               if(r2<=0.0) throw std::runtime_error(line_no +": r2 must be > 0.0 " + m_func);
+               if(r1<0.0) throw std::runtime_error(line_no +": r1 must be >= 0.0 " + m_func);
+               if(r2<0.0) throw std::runtime_error(line_no +": r2 must be >= 0.0 " + m_func);
+               if(r1+r2<=0.0)throw std::runtime_error(line_no +": r1+r2 must be > 0.0 " + m_func);
 
                xml_this.add_property("h",h);
                xml_this.add_property("r1",r1);
