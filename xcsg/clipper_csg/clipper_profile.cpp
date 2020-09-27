@@ -46,18 +46,20 @@ std::shared_ptr<polyset2d> clipper_profile::polyset()
 {
    std::shared_ptr<polyset2d> pset(new polyset2d());
 
+   // check orientation of 1st path
+   bool positive = Orientation(m_paths[0]);
+
+   // if negative, reverse all paths
+   bool reverse_all = !positive;
+
    std::shared_ptr<polygon2d> polygon;
    for(size_t i=0; i<m_paths.size(); i++) {
-      bool positive = Orientation(m_paths[i]);
-      if(positive) {
-         polygon = std::shared_ptr<polygon2d>(new polygon2d());
-         pset->push_back(polygon);
-      }
-      if(!polygon.get()) {
-         throw std::logic_error("polyset2d error: 1st polygon2d contour was negative??");
-      }
+      polygon = std::shared_ptr<polygon2d>(new polygon2d());
+      pset->push_back(polygon);
       polygon->push_back(std::shared_ptr<contour2d>(new contour2d(m_paths[i])));
+      if(reverse_all)polygon->get_contour(0)->reverse();
    }
+
    return pset;
 }
 
