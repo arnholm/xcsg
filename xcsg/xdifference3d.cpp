@@ -92,4 +92,7 @@ xdifference3d::xdifference3d(const cf_xmlNode& node)
    set_transform(node);
 
    xsolid_collector::collect_children(node,m_incl,1,m_excl);
+
+   size_t nchildren = m_incl.size() + m_excl.size();
+   if(nchildren<2) throw logic_error("difference3d requires 2 or more children but found " + std::to_string(nchildren));
 }

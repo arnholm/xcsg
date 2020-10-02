@@ -69,4 +69,6 @@ xintersection2d::xintersection2d(const cf_xmlNode& node)
    set_transform(node);
 
    xshape2d_collector::collect_children(node,m_incl);
+
+   if(m_incl.size()<2) throw logic_error("intersection2d requires 2 or more children but found " + std::to_string(m_incl.size()));
 }

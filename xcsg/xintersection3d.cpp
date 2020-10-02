@@ -34,6 +34,8 @@ xintersection3d::xintersection3d(const cf_xmlNode& node)
    set_transform(node);
 
    xsolid_collector::collect_children(node,m_incl);
+
+   if(m_incl.size()<2) throw logic_error("intersection3d requires 2 or more children but found " + std::to_string(m_incl.size()));
 }
 
 std::shared_ptr<carve::mesh::MeshSet<3>> xintersection3d::create_carve_mesh(const carve::math::Matrix& t) const
