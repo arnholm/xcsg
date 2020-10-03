@@ -659,6 +659,24 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                   }
                }
             }
+            else if(xcsg_tag=="projection2d") {
+
+               // check if this is a "cut" or a proper projection
+               // if projection it is a no-op here
+               // if cut, insert an intersection with a very thin cuboid, and project that
+               bool cut = get_value("cut")->to_bool();
+               if(cut) {
+                  cf_xmlNode xml_intersection = xml_this.add_child("intersection3d");
+                  cf_xmlNode xml_cuboid = xml_intersection.add_child("cuboid");
+                  xml_cuboid.add_property("dx",1.0E4);
+                  xml_cuboid.add_property("dy",1.0E4);
+                  xml_cuboid.add_property("dz",1.0E-4);
+                  xml_cuboid.add_property("center","true");
+
+                  // hijack "xml_this" so the children are applied to intersection below
+                  xml_this = xml_intersection;
+               }
+            }
             else if(xcsg_tag.substr(0,4)=="diff" ||
                     xcsg_tag.substr(0,4)=="inte" ||
                     xcsg_tag.substr(0,4)=="mink"
@@ -675,7 +693,6 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                }
             }
             else if(xcsg_tag.substr(0,4)=="unio" ||
-                    xcsg_tag.substr(0,4)=="proj" ||
                     xcsg_tag.substr(0,4)=="hull"
                     )
             {
