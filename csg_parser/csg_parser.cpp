@@ -18,8 +18,9 @@
 #include <vector>
 #include <iomanip>
 
-csg_parser::csg_parser(std::istream& csg)
+csg_parser::csg_parser(std::istream& csg, double secant_tolerance)
 : m_root(std::make_shared<csg_node>())
+, m_secant_tolerance(secant_tolerance)
 {
    // read the whole file into a string
    std::ostringstream sstr;
@@ -90,7 +91,7 @@ bool csg_parser::to_xcsg(cf_xmlTree& tree)
       cf_xmlNode root;
       if(tree.get_root(root)) {
          root.add_property("version","1.0");
-         root.add_property("secant_tolerance","0.05");
+         root.add_property("secant_tolerance",m_secant_tolerance);
 
          m_root->to_xcsg(root);
          if(m_root->dimension() < 2) throw std::runtime_error("Undetermined .csg model dimension, conversion failed.");

@@ -45,6 +45,7 @@ boost_command_line::boost_command_line(int argc , char **argv)
 , m_version_shown(false)
 , m_max_bool(std::numeric_limits<size_t>::max())
 , m_export_dir(false,"")
+, m_secant_tolerance(0.05)
 {
    generic.add_options()
         ("help,h",  "Show this help message.")
@@ -59,6 +60,7 @@ boost_command_line::boost_command_line(int argc , char **argv)
         ("off",   "OFF output format (Geomview Object File Format)")
         ("export_dir", po::value<std::string>(), "Export output files to directory")
         ("max_bool", po::value<size_t>(),  "Max number of booleans allowed")
+        ("sec_tol", po::value<double>(),  "Secant tolerance when importing OpenSCAD csg (0.05)")
         ("fullpath", "Show full file paths.")
          ;
 
@@ -145,6 +147,10 @@ boost_command_line::boost_command_line(int argc , char **argv)
 
    if(vm.count("max_bool") > 0) {
       m_max_bool = get<size_t>("max_bool");
+   }
+
+   if(vm.count("sec_tol") > 0) {
+      m_secant_tolerance = get<double>("sec_tol");
    }
 
    // some things are counted as errors without error message

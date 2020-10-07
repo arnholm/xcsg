@@ -29,7 +29,7 @@ public:
    typedef std::pair<std::string,std::pair<size_t,size_t>> func_data;  // <signature,<tree_level,line>>
 
    // parse openscad.csg file and build the openscad tree
-   csg_parser(std::istream& csg);
+   csg_parser(std::istream& csg, double secant_tolerance);
    virtual ~csg_parser();
 
    // create an xcsg tree
@@ -39,6 +39,7 @@ protected:
    void init_func(const std::string& csg);
 
 private:
+   double                     m_secant_tolerance;
    std::shared_ptr<csg_node>  m_root;  // openscad tree
 };
 
