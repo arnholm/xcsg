@@ -392,6 +392,11 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
          std::string xcsg_tag = fix_tag(it->second);
          if(xcsg_tag.find('*') == std::string::npos) {
 
+            // Special fix: OpenSCAD allows difference with only 1 child, but xcsg does not.
+            // This is effectively a no-op so we can replace difference with union here
+            if(xcsg_tag == "difference3d" && m_children.size()==1) xcsg_tag = "union3d";
+            else if(xcsg_tag == "difference2d" && m_children.size()==1) xcsg_tag = "union2d";
+
             // we have determined the xcsg tag, so create the xcsg node
             xml_this = parent.add_child(xcsg_tag);
 
