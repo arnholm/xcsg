@@ -20,14 +20,12 @@
 					<Add option="/RTCsu" />
 					<Add option="/Fd$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).pdb" />
 					<Add option="/EHsc" />
-					<Add option="`$(CPDE_USR)\bin\wx-config.exe --prefix=$(#wx) --wxcfg=$(#wx.debug) --cxxflags`" />
 					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
 					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
 					<Add option="/D_CRT_SECURE_DEPRECATE" />
 					<Add directory="./" />
 				</Compiler>
 				<Linker>
-					<Add option="`$(CPDE_USR)\bin\wx-config.exe  --prefix=$(#wx) --wxcfg=$(#wx.debug) --libs`" />
 					<Add option="/NODEFAULTLIB:libcmt.lib" />
 					<Add option="/NODEFAULTLIB:msvcrt.lib" />
 					<Add option="/INCREMENTAL:NO" />
@@ -52,14 +50,12 @@
 					<Add option="/Ox" />
 					<Add option="/W3" />
 					<Add option="/EHsc" />
-					<Add option="`$(CPDE_USR)\bin\wx-config.exe --prefix=$(#wx) --wxcfg=$(#wx.release) --cxxflags`" />
 					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
 					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
 					<Add option="/D_CRT_SECURE_DEPRECATE" />
 					<Add directory="./" />
 				</Compiler>
 				<Linker>
-					<Add option="`$(CPDE_USR)\bin\wx-config.exe  --prefix=$(#wx) --wxcfg=$(#wx.release) --libs`" />
 					<Add option="/NODEFAULTLIB:libcmtd.lib" />
 					<Add option="/NODEFAULTLIB:msvcrtd.lib" />
 					<Add option="/INCREMENTAL:NO" />
@@ -89,7 +85,6 @@
 					<Add option="-g" />
 					<Add option="-W" />
 					<Add option="-fexceptions" />
-					<Add option="`$(#wx.config) --cxxflags --debug`" />
 					<Add option="-DNOPCH" />
 					<Add option="-D_DEBUG" />
 					<Add option="-DBOOST_ERROR_CODE_HEADER_ONLY" />
@@ -99,7 +94,6 @@
 					<Add directory="./" />
 				</Compiler>
 				<Linker>
-					<Add option="`$(#wx.config) --libs std,aui --static --debug`" />
 					<Add library="csg_parserd" />
 					<Add library="csplinesd" />
 					<Add library="qhulld" />
@@ -110,6 +104,7 @@
 					<Add library="boost_filesystem" />
 					<Add library="boost_thread" />
 					<Add library="boost_system" />
+					<Add library="pthread" />
 					<Add directory="$(#carve.lib)" />
 				</Linker>
 			</Target>
@@ -125,7 +120,6 @@
 					<Add option="-fPIC" />
 					<Add option="-W" />
 					<Add option="-fexceptions" />
-					<Add option="`$(#wx.config) --cxxflags`" />
 					<Add option="-DNOPCH" />
 					<Add option="-DBOOST_ERROR_CODE_HEADER_ONLY" />
 					<Add option="-DBOOST_SYSTEM_NO_DEPRECATED" />
@@ -134,7 +128,6 @@
 					<Add directory="./" />
 				</Compiler>
 				<Linker>
-					<Add option="`$(#wx.config) --libs std,aui --static`" />
 					<Add library="csg_parser" />
 					<Add library="csplines" />
 					<Add library="qhull" />
@@ -145,6 +138,7 @@
 					<Add library="boost_system" />
 					<Add library="boost_filesystem" />
 					<Add library="boost_thread" />
+					<Add library="pthread" />
 					<Add directory="$(#carve.lib)" />
 				</Linker>
 				<ExtraCommands>
