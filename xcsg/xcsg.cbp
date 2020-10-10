@@ -23,6 +23,7 @@
 					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
 					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
 					<Add option="/D_CRT_SECURE_DEPRECATE" />
+					<Add option="/DWIN32" />
 					<Add directory="./" />
 				</Compiler>
 				<Linker>
@@ -53,6 +54,7 @@
 					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
 					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
 					<Add option="/D_CRT_SECURE_DEPRECATE" />
+					<Add option="/DWIN32" />
 					<Add directory="./" />
 				</Compiler>
 				<Linker>
@@ -584,9 +586,6 @@
 		</Unit>
 		<Extensions>
 			<lib_finder disable_auto="1" />
-			<envvars />
-			<code_completion />
-			<debugger />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
