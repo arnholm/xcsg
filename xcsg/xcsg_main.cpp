@@ -83,7 +83,7 @@ bool xcsg_main::run()
 
    if(file.GetExt() == ".csg") {
 
-      cout << "Converting from OpenSCAD " << xcsg_file << endl;
+      cout << "Converting from: " << DisplayName(xcsg_file,show_path) << endl;
       std::ifstream csg(xcsg_file);
       csg_parser parser(csg,m_cmd.secant_tolerance());
       parser.to_xcsg(tree);
