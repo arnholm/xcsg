@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdexcept>
 #include <cmath>
+#include <unordered_set>
 
 #include "csg_node.h"
 #include "csg_scalar.h"
@@ -232,7 +233,14 @@ void  csg_node::dump()
 
 bool csg_node::is_dummy()
 {
-   if(tag() == "group" && m_children.size()==0)return true;
+   if(tag() == "group") {
+      if (m_children.size()==0)return true;
+      else {
+         for( auto c : m_children) {
+            if(!c->is_dummy()) return false;
+         }
+      }
+   }
    return false;
 }
 
@@ -313,35 +321,38 @@ size_t csg_node::dimension()
 
    for(auto& c : m_children) {
 
-      if(c->tag() == "circle")dim=2;
-      else if(c->tag() == "square")dim=2;
-      else if(c->tag() == "polygon")dim=2;
-      else if(c->tag() == "projection")dim=2;
+      if(!c->is_dummy()) {
 
-      else if(c->tag() == "sphere")dim=3;
-      else if(c->tag() == "cylinder")dim=3;
-      else if(c->tag() == "cube")dim=3;
-      else if(c->tag() == "polyhedron")dim=3;
-      else if(c->tag() == "linear_extrude")dim=3;
-      else if(c->tag() == "rotate_extrude")dim=3;
+         if(c->tag() == "circle")dim=2;
+         else if(c->tag() == "square")dim=2;
+         else if(c->tag() == "polygon")dim=2;
+         else if(c->tag() == "projection")dim=2;
 
-      else if(c->tag() == "group")dim= c->dimension();
-      else if(c->tag() == "color")dim= c->dimension();
-      else if(c->tag() == "multmatrix")dim= c->dimension();
-      else if(c->tag().substr(0,4) == "unio")dim= c->dimension();
-      else if(c->tag().substr(0,4) == "diff")dim= c->dimension();
-      else if(c->tag().substr(0,4) == "inte")dim= c->dimension();
-      else if(c->tag().substr(0,4) == "mink")dim= c->dimension();
-      else if(c->tag().substr(0,4) == "offs")dim= c->dimension();
-      else if(c->tag().substr(0,4) == "rend")dim= c->dimension();
-      else if(c->tag().substr(0,4) == "hull")dim= c->dimension();
+         else if(c->tag() == "sphere")dim=3;
+         else if(c->tag() == "cylinder")dim=3;
+         else if(c->tag() == "cube")dim=3;
+         else if(c->tag() == "polyhedron")dim=3;
+         else if(c->tag() == "linear_extrude")dim=3;
+         else if(c->tag() == "rotate_extrude")dim=3;
 
-      else if(c->tag() == "text") throw  std::runtime_error("OpenSCAD csg: 'text' is not supported ");
-      else if(c->tag() == "surface") throw  std::runtime_error("OpenSCAD csg: 'surface' is not supported ");
-      else if(c->tag() == "import") throw  std::runtime_error("OpenSCAD csg: 'import' is not supported ");
-      else if(c->tag() == "resize") throw  std::runtime_error("OpenSCAD csg: 'resize' is not supported ");
+         else if(c->tag() == "group")dim= c->dimension();
+         else if(c->tag() == "color")dim= c->dimension();
+         else if(c->tag() == "multmatrix")dim= c->dimension();
+         else if(c->tag().substr(0,4) == "unio")dim= c->dimension();
+         else if(c->tag().substr(0,4) == "diff")dim= c->dimension();
+         else if(c->tag().substr(0,4) == "inte")dim= c->dimension();
+         else if(c->tag().substr(0,4) == "mink")dim= c->dimension();
+         else if(c->tag().substr(0,4) == "offs")dim= c->dimension();
+         else if(c->tag().substr(0,4) == "rend")dim= c->dimension();
+         else if(c->tag().substr(0,4) == "hull")dim= c->dimension();
 
-      if(dim>0)return dim;
+         else if(c->tag() == "text") throw  std::runtime_error("OpenSCAD csg: 'text' is not supported ");
+         else if(c->tag() == "surface") throw  std::runtime_error("OpenSCAD csg: 'surface' is not supported ");
+         else if(c->tag() == "import") throw  std::runtime_error("OpenSCAD csg: 'import' is not supported ");
+         else if(c->tag() == "resize") throw  std::runtime_error("OpenSCAD csg: 'resize' is not supported ");
+
+         if(dim>0)return dim;
+      }
    }
 
    return dim;
@@ -690,12 +701,12 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                     )
             {
                if(m_children.size() < 2) throw std::runtime_error(line_no +": Fewer than 2 children provided to '" + openscad_tag + "' --> " + xcsg_tag);
-               size_t idim=0;
+               std::unordered_set<size_t> dims;
                for(auto c : m_children) {
                   if(!c->is_dummy()) {
                      size_t dim = c->dimension();
-                     if(idim == 0)idim=dim;
-                     else if(idim != dim) throw std::runtime_error(line_no +": Mixed dimension children provided to '" + openscad_tag + "' --> " + xcsg_tag);
+                     if(dim>0) dims.insert(dim);
+                     if(dims.size() > 1) throw std::runtime_error(line_no +": Mixed dimension children provided to '" + openscad_tag + "' --> " + xcsg_tag);
                   }
                }
             }
@@ -703,12 +714,12 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                     xcsg_tag.substr(0,4)=="hull"
                     )
             {
-               size_t idim=0;
+               std::unordered_set<size_t> dims;
                for(auto c : m_children) {
                   if(!c->is_dummy()) {
                      size_t dim = c->dimension();
-                     if(idim == 0)idim=dim;
-                     else if(idim != dim) throw std::runtime_error(line_no +": Mixed dimension children provided to '" + openscad_tag + "' --> " + xcsg_tag);
+                     if(dim>0) dims.insert(dim);
+                     if(dims.size() > 1) throw std::runtime_error(line_no +": Mixed dimension children provided to '" + openscad_tag + "' --> " + xcsg_tag);
                   }
                }
             }
