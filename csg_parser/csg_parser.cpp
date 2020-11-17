@@ -64,7 +64,7 @@ void csg_parser::init_func(const std::string& csg)
       }
 
       // characters not contributing to token
-      if( c==' ' || c=='\t' || c=='\n' || c==';' || c=='{' || c=='}') continue;
+      if( c==' ' || c=='\t' || c=='\n' || c==';' || c=='{' || c=='}' || c=='#') continue;
 
       // add character to token
       token += c;
