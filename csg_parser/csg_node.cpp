@@ -314,6 +314,10 @@ size_t csg_node::dimension()
    else if(this_tag == "polyhedron")dim=3;
    else if(this_tag == "linear_extrude")dim=3;
    else if(this_tag == "rotate_extrude")dim=3;
+   else if(this_tag == "text") throw  std::runtime_error("OpenSCAD csg line "+ std::to_string(m_line_no)    +", 'text' is not supported, line\n"+ m_func);
+   else if(this_tag == "surface") throw  std::runtime_error("OpenSCAD csg line "+ std::to_string(m_line_no) +", 'surface' is not supported\n"+ m_func );
+   else if(this_tag == "import") throw  std::runtime_error("OpenSCAD csg line "+ std::to_string(m_line_no)  +", 'import' is not supported\n"+ m_func);
+   else if(this_tag == "resize") throw  std::runtime_error("OpenSCAD csg line "+ std::to_string(m_line_no)  +", 'resize' is not supported\n"+ m_func);
 
    if(dim>0)return dim;
 
@@ -346,10 +350,10 @@ size_t csg_node::dimension()
          else if(c->tag().substr(0,4) == "rend")dim= c->dimension();
          else if(c->tag().substr(0,4) == "hull")dim= c->dimension();
 
-         else if(c->tag() == "text") throw  std::runtime_error("OpenSCAD csg: 'text' is not supported ");
-         else if(c->tag() == "surface") throw  std::runtime_error("OpenSCAD csg: 'surface' is not supported ");
-         else if(c->tag() == "import") throw  std::runtime_error("OpenSCAD csg: 'import' is not supported ");
-         else if(c->tag() == "resize") throw  std::runtime_error("OpenSCAD csg: 'resize' is not supported ");
+         else if(c->tag() == "text") throw  std::runtime_error("OpenSCAD csg: 'text' is not supported, line "+ std::to_string(m_line_no));
+         else if(c->tag() == "surface") throw  std::runtime_error("OpenSCAD csg: 'surface' is not supported, line "+ std::to_string(m_line_no));
+         else if(c->tag() == "import") throw  std::runtime_error("OpenSCAD csg: 'import' is not supported, line "+ std::to_string(m_line_no));
+         else if(c->tag() == "resize") throw  std::runtime_error("OpenSCAD csg: 'resize' is not supported, line "+ std::to_string(m_line_no));
 
          if(dim>0)return dim;
       }
@@ -390,7 +394,8 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
 
       // get the openscad tag
       std::string openscad_tag = tag();
-      if(openscad_tag == "group" && dimension()==0) return xml_this;
+     // if(openscad_tag == "group" && dimension()==0) return xml_this;
+      if(dimension()==0) return xml_this;
 
       // first check for special cases
       if(openscad_tag == "multmatrix") {
