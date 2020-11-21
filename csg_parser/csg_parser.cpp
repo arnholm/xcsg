@@ -77,6 +77,8 @@ void csg_parser::init_func(const std::string& csg)
 
    }
 
+   if(func.size() == 0) throw std::runtime_error("csg tree has 0 elements!");
+
    // build the tree
    size_t index = 0;
    m_root->build_tree(func,index);

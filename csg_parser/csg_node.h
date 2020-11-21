@@ -45,6 +45,11 @@ public:
    // return naked function name
    std::string tag() const;
 
+   // return full function string
+   std::string func() const { return m_func; }
+
+   size_t line_no() const { return m_line_no; }
+
    // look up parameter
    par_iterator par_find(const std::string& name) { return m_par.find(name); };
    par_iterator par_begin() { return m_par.begin(); }
