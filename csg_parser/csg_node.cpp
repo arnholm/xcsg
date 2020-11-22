@@ -452,19 +452,22 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                vector<size_t> path(np);
                for(size_t ip=0; ip<np; ip++) path[ip]=ip;
 
-               auto paths = get_value("paths");
-               if(paths.get()) {
-                  if(paths->is_vector()) {
-                     // we allow max one specified path (=outer path)
-                     if(paths->size()==1) {
-                        auto outer_path = paths->get(0);
-                        path.clear();
-                        np = outer_path->size();
-                        path.resize(np);
-                        for(size_t ip=0; ip<np; ip++) path[ip]=outer_path->get(ip)->to_int();
-                     }
-                     else {
-                        throw std::runtime_error(line_no +": polygon with internal hole(s) is not supported: " + m_func);
+               auto ipar = m_par.find("paths");
+               if(ipar != m_par.end()) {
+                  auto paths = ipar->second;
+                  if(paths.get()) {
+                     if(paths->is_vector()) {
+                        // we allow max one specified path (=outer path)
+                        if(paths->size()==1) {
+                           auto outer_path = paths->get(0);
+                           path.clear();
+                           np = outer_path->size();
+                           path.resize(np);
+                           for(size_t ip=0; ip<np; ip++) path[ip]=outer_path->get(ip)->to_int();
+                        }
+                        else {
+                           throw std::runtime_error(line_no +": polygon with internal hole(s) is not supported: " + m_func);
+                        }
                      }
                   }
                }
