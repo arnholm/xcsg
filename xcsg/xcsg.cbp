@@ -19,9 +19,11 @@
 					<Add option="/GF" />
 					<Add option="/Od" />
 					<Add option="/W3" />
+					<Add option="/Zi" />
 					<Add option="/RTCsu" />
 					<Add option="/Fd$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).pdb" />
 					<Add option="/EHsc" />
+					<Add option="/DEBUG" />
 					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
 					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
 					<Add option="/D_CRT_SECURE_DEPRECATE" />
@@ -29,6 +31,7 @@
 					<Add directory="./" />
 				</Compiler>
 				<Linker>
+					<Add option="/debug" />
 					<Add option="/DEBUG" />
 					<Add option="/NODEFAULTLIB:libcmt.lib" />
 					<Add option="/NODEFAULTLIB:msvcrt.lib" />
