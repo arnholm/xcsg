@@ -7,7 +7,7 @@ The xcsg application takes an input .xcsg file, compiles its data into a solid m
 
     $ xcsg --help
    
-	xcsg command line options & arguments (v1.0-04):
+	xcsg command line options & arguments (v1.5-00):
 	  -h [ --help ]         Show this help message.
 	  -v [ --version ]      Show program version (numeric part).
 	  --amf                 AMF output format (Additive Manufacturing Format)
@@ -18,6 +18,10 @@ The xcsg application takes an input .xcsg file, compiles its data into a solid m
 	  --astl                STL output format (STereoLitography) - ASCII
 	  --obj                 OBJ output format (Wavefront format)
 	  --off                 OFF output format (Geomview Object File Format)
+	  --export_dir arg      Export output files to directory
+	  --max_bool arg        Max number of booleans allowed
+	  --sec_tol arg         Secant tolerance when importing OpenSCAD csg (0.05)
+	  --fullpath            Show full file paths. 
 	  <xcsg-file>           path to input .xcsg file (required)
 
 ### example
