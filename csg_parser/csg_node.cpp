@@ -484,7 +484,7 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                // == 2d offset
 
                auto ir  = m_par.find("r");
-               auto id  = m_par.find("d");
+               auto id  = m_par.find("delta");
                auto ich = m_par.find("chamfer");
                // translate the offset parameters to xcg
                double delta        = (ir  != m_par.end())? ir->second->to_double() : id->second->to_double();
