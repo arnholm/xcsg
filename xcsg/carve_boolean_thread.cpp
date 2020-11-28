@@ -16,7 +16,7 @@
 
 #include "carve_boolean_thread.h"
 #include "carve_boolean.h"
-
+#include <iostream>
 
 carve_boolean_thread::carve_boolean_thread(safe_queue<MeshSet_ptr>& mesh_queue, carve::csg::CSG::OP op, safe_queue<std::string>& exception_queue)
 : m_op(op)
@@ -39,10 +39,17 @@ void carve_boolean_thread::run()
          if(m_mesh_queue.try_dequeue(a)) {
             if(m_mesh_queue.try_dequeue(b)) {
 
-               carve_boolean csg;
-               csg.compute(a,m_op);
-               csg.compute(b,m_op);
-               m_mesh_queue.enqueue(csg.mesh_set());
+               size_t nva = a->vertex_storage.size();
+               size_t nvb = b->vertex_storage.size();
+               if(nva>0 && nvb>0) {
+                  carve_boolean csg;
+                  csg.compute(a,m_op);
+                  csg.compute(b,m_op);
+                  m_mesh_queue.enqueue(csg.mesh_set());
+               }
+               else {
+                  throw std::runtime_error("ERROR: empty mesh component in boolean operation " + carve_boolean::boolean_type(m_op));
+               }
             }
             else {
                m_mesh_queue.enqueue(a);

@@ -1,6 +1,8 @@
 #include "carve_mesh_thread.h"
 #include <list>
 #include "boolean_timer.h"
+#include <typeinfo>
+#include <stdexcept>
 
 carve_mesh_thread::carve_mesh_thread(const carve::math::Matrix& t,
                                      const std::unordered_set<std::shared_ptr<xsolid>>& solids,
@@ -19,7 +21,15 @@ void carve_mesh_thread::run()
 {
    try {
       for(auto& solid : m_solids) {
-         m_mesh_queue.enqueue(solid->create_carve_mesh(m_t));
+         std::shared_ptr<carve::mesh::MeshSet<3>> mesh = solid->create_carve_mesh(m_t);
+
+         size_t nv = mesh->vertex_storage.size();
+         if(nv == 0) {
+            std::string type = typeid(*solid.get()).name();
+            throw std::runtime_error("ERROR: Solid of type '" + type + "' created empty mesh");
+         }
+
+         m_mesh_queue.enqueue(mesh);
       }
    }
    catch(carve::exception& ex) {

@@ -24,6 +24,21 @@
 #include "boolean_timer.h"
 #include "mesh_utils.h"
 
+std::string carve_boolean::boolean_type(carve::csg::CSG::OP op)
+{
+   std::string retval;
+   switch(op) {
+     case carve::csg::CSG::UNION:                 { retval = "UNION"; break; }
+     case carve::csg::CSG::INTERSECTION:          { retval = "INTERSECTION"; break; }
+     case carve::csg::CSG::A_MINUS_B:             { retval = "A_MINUS_B"; break; }
+     case carve::csg::CSG::B_MINUS_A:             { retval = "B_MINUS_A"; break; }
+     case carve::csg::CSG::SYMMETRIC_DIFFERENCE:  { retval = "SYMMETRIC_DIFFERENCE"; break; }
+     case carve::csg::CSG::ALL:                   { retval = "ALL"; break; }
+     default:                                     { retval = "DEFAULT"; break; }
+   };
+   return retval;
+}
+
 carve_boolean::carve_boolean()
 {}
 

@@ -37,6 +37,8 @@ public:
    };
 */
 
+   static std::string boolean_type(carve::csg::CSG::OP op);
+
    carve_boolean();
    virtual ~carve_boolean();
 
