@@ -66,6 +66,9 @@ public:
    // returns 3 for 3d children
    size_t dimension();
 
+   // count non-dummy children
+   size_t size_children();
+
 protected:
 
    // helpers to buuild csg tree, parse node parameters etc

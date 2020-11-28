@@ -377,6 +377,15 @@ std::string  csg_node::fix_tag(const std::string& tag)
    return tag;
 }
 
+size_t csg_node::size_children()
+{
+   size_t nc = 0;
+   for(auto c : m_children) {
+      if(!c->is_dummy()) nc++;
+   }
+   return nc;
+}
+
 cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
 {
    cf_xmlNode xml_this;
@@ -410,10 +419,10 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
 
             // Special fix: OpenSCAD allows difference/intersection with only 1 child, but xcsg does not.
             // This is effectively a no-op so we can replace difference/intersection with union here
-            if(xcsg_tag == "difference3d" && m_children.size()==1) xcsg_tag = "union3d";
-            else if(xcsg_tag == "difference2d" && m_children.size()==1) xcsg_tag = "union2d";
-            else if(xcsg_tag == "intersection3d" && m_children.size()==1) xcsg_tag = "union3d";
-            else if(xcsg_tag == "intersection2d" && m_children.size()==1) xcsg_tag = "union2d";
+            if(xcsg_tag == "difference3d" && size_children()==1) xcsg_tag = "union3d";
+            else if(xcsg_tag == "difference2d" && size_children()==1) xcsg_tag = "union2d";
+            else if(xcsg_tag == "intersection3d" && size_children()==1) xcsg_tag = "union3d";
+            else if(xcsg_tag == "intersection2d" && size_children()==1) xcsg_tag = "union2d";
 
             // we have determined the xcsg tag, so create the xcsg node
             xml_this = parent.add_child(xcsg_tag);
@@ -659,9 +668,13 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                if(np<4)  throw std::runtime_error(line_no + ": polyhedron with too few points: "+ par());
                cf_xmlNode xml_vertices = xml_this.add_child("vertices");
                for(size_t ip=0; ip<np; ip++) {
-                  cf_xmlNode xml_vertex = xml_vertices.add_child("vertex");
                   auto point = points->get(ip);
-                  if(point->size()<3)  throw std::runtime_error(line_no +": polyhedron points must have 3 values: "+ par());
+                  if(point->size()==1) {
+                     throw std::runtime_error(line_no +": Illegal polyhedron point value at position("+std::to_string(ip)+"): "+point->to_string() );
+                  }
+                  if(point->size()<3)  throw std::runtime_error(line_no +": polyhedron points must have 3 values ("+std::to_string(ip)+' ' +std::to_string(point->size())+"): "+ par());
+
+                  cf_xmlNode xml_vertex = xml_vertices.add_child("vertex");
                   xml_vertex.add_property("x",point->get(0)->to_string());
                   xml_vertex.add_property("y",point->get(1)->to_string());
                   xml_vertex.add_property("z",point->get(2)->to_string());
