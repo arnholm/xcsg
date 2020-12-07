@@ -88,7 +88,7 @@
 				<Option compiler="gcc_generic" />
 				<Option parameters="--stl /work/DATA/DXF/xcsg/minkowski3d.xcsg" />
 				<Compiler>
-					<Add option="-std=c++0x" />
+					<Add option="-std=c++11" />
 					<Add option="-fPIC" />
 					<Add option="-g" />
 					<Add option="-W" />
@@ -124,7 +124,7 @@
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
 					<Add option="-Os" />
-					<Add option="-std=c++0x" />
+					<Add option="-std=c++11" />
 					<Add option="-fPIC" />
 					<Add option="-W" />
 					<Add option="-fexceptions" />

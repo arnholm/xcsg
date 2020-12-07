@@ -63,7 +63,7 @@
 				<Option compiler="gcc_generic" />
 				<Option createDefFile="1" />
 				<Compiler>
-					<Add option="-std=c++0x" />
+					<Add option="-std=c++11" />
 					<Add option="-W" />
 					<Add option="-fPIC" />
 					<Add option="-DNOPCH" />
@@ -84,7 +84,7 @@
 				<Option compiler="gcc_generic" />
 				<Option createDefFile="1" />
 				<Compiler>
-					<Add option="-std=c++0x" />
+					<Add option="-std=c++11" />
 					<Add option="-W" />
 					<Add option="-fPIC" />
 					<Add option="-DNOPCH" />
