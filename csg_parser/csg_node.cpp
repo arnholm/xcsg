@@ -648,12 +648,12 @@ cf_xmlNode csg_node::to_xcsg(cf_xmlNode& parent)
                auto iangle = m_par.find("angle");
                xml_this.add_property("angle",iangle->second->to_double()*pi/180);
 
-               // special +90 deg rotate around x applied here since
-               // openscad's rotate_extrude implies +90 deg rotate around x after extrusion
+               // special -90 deg rotate around x applied here since
+               // openscad's rotate_extrude implies -90 deg rotate around x after extrusion
                csg_matrix<4,4> rotx;
                rotx(1,1)=0;
-               rotx(1,2)=-1;
-               rotx(2,1)=1;
+               rotx(1,2)=1;
+               rotx(2,1)=-1;
                rotx(2,2)=0;
                if(m_has_matrix) m_matrix = csg_matrix_mult<4,4,4>(rotx,m_matrix);
                else             m_matrix = rotx;
