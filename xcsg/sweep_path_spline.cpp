@@ -74,7 +74,7 @@ sweep_path_spline::sweep_path_spline(std::shared_ptr<const polymesh2d> pm2d, std
    m_nseg = std::abs(nseg);
 
    // use number of segments at least as fine grained as the number of control points in the path
-   if(path->size() > m_nseg)m_nseg =  static_cast<int>(path->size());
+   if(path->size() >  static_cast<size_t>(m_nseg))m_nseg =  static_cast<int>(path->size());
 }
 
 sweep_path_spline::~sweep_path_spline()

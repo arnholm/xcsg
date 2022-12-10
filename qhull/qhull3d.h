@@ -18,7 +18,7 @@
 
 #include <vector>
 #include <map>
-
+#include <cstddef>
 #include "qvec3d.h"
 
 // convert convex 3d hull from a set of input coordinates

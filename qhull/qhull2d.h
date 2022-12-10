@@ -18,6 +18,7 @@
 
 #include <vector>
 #include <map>
+#include <cstddef>
 
 // compute convex 2d hull from a set of input coordinates
 // the resulting hull contour is guaranteed to be CCW

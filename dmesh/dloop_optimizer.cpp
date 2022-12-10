@@ -16,7 +16,7 @@
 #include "dloop_optimizer.h"
 #include "dline2d.h"
 #include <map>
-
+#include <cstddef>
 typedef std::map<size_t,dpos2d> pos_map;
 
 
